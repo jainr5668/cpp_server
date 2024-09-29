@@ -7,8 +7,14 @@ namespace services {
             injections_ = std::move(injections);
         }
 
-        bool TodoService::addTodo(TodoPostData, std::string userId) {
-            return false;
+        TodoDbData TodoService::addTodo(TodoPostData todoPostData, std::string userId) {
+            logger.info("TodoService::addTodo Entry");
+            TodoDBData result(todoPostData);
+            result.userId = userId;
+            injections_->todoServiceData->insertTodo(result);
+            result.userId.reset();
+            logger.info("TodoService::addTodo Exit");
+            return result;
         }
 
         std::vector<TodoDBData> TodoService::getTodos(std::string userId) {

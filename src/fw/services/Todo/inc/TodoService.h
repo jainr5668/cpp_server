@@ -4,6 +4,7 @@
 #include "ITodoService.h"
 #include "TodoServiceTypes.h"
 #include "TodoServiceInjections.h"
+#include "logger.h"
 
 using TodoPostData = services::TodoService::TodoPostData;
 using TodoDBData = services::TodoService::TodoDbData;
@@ -15,10 +16,11 @@ namespace services
         {
         public:
             TodoService(std::unique_ptr<services::TodoService::TodoServiceInjections> injections);
-            bool addTodo(TodoPostData, std::string userId) override;
+            TodoDbData addTodo(TodoPostData, std::string userId) override;
             std::vector<TodoDBData> getTodos(std::string userId) override;
         private:
             std::unique_ptr<services::TodoService::TodoServiceInjections> injections_;
+            Logger logger;
         };
     } // namespace services::AuthenticationServiceData
 } // namespace services

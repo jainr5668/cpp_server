@@ -4,6 +4,7 @@
 #include "TodoServiceData.h"
 #include "TodoService.h"
 #include "TodoServiceTypes.h"
+#include "Utils.h"
 
 using AuthorizationConfig = common::authorization::AuthorizationConfig;
 using TodoServiceData = services::TodoService::TodoServiceData;
@@ -45,7 +46,22 @@ namespace endpoints
         void TodoEndpoint::addTodo(RouteContext routeContext)
         {
             logger.info("TodoEndpoint::addTodo Entry");
-            todoService_->addTodo(jsonToObject<services::TodoService::TodoPostData>(routeContext.req->body));
+            std::string userId = Utils::getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
+            if (userId.empty())
+            {
+                routeContext.res->status_code = 401;
+                routeContext.res->body = "Unauthorized";
+                return;
+            }
+            auto todoPostData = jsonToObject<services::TodoService::TodoPostData>(routeContext.req->body);
+            if (todoPostData.dueDate.value < std::chrono::system_clock::now())
+            {
+                std::cout << "dueDate cannot be in the past" << std::endl;
+                throw std::invalid_argument("dueDate cannot be in the past");
+            }
+            auto response = todoService_->addTodo(todoPostData, userId);
+            logger.info("addTodo Response: " + response.title.value);
+            routeContext.res->body = objectToJson(response);
             logger.info("TodoEndpoint::addTodo Exit");
         }
 
@@ -104,7 +120,7 @@ namespace endpoints
             deleteTodoConfig.scope.push_back("api");
             routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteTodoConfig,
                                    std::function<void(RouteContext)>(std::bind(&TodoEndpoint::deleteTodo, this, std::placeholders::_1))});
-            
+
             return routes;
         }
     }
