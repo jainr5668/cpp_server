@@ -25,6 +25,7 @@ jobs:
           build-essential \
           libboost-all-dev \
           libgtest-dev \
+          libgmock-dev \
           cmake \
           libssl-dev
 
