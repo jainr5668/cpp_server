@@ -27,10 +27,8 @@ jobs:
           libgtest-dev \
           libgmock-dev \
           cmake \
-          libssl-dev
-
-    - name: Install nlohmann_json
-      run: sudo apt-get install -y nlohmann-json3-dev
+          libssl-dev \
+          nlohmann-json3-dev
 
     - name: Build and run tests
       run: |
