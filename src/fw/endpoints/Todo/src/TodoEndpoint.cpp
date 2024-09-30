@@ -5,11 +5,14 @@
 #include "TodoService.h"
 #include "TodoServiceTypes.h"
 #include "Utils.h"
+#include "TodoEndpointTypes.h"
+#include <string>
 
 using AuthorizationConfig = common::authorization::AuthorizationConfig;
 using TodoServiceData = services::TodoService::TodoServiceData;
 using TodoServiceInjections = services::TodoService::TodoServiceInjections;
 using TodoService = services::TodoService::TodoService;
+using TodosGetResponse = endpoints::TodoEndpoint::TodosGetResponse;
 namespace endpoints
 {
     namespace TodoEndpoint
@@ -38,8 +41,21 @@ namespace endpoints
         void TodoEndpoint::getTodos(RouteContext routeContext)
         {
             logger.info("TodoEndpoint::getTodos Entry");
-            routeContext.res->status_code = 500;
-            routeContext.res->body = "Not Implemented";
+            auto todos = todoService_->getTodos(Utils::getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", ""));
+            routeContext.res->status_code = 200;
+            std::vector<std::string> memberIds;
+            std::vector<TodoDBData> members;
+            for (auto todo : todos)
+            {
+                memberIds.push_back(todo.id.value());
+                members.push_back(todo);
+            }
+            TodosGetResponse todosGetResponse(memberIds);
+            if (Utils::getValueFromMap(routeContext.req->query_params, "includeMembers", "false") == "true")
+            {
+                todosGetResponse.members = members;
+            }
+            routeContext.res->body = objectToJson(todosGetResponse);
             logger.info("TodoEndpoint::getTodos Exit");
         }
 
@@ -60,8 +76,18 @@ namespace endpoints
                 throw std::invalid_argument("dueDate cannot be in the past");
             }
             auto response = todoService_->addTodo(todoPostData, userId);
-            logger.info("addTodo Response: " + response.title.value);
-            routeContext.res->body = objectToJson(response);
+            if (response == nullptr)
+            {
+                logger.info("inside if true");
+                routeContext.res->status_code = 500;
+                routeContext.res->body = "Internal Server Error";
+            }
+            else
+            {
+                logger.info("inside if false");
+                routeContext.res->status_code = 201;
+                routeContext.res->body = objectToJson(*response);
+            }
             logger.info("TodoEndpoint::addTodo Exit");
         }
 

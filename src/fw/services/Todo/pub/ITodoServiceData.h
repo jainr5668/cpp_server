@@ -10,7 +10,7 @@ namespace services
         {
         public:
             ~ITodoServiceData() = default;
-            virtual std::vector<std::vector<std::string>> retriveTodos(std::string query) = 0;
+            virtual std::vector<std::vector<std::string>> retriveTodos(std::string userId) = 0;
             virtual bool insertTodo(TodoDbData) = 0;
         };
     } // namespace services::AuthenticationServiceData

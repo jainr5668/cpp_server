@@ -13,7 +13,7 @@ namespace services
         {
         public:
             ~ITodoService() = default;
-            virtual TodoDbData addTodo(TodoPostData, std::string userId) = 0;
+            virtual TodoDbData* addTodo(TodoPostData, std::string userId) = 0;
             virtual std::vector<TodoDBData> getTodos(std::string userId) = 0;
         };
     } // namespace services::AuthenticationServiceData

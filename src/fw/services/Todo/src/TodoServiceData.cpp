@@ -10,7 +10,7 @@ namespace services
             logger.info("TodoServiceData::TodoServiceData Constructor Entry");
             data_ = std::move(data);
             std::vector<std::string> queries = {
-                "CREATE TABLE IF NOT EXISTS todos (id TEXT, userId TEXT NOT NULL, title VARCHAR(255) NOT NULL, status VARCHAR(100), due_date DATETIME, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL);"
+                "CREATE TABLE IF NOT EXISTS todos (id TEXT, userId TEXT NOT NULL, title VARCHAR(255) NOT NULL,description TEXT NOT NULL, status VARCHAR(100), dueDate DATETIME, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL);"
             };
             for (std::string query : queries)
             {
@@ -19,17 +19,20 @@ namespace services
             logger.info("TodoServiceData::TodoServiceData Constructor Exit");
         }
 
-        std::vector<std::vector<std::string>> TodoServiceData::retriveTodos(std::string query)
+        std::vector<std::vector<std::string>> TodoServiceData::retriveTodos(std::string userId)
         {
             std::vector<std::vector<std::string>> result;
+            std::string query = "SELECT * FROM todos WHERE userId = '" + userId + "';";
+            result = data_->execute(query);
             return result;
         }
 
         bool TodoServiceData::insertTodo(TodoDbData todoDbData)
         {
             logger.info("TodoServiceData::insertTodo Entry");
-            std::string query = "INSERT INTO todos (id, userId, title, status, due_date, created_at, updated_at) VALUES ('" + Utils::get_uuid() + "', '" + todoDbData.userId.value() + "', '" + todoDbData.title.value + "', '" + todoDbData.status.value + "', '"+ Utils::timepoint_to_string(todoDbData.dueDate.value) + "', '" + Utils::timepoint_to_string(todoDbData.creationDate.value) + "', '" + Utils::timepoint_to_string(todoDbData.creationDate.value) + "');";
-            data_->execute(query);
+            todoDbData;
+            logger.info(std::to_string(data_->execute(data_->createInsertQuery("todos", todoDbData)).size()));
+            logger.info(data_->createInsertQuery("todos", todoDbData));
             logger.info("TodoServiceData::insertTodo Exit");
             return true;
         }

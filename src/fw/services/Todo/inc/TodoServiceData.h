@@ -14,7 +14,7 @@ namespace services
         {
         public:
             TodoServiceData(std::unique_ptr<Data> data);
-            std::vector<std::vector<std::string>> retriveTodos(std::string query) override;
+            std::vector<std::vector<std::string>> retriveTodos(std::string userId) override;
             bool insertTodo(TodoDbData) override;
         private:
             std::unique_ptr<Data> data_{nullptr};
