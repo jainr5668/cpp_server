@@ -16,8 +16,16 @@ namespace services
         {
         public:
             TodoService(std::unique_ptr<services::TodoService::TodoServiceInjections> injections);
-            TodoDbData* addTodo(TodoPostData, std::string userId) override;
-            std::vector<TodoDBData> getTodos(std::string userId) override;
+
+            /**
+             * @brief Add a new todo for a user
+             */
+            TodoDbData* addTodo(TodoPostData, std::string userId);
+
+            /**
+             * @brief Get all todos for a user
+             */
+            std::vector<TodoDBData> getTodos(std::string userId);
         private:
             std::unique_ptr<services::TodoService::TodoServiceInjections> injections_;
             Logger logger;

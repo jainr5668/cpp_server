@@ -7,6 +7,7 @@
 #include "Utils.h"
 #include "TodoEndpointTypes.h"
 #include <string>
+#include <Data.h>
 
 using AuthorizationConfig = common::authorization::AuthorizationConfig;
 using TodoServiceData = services::TodoService::TodoServiceData;

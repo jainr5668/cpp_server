@@ -5,10 +5,10 @@ namespace services
 {
     namespace TodoService
     {
-        TodoServiceData::TodoServiceData(std::unique_ptr<Data> data)
+        TodoServiceData::TodoServiceData(std::shared_ptr<IData> data)
         {
             logger.info("TodoServiceData::TodoServiceData Constructor Entry");
-            data_ = std::move(data);
+            data_ = data;
             std::vector<std::string> queries = {
                 "CREATE TABLE IF NOT EXISTS todos (id TEXT, userId TEXT NOT NULL, title VARCHAR(255) NOT NULL,description TEXT NOT NULL, status VARCHAR(100), dueDate DATETIME, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL);"
             };
