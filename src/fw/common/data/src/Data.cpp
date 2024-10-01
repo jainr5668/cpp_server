@@ -42,6 +42,8 @@ std::vector<std::vector<std::string>> Data::execute(std::string query)
         if (rc != SQLITE_OK)
         {
             std::cerr << "Error executing SQLite3 query: " << sqlite3_errmsg(db_) << std::endl;
+            sqlite3_close(db_);
+            throw std::runtime_error("Error executing SQLite3 query: " + std::string(sqlite3_errmsg(db_)));
             sqlite3_free(messageError);
         }
         else
@@ -52,20 +54,3 @@ std::vector<std::vector<std::string>> Data::execute(std::string query)
     return results;
 }
 
-template <typename T>
-std::string Data::createInsertQuery(const std::string& tableName, T object) {
-    nlohmann::json data = nlohmann::json::parse(object.to_json());
-    std::string keys = "";
-    std::string values = "";
-
-    for (auto it = data.begin(); it != data.end(); ++it) {
-        if (it != data.begin()) {
-            keys += ", ";
-            values += ", ";
-        }
-        keys += it.key();
-        values += it.value().dump();
-    }
-    std::string query = "INSERT INTO " + tableName + " (" + keys + ") VALUES (" + values + ");";
-    return query;
-}
