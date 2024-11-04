@@ -10,7 +10,8 @@ enum RouteMethod{
     GET = 0,
     POST,
     PUT,
-    DELETE
+    DELETE,
+    PATCH
 };
 
 struct RouteContext {

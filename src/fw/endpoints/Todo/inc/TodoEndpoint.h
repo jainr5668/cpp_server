@@ -3,6 +3,7 @@
 #include "logger.h"
 #include "TodoService.h"
 #include <memory>
+#include "BaseService.h"
 
 namespace endpoints
 {
@@ -11,7 +12,7 @@ namespace endpoints
         class TodoEndpoint  : public ITodoEndpoint
         {
         public:
-            TodoEndpoint();
+            TodoEndpoint(std::shared_ptr<BaseService> todoService);
             void getTodo(RouteContext routeContext);
             void getTodos(RouteContext routeContext);
             void addTodo(RouteContext routeContext);
@@ -20,7 +21,7 @@ namespace endpoints
         private:
             Logger logger;
             std::vector<Route> getRoutes();
-            std::unique_ptr<services::TodoService::TodoService> todoService_;
+            std::shared_ptr<services::TodoService::TodoService> todoService_;
         };
     } // namespace TodoEndpoint
 } // namespace endpoints
