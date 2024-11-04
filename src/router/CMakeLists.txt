@@ -8,7 +8,7 @@ target_include_directories(router_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 # Link to common and other feature libraries if needed
-target_link_libraries(router_lib common_lib)
+target_link_libraries(router_lib common_lib services_lib)
 # Testing
 enable_testing()
 find_package(GTest REQUIRED)

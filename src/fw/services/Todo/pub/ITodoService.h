@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "TodoServiceTypes.h"
+#include "BaseService.h"
 
 using TodoPostData = services::TodoService::TodoPostData;
 using TodoDBData = services::TodoService::TodoDbData;
@@ -9,7 +10,7 @@ namespace services
 {
     namespace TodoService
     {
-        class ITodoService
+        class ITodoService : public BaseService
         {
         public:
             ~ITodoService() = default;

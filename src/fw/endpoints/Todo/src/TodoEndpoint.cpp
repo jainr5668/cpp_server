@@ -18,16 +18,17 @@ namespace endpoints
 {
     namespace TodoEndpoint
     {
-        TodoEndpoint::TodoEndpoint()
+        TodoEndpoint::TodoEndpoint(std::shared_ptr<BaseService> todoService)
         {
             logger.info("TodoEndpoint::TodoEndpoint Entry");
             for (auto route : getRoutes())
             {
                 addRoute(route);
             }
-            auto todoServiceInjections = std::make_unique<TodoServiceInjections>();
-            todoServiceInjections->todoServiceData = std::make_unique<TodoServiceData>(std::make_unique<Data>("TodoData.db"));
-            todoService_ = std::make_unique<TodoService>(std::move(todoServiceInjections));
+            todoService_ = std::dynamic_pointer_cast<TodoService>(todoService);
+            // auto todoServiceInjections = std::make_unique<TodoServiceInjections>();
+            // todoServiceInjections->todoServiceData = std::make_unique<TodoServiceData>(std::make_unique<Data>("TodoData.db"));
+            // todoService_ = std::make_unique<TodoService>(std::move(todoServiceInjections));
             logger.info("TodoEndpoint::TodoEndpoint Exit");
         }
 
