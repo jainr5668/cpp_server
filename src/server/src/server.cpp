@@ -98,7 +98,7 @@ void Server::start()
          continue;
       }
       std::string reqPath = req->path;
-      logger.info("Start Processing request: " + reqPath);
+      logger.info("Start Processing request: " + reqPath + " Method: " + req->method);
       try
       {
          router->handle_request(req, res);
@@ -108,7 +108,7 @@ void Server::start()
          res->status_code = 500;
          res->body = "{\"error\": \"" + std::string(e.what()) + "\"}";
       }
-      logger.info("Stop Processing request: " + reqPath);
+      logger.info("Stop Processing request: " + reqPath + " Method: " + req->method);
       send(new_socket, res->to_string().c_str(), res->to_string().length(), 0);
       close(new_socket);
    }

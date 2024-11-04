@@ -7,6 +7,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
+#include <nlohmann/json.hpp>
 
 class Utils
 {
@@ -46,5 +47,13 @@ public:
         std::stringstream ss(str);
         ss >> std::get_time(&tm, dtFormat.c_str());
         return std::chrono::system_clock::from_time_t(std::mktime(&tm));
+    }
+
+    /**
+     * String to unordered_map
+     */
+    static nlohmann::json string_to_json(const std::string &str)
+    {
+        return nlohmann::json::parse(str);
     }
 };

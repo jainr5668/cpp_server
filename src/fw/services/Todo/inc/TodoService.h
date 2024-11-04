@@ -26,6 +26,21 @@ namespace services
              * @brief Get all todos for a user
              */
             std::vector<TodoDBData> getTodos(std::string userId);
+
+            /**
+             * @brief Get a todo by id
+             */
+            TodoDBData* getTodoById(std::string userId, std::string todoId);
+
+            /**
+             * @brief Delete a todo by id
+             */
+            std::string deleteTodoById(std::string userId, std::string todoId);
+
+            /**
+             * @brief Update a todo by id
+             */
+            TodoDbData* updateTodoById(std::string userId, std::string todoId, TodoDbData* todo);
         private:
             std::unique_ptr<services::TodoService::TodoServiceInjections> injections_;
             Logger logger;

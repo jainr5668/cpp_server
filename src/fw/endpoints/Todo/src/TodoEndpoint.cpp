@@ -34,8 +34,21 @@ namespace endpoints
         void TodoEndpoint::getTodo(RouteContext routeContext)
         {
             logger.info("TodoEndpoint::getTodo Entry");
-            routeContext.res->status_code = 500;
-            routeContext.res->body = "Not Implemented";
+            std::string todoId = routeContext.path_params.at("id");
+            std::string userId = Utils::getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
+            logger.info("TodoEndpoint::getTodo userId: " + userId);
+            logger.info("TodoEndpoint::getTodo todoId: " + todoId);
+            auto todo = todoService_->getTodoById(userId, todoId);
+            if (todo != nullptr)
+            {
+                routeContext.res->status_code = 200;
+                routeContext.res->body = objectToJson(*todo);
+            }
+            else
+            {
+                routeContext.res->status_code = 404;
+                routeContext.res->body = "Not Found";
+            }
             logger.info("TodoEndpoint::getTodo Exit");
         }
 
@@ -64,12 +77,6 @@ namespace endpoints
         {
             logger.info("TodoEndpoint::addTodo Entry");
             std::string userId = Utils::getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
-            if (userId.empty())
-            {
-                routeContext.res->status_code = 401;
-                routeContext.res->body = "Unauthorized";
-                return;
-            }
             auto todoPostData = jsonToObject<services::TodoService::TodoPostData>(routeContext.req->body);
             if (todoPostData.dueDate.value < std::chrono::system_clock::now())
             {
@@ -79,13 +86,11 @@ namespace endpoints
             auto response = todoService_->addTodo(todoPostData, userId);
             if (response == nullptr)
             {
-                logger.info("inside if true");
                 routeContext.res->status_code = 500;
                 routeContext.res->body = "Internal Server Error";
             }
             else
             {
-                logger.info("inside if false");
                 routeContext.res->status_code = 201;
                 routeContext.res->body = objectToJson(*response);
             }
@@ -95,16 +100,56 @@ namespace endpoints
         void TodoEndpoint::updateTodo(RouteContext routeContext)
         {
             logger.info("TodoEndpoint::updateTodo Entry");
-            routeContext.res->status_code = 500;
-            routeContext.res->body = "Not Implemented";
+            std::string todoId = routeContext.path_params.at("id");
+            std::string userId = Utils::getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
+            logger.info("TodoEndpoint::updateTodo userId: " + userId);
+            logger.info("TodoEndpoint::updateTodo todoId: " + todoId);
+            auto todo = todoService_->getTodoById(userId, todoId);
+            if (todo != nullptr)
+            {
+                auto jsonObject = Utils::string_to_json(routeContext.req->body);
+                jsonObject.contains("title") ? todo->title.value = jsonObject["title"].get<std::string>() : todo->title.value;
+                jsonObject.contains("description") ? todo->title.value = jsonObject["description"].get<std::string>() : todo->description.value;
+                todo->status.value = jsonObject.contains("status") ? jsonObject["status"].get<std::string>() : todo->status.value;
+                if (jsonObject.contains("dueDate"))
+                {
+                    auto dueDate = jsonObject["dueDate"].get<std::string>();
+                    if (Utils::string_to_timepoint(dueDate) < std::chrono::system_clock::now())
+                    {
+                        std::cout << "dueDate cannot be in the past" << std::endl;
+                        throw std::invalid_argument("dueDate cannot be in the past");
+                    }
+                    todo->dueDate.value = Utils::string_to_timepoint(dueDate);
+                }
+                todo = todoService_->updateTodoById(userId, todoId, todo);
+                routeContext.res->status_code = 200;
+                routeContext.res->body = objectToJson(*todo);
+            }
+            else
+            {
+                routeContext.res->status_code = 404;
+                routeContext.res->body = "Not Found";
+            }
             logger.info("TodoEndpoint::updateTodo Exit");
         }
 
         void TodoEndpoint::deleteTodo(RouteContext routeContext)
         {
             logger.info("TodoEndpoint::deleteTodo Entry");
-            routeContext.res->status_code = 500;
-            routeContext.res->body = "Not Implemented";
+            std::string userId = Utils::getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
+            std::string todoId = routeContext.path_params.at("id");
+            logger.info("TodoEndpoint::deleteTodo userId: " + userId);
+            logger.info("TodoEndpoint::deleteTodo todoId: " + todoId);
+            std::string response = todoService_->deleteTodoById(userId, todoId);
+            if (response.empty())
+            {
+                routeContext.res->status_code = 204;
+            }
+            else
+            {
+                routeContext.res->status_code = 500;
+                routeContext.res->body = "Not Implemented";
+            }
             logger.info("TodoEndpoint::deleteTodo Exit");
         }
 
@@ -134,11 +179,11 @@ namespace endpoints
             routes.push_back(Route{"/", RouteMethod::POST, addTodoConfig,
                                    std::function<void(RouteContext)>(std::bind(&TodoEndpoint::addTodo, this, std::placeholders::_1))});
 
-            // PUT /todos/{id}
+            // PATCH /todos/{id}
             updateTodoConfig.enabled = true;
             updateTodoConfig.accessLevels.push_back("admin");
             updateTodoConfig.scope.push_back("api");
-            routes.push_back(Route{"/:id", RouteMethod::PUT, updateTodoConfig,
+            routes.push_back(Route{"/:id", RouteMethod::PATCH, updateTodoConfig,
                                    std::function<void(RouteContext)>(std::bind(&TodoEndpoint::updateTodo, this, std::placeholders::_1))});
 
             // DELETE /todos/{id}

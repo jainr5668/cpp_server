@@ -138,6 +138,9 @@ std::string Router::requestMethodToString(RouteMethod method)
     case RouteMethod::DELETE:
         methodStr = "DELETE";
         break;
+    case RouteMethod::PATCH:
+        methodStr = "PATCH";
+        break;
     default:
         methodStr = "GET";
     }

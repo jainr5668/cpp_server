@@ -1,5 +1,6 @@
 #include "TodoServiceData.h"
 #include <iostream>
+#include "Utils.h"
 
 namespace services
 {
@@ -34,6 +35,23 @@ namespace services
             logger.info(std::to_string(data_->execute(data_->createInsertQuery("todos", todoDbData)).size()));
             logger.info(data_->createInsertQuery("todos", todoDbData));
             logger.info("TodoServiceData::insertTodo Exit");
+            return true;
+        }
+
+        bool TodoServiceData::deleteTodo(std::string userId, std::string todoId)
+        {
+            logger.info("TodoServiceData::deleteTodo Entry");
+            std::string query = "DELETE FROM todos WHERE userId = '" + userId + "' AND id = '" + todoId + "';";
+            data_->execute(query);
+            logger.info("TodoServiceData::deleteTodo Exit");
+            return true;
+        }
+
+        bool TodoServiceData::updateTodoById(TodoDbData todo){
+            logger.info("TodoServiceData::updateTodoById Entry");
+            std::string query = "UPDATE todos SET title = '" + todo.title.value + "', description = '" + todo.description.value + "', status = '" + todo.status.value + "', dueDate = '" + Utils::timepoint_to_string(todo.dueDate.value) + "', updated_at = '" + Utils::timepoint_to_string(todo.updated_at.value) + "' WHERE id = '" + todo.id.value() + "';";
+            data_->execute(query);
+            logger.info("TodoServiceData::updateTodoById Exit");
             return true;
         }
     } // namespace services::AuthenticationServiceData
