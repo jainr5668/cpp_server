@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "logger.h"
+#include "IAuthenticationService.h"
 
 namespace endpoints
 {
@@ -9,9 +10,8 @@ namespace endpoints
         class AuthenticationEndpointInjections
         {
         public:
-            AuthenticationEndpointInjections() = default;
-            ~AuthenticationEndpointInjections() = default;
             std::shared_ptr<Logger> logger{nullptr};
+            std::shared_ptr<services::AuthenticationService::IAuthenticationService> authenticationService;
         };
     } // namespace endpoints::AuthenticationEndpoint
 } // namespace endpoints

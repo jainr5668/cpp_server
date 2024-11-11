@@ -111,6 +111,13 @@ void Server::start()
       logger.info("Stop Processing request: " + reqPath + " Method: " + req->method);
       send(new_socket, res->to_string().c_str(), res->to_string().length(), 0);
       close(new_socket);
+      if(req)
+      {
+         delete req;
+      } 
+      if(res)
+      {
+      delete res;}
    }
 }
 void Server::stop()

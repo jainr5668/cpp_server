@@ -1,13 +1,48 @@
 #include "TodoServiceTypes.h"
 #include "TodoService.h"
+#include "Data.h"
+#include "TodoServiceData.h"
 
+        std::shared_ptr<services::TodoService::TodoService> services::TodoService::TodoService::instance_ = nullptr;
 namespace services
 {
     namespace TodoService
     {
-        TodoService::TodoService(std::unique_ptr<services::TodoService::TodoServiceInjections> injections)
+        void* TodoService::getInstance(){
+            if (instance_ == nullptr)
+            {
+                instance_ = std::make_shared<services::TodoService::TodoService>();
+            }
+            return static_cast<void*>(instance_.get());
+        }
+        TodoService::TodoService()
         {
-            injections_ = std::move(injections);
+            injections_ = new TodoServiceInjections();
+            instance_ = std::shared_ptr<TodoService>(this);
+        }
+
+        TodoService::~TodoService()
+        {
+            instance_ = nullptr;
+            delete injections_;
+        }
+
+        void TodoService::initialize()
+        {
+            logger.info("TodoService::initialize Entry");
+            injections_ = new services::TodoService::TodoServiceInjections();
+            injections_->todoServiceData = std::make_unique<services::TodoService::TodoServiceData>(std::make_unique<Data>("TodoData.db"));
+            logger.info("TodoService::initialize Exit");
+        }
+
+        void * TodoService::getInterface(ModuleUid uid){
+            logger.info("TodoService::getInterface Entry");
+            void* interfacePtr = nullptr;
+            if(uid == GET_MODULE_UID(ITodoService)){
+                interfacePtr = static_cast<ITodoService*>(getInstance());
+            }
+            logger.info("TodoService::getInterface Exit");
+            return interfacePtr;
         }
 
         TodoDbData *TodoService::addTodo(TodoPostData todoPostData, std::string userId)
@@ -93,6 +128,12 @@ namespace services
             }
             logger.info("TodoService::updateTodoById Exit");
             return result;
+        }
+        void TodoService::shutdown()
+        {
+            logger.info("TodoService::shutdown Entry");
+            delete injections_;
+            logger.info("TodoService::shutdown Exit");
         }
     }
 }

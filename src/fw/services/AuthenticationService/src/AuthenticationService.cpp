@@ -5,10 +5,11 @@ namespace services
 {
     namespace AuthenticationService
     {
-        AuthenticationService::AuthenticationService(std::unique_ptr<AuthenticationServiceInjections> injections): injections_(std::move(injections))
+        AuthenticationService::AuthenticationService()
         {
             logger.info("AuthenticationService::AuthenticationService Constructor Entry");
-            connect();
+
+            instance_ = std::shared_ptr<AuthenticationService>(this);
             logger.info("AuthenticationService::AuthenticationService Constructor Exit");
         }
 
@@ -41,8 +42,46 @@ namespace services
             if (users.size() == 1)
             {
                 isLoginSuccess = users[0][0];
-            }   
-            return isLoginSuccess;            
+            }
+            return isLoginSuccess;
+        }
+
+        void AuthenticationService::initialize()
+        {
+            logger.info("AuthenticationService::initialize Entry");
+            injections_ = new AuthenticationServiceInjections();
+            injections_->authenticationServiceData_ = std::make_unique<AuthenticationServiceData>(std::make_unique<Data>("AuthenticationServiceData.db"));
+            logger.info("AuthenticationService::initialize Exit");
+        }
+        void *AuthenticationService::getInterface(ModuleUid uid)
+        {
+            logger.info("AuthenticationService::getInterface Entry");
+            void *interfacePtr = nullptr;
+            if (uid == GET_MODULE_UID(IAuthenticationService))
+            {
+                interfacePtr = static_cast<IAuthenticationService *>(getInstance());
+            }
+            logger.info("AuthenticationService::getInterface Exit");
+            return nullptr;
+        }
+        void AuthenticationService::shutdown()
+        {
+            logger.info("AuthenticationService::shutdown Entry");
+            delete injections_;
+            logger.info("AuthenticationService::shutdown Exit");
+        }
+        void *AuthenticationService::getInstance()
+        {
+            logger.info("AuthenticationService::getInstance Entry");
+            if (instance_ == nullptr)
+            {
+                instance_ = std::make_shared<services::AuthenticationService::AuthenticationService>();
+            }
+            return static_cast<void *>(instance_.get());
+            logger.info("AuthenticationService::getInstance Exit");
+        }
+        void AuthenticationService::setInterface(ModuleUid uid, void *interface)
+        {
         }
 
         bool AuthenticationService::createUser(services::AuthenticationService::AuthenticationServiceTypes::SingupData singupData_)

@@ -15,8 +15,16 @@ namespace services
         class TodoService : public services::TodoService::ITodoService
         {
         public:
-            TodoService(std::unique_ptr<services::TodoService::TodoServiceInjections> injections);
+            TodoService();
+            ~TodoService();
 
+            void initialize() override;
+            void *getInterface(ModuleUid uid);
+            void setInterface(ModuleUid uid, void *interface){};
+            void connect() override{};
+            void *getInstance() override;
+            void shutdown() override;
+            ModuleUid getInterfaceUID(){return GET_MODULE_UID(services::TodoService::ITodoService);};
             /**
              * @brief Add a new todo for a user
              */
@@ -42,7 +50,8 @@ namespace services
              */
             TodoDbData* updateTodoById(std::string userId, std::string todoId, TodoDbData* todo);
         private:
-            std::unique_ptr<services::TodoService::TodoServiceInjections> injections_;
+        static std::shared_ptr<services::TodoService::TodoService> instance_;
+            services::TodoService::TodoServiceInjections* injections_;
             Logger logger;
         };
     } // namespace services::AuthenticationServiceData

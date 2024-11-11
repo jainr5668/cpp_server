@@ -1,0 +1,26 @@
+{
+    "services": {
+        "todos": {
+            "namespace": "services::TodoService::TodoService",
+            "connections": [],
+            "name": "services::TodoService::ITodoService"
+        },
+        "auth" :{
+            "namespace": "services::AuthenticationService::AuthenticationService",
+            "connections": [],
+            "name": "services::AuthenticationService::IAuthenticationService"
+        }
+    },
+    "endpoints": {
+        "todos": {
+            "namespace": "endpoints::TodoEndpoint::TodoEndpoint",
+            "connections": ["services::TodoService::ITodoService", "services::AuthenticationService::IAuthenticationService"],
+            "name": "todos"
+        },
+        "auth" :{
+            "namespace": "endpoints::AuthenticationEndpoint::AuthenticationEndpoint",
+            "connections": ["services::AuthenticationService::IAuthenticationService"],
+            "name": "auth"
+        }
+    }
+}

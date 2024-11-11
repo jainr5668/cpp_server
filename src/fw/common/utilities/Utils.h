@@ -56,4 +56,20 @@ public:
     {
         return nlohmann::json::parse(str);
     }
+
+    /**
+     * string to vector
+     */
+    static std::vector<std::string> splitByStream(const std::string& str, char delimiter = ' ') {
+        std::vector<std::string> tokens;
+        std::stringstream ss(str);
+        std::string token;
+        
+        while (std::getline(ss, token, delimiter)) {
+            if (!token.empty()) {  // Skip empty tokens
+                tokens.push_back(token);
+            }
+        }
+        return tokens;
+    }
 };

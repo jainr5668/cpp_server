@@ -18,18 +18,57 @@ namespace endpoints
 {
     namespace TodoEndpoint
     {
-        TodoEndpoint::TodoEndpoint(std::shared_ptr<BaseService> todoService)
+        TodoEndpoint::TodoEndpoint()
         {
             logger.info("TodoEndpoint::TodoEndpoint Entry");
-            for (auto route : getRoutes())
-            {
-                addRoute(route);
-            }
-            todoService_ = std::dynamic_pointer_cast<TodoService>(todoService);
+
             // auto todoServiceInjections = std::make_unique<TodoServiceInjections>();
             // todoServiceInjections->todoServiceData = std::make_unique<TodoServiceData>(std::make_unique<Data>("TodoData.db"));
             // todoService_ = std::make_unique<TodoService>(std::move(todoServiceInjections));
             logger.info("TodoEndpoint::TodoEndpoint Exit");
+        }
+
+        void TodoEndpoint::initialize()
+        {
+            logger.info("TodoEndpoint::initialize Entry");
+            injections_ = new TodoEndpointInjections();
+            logger.info("TodoEndpoint::initialize Exit");
+        }
+        void *TodoEndpoint::getInterface(ModuleUid uid)
+        {
+            logger.info("TodoEndpoint::getInterface Entry");
+            logger.info("TodoEndpoint::getInterface Exit");
+            return nullptr;
+        }
+        void TodoEndpoint::setInterface(ModuleUid uid, void *interface)
+        {
+            logger.info("TodoEndpoint::setInterface Entry");
+            if (uid == GET_MODULE_UID(services::TodoService::ITodoService))
+            {
+                injections_->todoService = std::shared_ptr<TodoService>(static_cast<TodoService *>(interface));
+            }
+            logger.info("TodoEndpoint::setInterface Exit");
+        }
+        void TodoEndpoint::connect()
+        {
+            logger.info("TodoEndpoint::connect Entry");
+            assert(injections_->todoService != nullptr), "Todo Service is not set";
+            for (auto route : getRoutes())
+            {
+                addRoute(route);
+            }
+            logger.info("TodoEndpoint::connect Exit");
+        }
+        void *TodoEndpoint::getInstance()
+        {
+            logger.info("TodoEndpoint::getInstance Entry");
+            logger.info("TodoEndpoint::getInstance Exit");
+            return nullptr;
+        }
+        void TodoEndpoint::shutdown()
+        {
+            logger.info("TodoEndpoint::shutdown Entry");
+            logger.info("TodoEndpoint::shutdown Exit");
         }
 
         void TodoEndpoint::getTodo(RouteContext routeContext)
@@ -39,7 +78,7 @@ namespace endpoints
             std::string userId = Utils::getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
             logger.info("TodoEndpoint::getTodo userId: " + userId);
             logger.info("TodoEndpoint::getTodo todoId: " + todoId);
-            auto todo = todoService_->getTodoById(userId, todoId);
+            auto todo = injections_->todoService->getTodoById(userId, todoId);
             if (todo != nullptr)
             {
                 routeContext.res->status_code = 200;
@@ -56,7 +95,7 @@ namespace endpoints
         void TodoEndpoint::getTodos(RouteContext routeContext)
         {
             logger.info("TodoEndpoint::getTodos Entry");
-            auto todos = todoService_->getTodos(Utils::getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", ""));
+            auto todos = injections_->todoService->getTodos(Utils::getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", ""));
             routeContext.res->status_code = 200;
             std::vector<std::string> memberIds;
             std::vector<TodoDBData> members;
@@ -84,7 +123,7 @@ namespace endpoints
                 std::cout << "dueDate cannot be in the past" << std::endl;
                 throw std::invalid_argument("dueDate cannot be in the past");
             }
-            auto response = todoService_->addTodo(todoPostData, userId);
+            auto response = injections_->todoService->addTodo(todoPostData, userId);
             if (response == nullptr)
             {
                 routeContext.res->status_code = 500;
@@ -105,7 +144,7 @@ namespace endpoints
             std::string userId = Utils::getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
             logger.info("TodoEndpoint::updateTodo userId: " + userId);
             logger.info("TodoEndpoint::updateTodo todoId: " + todoId);
-            auto todo = todoService_->getTodoById(userId, todoId);
+            auto todo = injections_->todoService->getTodoById(userId, todoId);
             if (todo != nullptr)
             {
                 auto jsonObject = Utils::string_to_json(routeContext.req->body);
@@ -122,7 +161,7 @@ namespace endpoints
                     }
                     todo->dueDate.value = Utils::string_to_timepoint(dueDate);
                 }
-                todo = todoService_->updateTodoById(userId, todoId, todo);
+                todo = injections_->todoService->updateTodoById(userId, todoId, todo);
                 routeContext.res->status_code = 200;
                 routeContext.res->body = objectToJson(*todo);
             }
@@ -141,7 +180,7 @@ namespace endpoints
             std::string todoId = routeContext.path_params.at("id");
             logger.info("TodoEndpoint::deleteTodo userId: " + userId);
             logger.info("TodoEndpoint::deleteTodo todoId: " + todoId);
-            std::string response = todoService_->deleteTodoById(userId, todoId);
+            std::string response = injections_->todoService->deleteTodoById(userId, todoId);
             if (response.empty())
             {
                 routeContext.res->status_code = 204;

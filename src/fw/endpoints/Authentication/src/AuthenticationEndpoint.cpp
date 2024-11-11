@@ -7,6 +7,7 @@ using AuthenticationServiceInjections = services::AuthenticationService::Authent
 using LoginData = services::AuthenticationService::AuthenticationServiceTypes::LoginData;
 using LoginResponse = services::AuthenticationService::AuthenticationServiceTypes::LoginResponse;
 using AuthorizationConfig = common::authorization::AuthorizationConfig;
+using IAuthenticationService = services::AuthenticationService::IAuthenticationService;
 
 namespace endpoints
 {
@@ -15,21 +16,58 @@ namespace endpoints
         AuthenticationEndpoint::AuthenticationEndpoint()
         {
             logger.info("AuthenticationEndpoint::AuthenticationEndpoint Entry");
-            std::unique_ptr<AuthenticationServiceInjections> injections_ = std::make_unique<AuthenticationServiceInjections>();
-            std::unique_ptr<Data> data = std::make_unique<Data>("AuthenticationServiceData.db");
-            auto authenticationServiceData_ = std::make_unique<services::AuthenticationService::AuthenticationServiceData>(std::move(data));
-            injections_->authenticationServiceData_ = std::move(authenticationServiceData_);
-            authenticationService = new services::AuthenticationService::AuthenticationService(std::move(injections_));
+            
+            logger.info("AuthenticationEndpoint::AuthenticationEndpoint Exit");
+        }
+        void AuthenticationEndpoint::initialize()
+        {
+            logger.info("AuthenticationEndpoint::initialize Entry");
+            injections_ = new AuthenticationEndpointInjections();
+            
+            logger.info("AuthenticationEndpoint::initialize Exit");
+        }
+        void *AuthenticationEndpoint::getInterface(ModuleUid uid)
+        {
+            logger.info("AuthenticationEndpoint::getInterface Entry");
+            logger.info("AuthenticationEndpoint::getInterface Exit");
+            return dynamic_cast<IAuthenticationEndpoint*>(this);
+        }
+        void AuthenticationEndpoint::setInterface(ModuleUid uid, void *interface)
+        {
+            logger.info("AuthenticationEndpoint::setInterface Entry");
+            if (uid == GET_MODULE_UID(IAuthenticationService))
+            {
+                injections_->authenticationService = std::shared_ptr<IAuthenticationService>(static_cast<IAuthenticationService *>(interface));
+            }
+            logger.info("AuthenticationEndpoint::setInterface Exit");
+        }
+        void AuthenticationEndpoint::connect()
+        {
+            logger.info("AuthenticationEndpoint::connect Entry");
+            assert(injections_->authenticationService != nullptr), "Authentication Service is not set";
             for (auto route : getRoutes())
             {
                 addRoute(route);
             }
-            logger.info("AuthenticationEndpoint::AuthenticationEndpoint Exit");
+            logger.info("AuthenticationEndpoint::connect Exit");
         }
+        void *AuthenticationEndpoint::getInstance()
+        {
+            logger.info("AuthenticationEndpoint::getInstance Entry");
+            logger.info("AuthenticationEndpoint::getInstance Exit");
+            return nullptr;
+        }
+        void AuthenticationEndpoint::shutdown()
+        {
+            logger.info("AuthenticationEndpoint::shutdown Entry");
+            // delete injections_;
+            logger.info("AuthenticationEndpoint::shutdown Exit");
+        }
+        
         void AuthenticationEndpoint::login(RouteContext routeContext)
         {
             logger.info("AuthenticationEndpoint::login Entry");
-            std::string userId = authenticationService->isCredValid(jsonToObject<LoginData>(routeContext.req->body));
+            std::string userId = injections_->authenticationService->isCredValid(jsonToObject<LoginData>(routeContext.req->body));
             if (!userId.empty())
             {
                 routeContext.res->status_code = 200;
@@ -54,7 +92,7 @@ namespace endpoints
         void AuthenticationEndpoint::signup(RouteContext routeContext)
         {
             logger.info("AuthenticationEndpoint::signup Entry");
-            bool isUserCreated = authenticationService->createUser(jsonToObject<services::AuthenticationService::AuthenticationServiceTypes::SingupData>(routeContext.req->body));
+            bool isUserCreated = injections_->authenticationService->createUser(jsonToObject<services::AuthenticationService::AuthenticationServiceTypes::SingupData>(routeContext.req->body));
             if (isUserCreated)
             {
                 routeContext.res->status_code = 200;

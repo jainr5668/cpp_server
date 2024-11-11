@@ -23,3 +23,4 @@ namespace services
         };
     } // namespace services::AuthenticationServiceData
 } // namespace services
+DEFINE_MODULE_UID(services::TodoService::ITodoService, 0x00000001)

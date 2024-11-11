@@ -3,8 +3,9 @@
 #include "logger.h"
 #include "RouterType.h"
 #include "AuthenticationService.h"
-#include "AuthenticationServiceInjections.h"
+#include "AuthenticationEndpointInjections.h"
 #include <memory>
+#include "BaseService.h"
 
 namespace endpoints
 {
@@ -31,12 +32,17 @@ namespace endpoints
              * @param routeContext
              */
             void timepass(RouteContext routeContext);
+            void initialize();
+            void *getInterface(ModuleUid uid);
+            void setInterface(ModuleUid uid, void *interface);
+            void connect();
+            void *getInstance();
+            void shutdown();
+            ModuleUid getInterfaceUID(){return GET_MODULE_UID(endpoints::AuthenticationEndpoint::IAuthenticationEndpoint);};
 
         private:
             Logger logger;
-
-            // Instance of AuthenticationService
-            services::AuthenticationService::AuthenticationService *authenticationService;
+            AuthenticationEndpointInjections* injections_{nullptr};
 
             /**
              * @brief Get the vector of Routes object

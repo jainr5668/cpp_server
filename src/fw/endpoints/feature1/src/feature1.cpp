@@ -83,5 +83,5 @@ Feature1::Feature1()
       logger.info("Feature1::ronak Exit");
    };
    addRoute(route);
-   addSubRouter("f123", std::make_unique<F123>());
+   addSubRouter("f123", std::make_shared<F123>());
 }

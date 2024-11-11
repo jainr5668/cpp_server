@@ -3,19 +3,21 @@
 
 void Router::addRoute(Route route)
 {
+    logger.info("Router::addRoute Entry");
     routes.push_back(route);
+    logger.info("Router::addRoute Exit");
+
 }
-void Router::addSubRouter(const std::string &path, std::unique_ptr<IRouter> subrouter_)
+void Router::addSubRouter(const std::string &path, std::shared_ptr<IRouter> subrouter_)
 {
-    subRoutes[path] = std::move(subrouter_);
+    logger.info("Router::addSubRouter Entry");
+    logger.info("Path: " + path);
+    subRoutes[path] = subrouter_;
+    logger.info("Router::addSubRouter Exit");
 }
 void Router::handle_request(Request *req, Response *res)
 {
-    // logger.info("Processing request: " + req->path + " Method: " + req->method);
-    // for (auto route : routes)
-    // {
-    //     logger.info("Route: " + route.path + " Method: " + requestMethodToString(route.method));
-    // }
+    logger.info("Processing request: " + req->path + " Method: " + req->method);
     std::vector<std::string> seglist;
     std::string segment;
     std::stringstream test(req->path);

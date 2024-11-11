@@ -39,12 +39,18 @@ public:
         Router::addRoute(route);
     }
 
-    void addSubRouter(std::string path, std::unique_ptr<IRouter> subRouter)
+    void addSubRouter(std::string path, std::shared_ptr<IRouter> subRouter)
     {
-        Router::addSubRouter(path, std::move(subRouter));
+        Router::addSubRouter(path, subRouter);
     }
     void handle_request(Request *req, Response *res) override
     {
         Router::handle_request(req, res);
     }
+    virtual void initialize() = 0;
+    virtual void *getInterface(ModuleUid uid) = 0;
+    virtual void setInterface(ModuleUid uid, void *interface) = 0;
+    virtual void connect() = 0;
+    virtual void *getInstance() = 0;
+    virtual void shutdown() = 0;
 };
