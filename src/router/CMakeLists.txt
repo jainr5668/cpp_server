@@ -1,9 +1,10 @@
 add_library(router_lib
     src/router.cpp
 )
-target_include_directories(router_lib PUBLIC
+target_include_directories(router_lib 
+PUBLIC
+${CMAKE_CURRENT_SOURCE_DIR}/pub
     ${CMAKE_CURRENT_SOURCE_DIR}/inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/pub
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${CMAKE_CURRENT_SOURCE_DIR}
 )

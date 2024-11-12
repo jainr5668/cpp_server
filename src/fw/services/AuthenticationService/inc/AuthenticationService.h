@@ -11,6 +11,7 @@ namespace services
         {
         public:
             AuthenticationService();
+            ~AuthenticationService();
             std::string isCredValid(services::AuthenticationService::AuthenticationServiceTypes::LoginData);
             bool createUser(services::AuthenticationService::AuthenticationServiceTypes::SingupData);
             void initialize() override;

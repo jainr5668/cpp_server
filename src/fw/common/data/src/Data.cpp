@@ -15,23 +15,25 @@ static int callback(void* data, int argc, char** argv, char** azColName) {
 
 Data::Data(std::string dbName) 
 {
+    logger_.info("Data::Data Entry");
     dbPath_ = "db/" + dbName;
     struct stat info;
     if (stat("db", &info) != 0) {
         // Directory does not exist, create it
         if (mkdir("db", 0777) == -1) {
-            std::cerr << "Error creating directory 'db'" << std::endl;
+            logger_.error("Error creating directory 'db'");
         }
-        std::cout << "Created directory 'db'" << std::endl;
     } else if (!(info.st_mode & S_IFDIR)) {
         // Path exists but is not a directory
-        std::cerr << "'db' exists but is not a directory" << std::endl;
+        logger_.error("Path 'db' exists but is not a directory");
     }
+    logger_.info("Data::Data Exit");
 
 }
 
 std::vector<std::vector<std::string>> Data::execute(std::string query)
 {
+    logger_.info("Data::execute Entry");
     std::vector<std::vector<std::string>> results;
     bool result = false;
     char *messageError;

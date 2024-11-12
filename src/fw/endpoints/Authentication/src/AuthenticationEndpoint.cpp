@@ -23,7 +23,10 @@ namespace endpoints
         {
             logger.info("AuthenticationEndpoint::initialize Entry");
             injections_ = new AuthenticationEndpointInjections();
-            
+            for (auto route : getRoutes())
+            {
+                addRoute(route);
+            }
             logger.info("AuthenticationEndpoint::initialize Exit");
         }
         void *AuthenticationEndpoint::getInterface(ModuleUid uid)
@@ -39,16 +42,17 @@ namespace endpoints
             {
                 injections_->authenticationService = std::shared_ptr<IAuthenticationService>(static_cast<IAuthenticationService *>(interface));
             }
+            else if (uid == GET_MODULE_UID(services::CommonService::IUtilityService))
+            {
+                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(static_cast<services::CommonService::IUtilityService *>(interface));
+            }
             logger.info("AuthenticationEndpoint::setInterface Exit");
         }
         void AuthenticationEndpoint::connect()
         {
             logger.info("AuthenticationEndpoint::connect Entry");
             assert(injections_->authenticationService != nullptr), "Authentication Service is not set";
-            for (auto route : getRoutes())
-            {
-                addRoute(route);
-            }
+            assert(injections_->utilityService != nullptr), "Utility Service is not set";
             logger.info("AuthenticationEndpoint::connect Exit");
         }
         void *AuthenticationEndpoint::getInstance()

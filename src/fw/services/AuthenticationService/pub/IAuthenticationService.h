@@ -16,4 +16,4 @@ namespace services
         };
     } // namespace services::AuthenticationService
 } // namespace services
-DEFINE_MODULE_UID(services::AuthenticationService::IAuthenticationService, 0x98235f);
+DEFINE_MODULE_UID(services::AuthenticationService::IAuthenticationService, "0x98235f");

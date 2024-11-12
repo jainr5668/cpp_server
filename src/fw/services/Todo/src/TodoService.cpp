@@ -17,14 +17,14 @@ namespace services
         }
         TodoService::TodoService()
         {
-            injections_ = new TodoServiceInjections();
-            instance_ = std::shared_ptr<TodoService>(this);
         }
 
         TodoService::~TodoService()
         {
             instance_ = nullptr;
-            delete injections_;
+            logger.info("TodoService::~TodoService Entry");
+            // delete injections_;
+            logger.info("TodoService::~TodoService Exit");
         }
 
         void TodoService::initialize()
@@ -39,10 +39,26 @@ namespace services
             logger.info("TodoService::getInterface Entry");
             void* interfacePtr = nullptr;
             if(uid == GET_MODULE_UID(ITodoService)){
-                interfacePtr = static_cast<ITodoService*>(getInstance());
+                interfacePtr = this;
             }
             logger.info("TodoService::getInterface Exit");
             return interfacePtr;
+        }
+
+        void TodoService::setInterface(ModuleUid uid, void *interface){
+            logger.info("TodoService::setInterface Entry");
+            if (uid == GET_MODULE_UID(services::CommonService::IUtilityService))
+            {
+                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(static_cast<services::CommonService::IUtilityService *>(interface));
+            }
+            logger.info("TodoService::setInterface Exit");
+        }
+
+        void TodoService::connect()
+        {
+            logger.info("TodoService::connect Entry");
+            assert(injections_->utilityService != nullptr), "Utility Service is not set";
+            logger.info("TodoService::connect Exit");
         }
 
         TodoDbData *TodoService::addTodo(TodoPostData todoPostData, std::string userId)
@@ -132,7 +148,6 @@ namespace services
         void TodoService::shutdown()
         {
             logger.info("TodoService::shutdown Entry");
-            delete injections_;
             logger.info("TodoService::shutdown Exit");
         }
     }

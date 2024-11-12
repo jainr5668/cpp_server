@@ -2,6 +2,7 @@
 
 #include "AuthenticationServiceData.h"
 #include <memory>
+#include "IUtilityService.h"
 
 namespace services
 {
@@ -11,6 +12,7 @@ namespace services
         {
         public:
             std::unique_ptr<AuthenticationServiceData> authenticationServiceData_{nullptr};
+            std::shared_ptr<services::CommonService::IUtilityService> utilityService{nullptr};
         };
     } // namespace services::AuthenticationServiceData
 } // namespace services

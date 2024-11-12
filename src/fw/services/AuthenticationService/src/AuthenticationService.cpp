@@ -9,7 +9,7 @@ namespace services
         {
             logger.info("AuthenticationService::AuthenticationService Constructor Entry");
 
-            instance_ = std::shared_ptr<AuthenticationService>(this);
+            // instance_ = std::shared_ptr<AuthenticationService>(this);
             logger.info("AuthenticationService::AuthenticationService Constructor Exit");
         }
 
@@ -17,6 +17,7 @@ namespace services
         {
             logger.info("AuthenticationService::connect");
             bool isNull = false;
+            assert(injections_->utilityService != nullptr), "Utility Service is not set";
             std::string errorMessage;
             if (injections_ == nullptr)
             {
@@ -59,16 +60,21 @@ namespace services
             void *interfacePtr = nullptr;
             if (uid == GET_MODULE_UID(IAuthenticationService))
             {
-                interfacePtr = static_cast<IAuthenticationService *>(getInstance());
+                interfacePtr = this;
             }
             logger.info("AuthenticationService::getInterface Exit");
-            return nullptr;
+            return interfacePtr;
         }
         void AuthenticationService::shutdown()
         {
             logger.info("AuthenticationService::shutdown Entry");
-            delete injections_;
             logger.info("AuthenticationService::shutdown Exit");
+        }
+
+        AuthenticationService::~AuthenticationService()
+        {
+            logger.info("AuthenticationService::~AuthenticationService Entry");
+            logger.info("AuthenticationService::~AuthenticationService Exit");
         }
         void *AuthenticationService::getInstance()
         {
@@ -82,6 +88,12 @@ namespace services
         }
         void AuthenticationService::setInterface(ModuleUid uid, void *interface)
         {
+            logger.info("AuthenticationService::setInterface Entry");
+            if (uid == GET_MODULE_UID(services::CommonService::IUtilityService))
+            {
+                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(static_cast<services::CommonService::IUtilityService *>(interface));
+            }
+            logger.info("AuthenticationService::setInterface Exit");
         }
 
         bool AuthenticationService::createUser(services::AuthenticationService::AuthenticationServiceTypes::SingupData singupData_)

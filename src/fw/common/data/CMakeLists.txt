@@ -7,7 +7,7 @@ target_include_directories(data_lib PUBLIC
 ${CMAKE_CURRENT_SOURCE_DIR}/pub
 ${CMAKE_CURRENT_SOURCE_DIR}/inc
 )
-target_link_libraries(data_lib LINK_PUBLIC sqlite3)
+target_link_libraries(data_lib LINK_PUBLIC sqlite3 logging_lib)
 # target_link_libraries(data_lib sqlite3)
 # Testing
 enable_testing()

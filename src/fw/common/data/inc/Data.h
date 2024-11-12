@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sqlite3.h>
 #include <vector>
+#include "logger.h"
 
 class Data : public IData
 {
@@ -15,4 +16,5 @@ public:
 private:
     sqlite3 *db_;
     std::string dbPath_;
+    Logger logger_;
 };

@@ -4,6 +4,7 @@
 void Router::addRoute(Route route)
 {
     logger.info("Router::addRoute Entry");
+    logger.info("Router::addRoute Route: " + route.path + " Method: " + requestMethodToString(route.method));
     routes.push_back(route);
     logger.info("Router::addRoute Exit");
 

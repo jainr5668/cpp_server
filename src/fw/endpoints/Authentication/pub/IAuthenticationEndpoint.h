@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseEndpoint.h"
 
+
 namespace endpoints
 {
     namespace AuthenticationEndpoint
@@ -14,4 +15,4 @@ namespace endpoints
         };
     }
 } // namespace endpoints::AuthenticationEndpoint
-DEFINE_MODULE_UID(endpoints::AuthenticationEndpoint::IAuthenticationEndpoint, 1234567890)
+DEFINE_MODULE_UID(endpoints::AuthenticationEndpoint::IAuthenticationEndpoint, std::to_string(1234567890))

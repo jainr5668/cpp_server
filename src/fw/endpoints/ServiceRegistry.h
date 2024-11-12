@@ -38,9 +38,11 @@ public:
         if (it != serviceCreators_.end())
         {
             service = it->second();
-            std::cout << "find the name :" << name << std::endl;
         }
-        std::cout << "returning service" << service.get() <<std::endl;
+        else
+        {
+            std::cerr << "Service not found: " << name << std::endl;
+        }
         return service;
     }
 
@@ -77,7 +79,7 @@ private:
 #define REGISTER_SERVICE(name, type)                                                                                                      \
     namespace                                                                                                                             \
     {                                                                                                                                     \
-        const bool UNIQUE_VAR = []() {                                                                                                    \
+        const bool UNIQUE_VAR = []() {                                                                                 \
             ServiceRegistry::instance().registerService(name, []() -> std::shared_ptr<BaseService> { return std::make_shared<type>(); }); \
             return true;                                                                                                                  \
         }();                                                                                                                              \

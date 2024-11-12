@@ -20,8 +20,8 @@ namespace services
 
             void initialize() override;
             void *getInterface(ModuleUid uid);
-            void setInterface(ModuleUid uid, void *interface){};
-            void connect() override{};
+            void setInterface(ModuleUid uid, void *interface);
+            void connect() override;
             void *getInstance() override;
             void shutdown() override;
             ModuleUid getInterfaceUID(){return GET_MODULE_UID(services::TodoService::ITodoService);};

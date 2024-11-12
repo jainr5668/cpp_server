@@ -18,4 +18,4 @@ namespace endpoints
         };
     }
 } // namespace endpoints::Todo
-DEFINE_MODULE_UID(endpoints::TodoEndpoint::ITodoEndpoint, 0x00000011)
+DEFINE_MODULE_UID(endpoints::TodoEndpoint::ITodoEndpoint, "0x00000011")

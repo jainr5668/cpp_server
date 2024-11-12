@@ -25,7 +25,7 @@ public:
    void connect() override {};
    void *getInstance() override{return nullptr;};
    void shutdown() override {};
-   ModuleUid getInterfaceUID(){return 12314;};
+   ModuleUid getInterfaceUID(){return "12314";};
    void addRoute(Route route);
    void handle_request(Request *req, Response *res);
    void addSubRouter(const std::string &path, std::shared_ptr<IRouter> subrouter_);

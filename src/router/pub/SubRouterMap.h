@@ -3,50 +3,76 @@
 #include <iostream>
 #include "registry.h"
 #include <nlohmann/json.hpp>
-
-
+#include "BaseService.h"
 
 class ObjectFactory
 {
 public:
-    void discoverDependencies()
+    bool discoverDependencies()
     {
         logger_.info("ObjectFactory::discoverDependencies Entry");
-        std::ifstream inputFile("/home/ronak/cpp_server/src/router/pub/dependencies.json");
+        std::string dependenciesFile = "/app/src/router/pub/dependencies.json";
+        bool result = false;
+        std::ifstream inputFile(dependenciesFile);
         if (!inputFile.is_open())
         {
-            std::cerr << "Could not open the Dependencies file: " << std::endl;
-            return;
+            logger_.error("Could not open the Dependencies file: " + dependenciesFile);
         }
-        inputFile >> jsonData;
-        inputFile.close();
+        else
+        {
+            inputFile >> jsonData;
+            inputFile.close();
+            result = true;
+        }
         logger_.info("ObjectFactory::discoverDependencies Exit");
+        return result;
     }
     void generateServiceDependencies()
     {
         logger_.info("ObjectFactory::generateServiceDependencies Entry");
-        std::cout << jsonData["services"].size() << std::endl;
-        for (auto &service : jsonData["services"])
+        for (auto it = jsonData["services"].begin(); it != jsonData["services"].end(); ++it)
         {
-            std::cout << "Service Namespace: " << service.dump(4) << std::endl;
-            std::cout << "Service Name: " << service["name"] << std::endl;
-            auto serviceCreator = ServiceRegistry::instance().createService(service["namespace"]);
-            if (serviceCreator)
-            {
-                std::cout << "Service Creator is not null" << std::endl;
-            }
-            else {
-                std::cout << "Service Creator is null" << std::endl;
-            }
+            getOrCreateServiceInstance(it.key());
+        }
+        logger_.info("ObjectFactory::generateServiceDependencies Exit");
+    }
 
+    /**
+     * @brief Get the Service Instance object
+     */
+    std::shared_ptr<BaseService> getOrCreateServiceInstance(std::string serviceName)
+    {
+        logger_.info("ObjectFactory::getService Entry");
+        auto it = serviceDependencies.find(serviceName);
+        std::shared_ptr<BaseService> interfacePtr = nullptr;
+        if (it != serviceDependencies.end())
+        {
+            logger_.info("ObjectFactory::getService Exit");
+            interfacePtr = it->second;
+        }
+        else
+        {
+            auto serviceCreator = ServiceRegistry::instance().createService(jsonData["services"][serviceName]["namespace"].get<std::string>());
             if (serviceCreator)
             {
                 serviceCreator->initialize();
+                for (auto &dependency : jsonData["services"][serviceName]["connections"])
+                {
+                    auto dependencyService = getOrCreateServiceInstance(dependency["from"].get<std::string>());
+                    assert(dependencyService.get() != nullptr), "Dependency not found";
+                    auto dUid = GET_MODULE_UID_STR(dependency["name"].get<std::string>());
+                    assert(dUid != ""), "Dependency not found";
+                    auto interface = dependencyService->getInterface(dUid);
+                    assert(interface != nullptr), "Interface not found";
+                    serviceCreator->setInterface(dUid, interface);
+                }
                 serviceCreator->connect();
-                serviceDependencies[service["name"].get<std::string>()] = serviceCreator;
+                serviceDependencies[serviceName] = serviceCreator;
+                interfacePtr = serviceCreator;
             }
         }
-        logger_.info("ObjectFactory::generateServiceDependencies Exit");
+        logger_.info("ObjectFactory::getService Exit");
+        return interfacePtr;
     }
     std::map<std::string, std::shared_ptr<BaseService>> getServiceDependencies()
     {
@@ -71,8 +97,9 @@ public:
                 endpointCreator->initialize();
                 for (auto &dependency : endpoint["connections"])
                 {
-                    auto dependencyService = serviceDependencies[dependency.get<std::string>()];
-                    endpointCreator->setInterface(dependencyService->getInterfaceUID(), dependencyService->getInstance());
+                    auto dependencyService = getOrCreateServiceInstance(dependency["from"].get<std::string>());
+                    auto dUid = GET_MODULE_UID_STR(dependency["name"].get<std::string>());
+                    endpointCreator->setInterface(dUid, dependencyService->getInterface(dUid));
                 }
                 endpointCreator->connect();
                 endpointDependencies[endpoint["name"]] = endpointCreator;
@@ -95,20 +122,25 @@ public:
     {
         logger_.info("SubRouterMap::SubRouterMap Entry");
         ObjectFactory o;
-        o.discoverDependencies();
-        o.generateServiceDependencies();
-        serviceMap_ = o.getServiceDependencies();
-        o.generateEndpointDependencies();
-        routerMap_ = o.getEndpointDependencies();
+        if (o.discoverDependencies())
+        {
+            o.generateServiceDependencies();
+            serviceMap_ = o.getServiceDependencies();
+            o.generateEndpointDependencies();
+            routerMap_ = o.getEndpointDependencies();
+        }
         logger_.info("SubRouterMap::SubRouterMap Exit");
     }
 
-    ~SubRouterMap(){
+    ~SubRouterMap()
+    {
         logger_.info("SubRouterMap::~SubRouterMap Shutting down the services and routers");
-        for(auto &router : routerMap_){
+        for (auto &router : routerMap_)
+        {
             router.second->shutdown();
         }
-        for(auto &service : serviceMap_){
+        for (auto &service : serviceMap_)
+        {
             service.second->shutdown();
         }
         logger_.info("SubRouterMap::~SubRouterMap Services and routers are shutdown");

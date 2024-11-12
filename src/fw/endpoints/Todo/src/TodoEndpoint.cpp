@@ -32,6 +32,10 @@ namespace endpoints
         {
             logger.info("TodoEndpoint::initialize Entry");
             injections_ = new TodoEndpointInjections();
+            for (auto route : getRoutes())
+            {
+                addRoute(route);
+            }
             logger.info("TodoEndpoint::initialize Exit");
         }
         void *TodoEndpoint::getInterface(ModuleUid uid)
@@ -53,10 +57,6 @@ namespace endpoints
         {
             logger.info("TodoEndpoint::connect Entry");
             assert(injections_->todoService != nullptr), "Todo Service is not set";
-            for (auto route : getRoutes())
-            {
-                addRoute(route);
-            }
             logger.info("TodoEndpoint::connect Exit");
         }
         void *TodoEndpoint::getInstance()
@@ -120,7 +120,6 @@ namespace endpoints
             auto todoPostData = jsonToObject<services::TodoService::TodoPostData>(routeContext.req->body);
             if (todoPostData.dueDate.value < std::chrono::system_clock::now())
             {
-                std::cout << "dueDate cannot be in the past" << std::endl;
                 throw std::invalid_argument("dueDate cannot be in the past");
             }
             auto response = injections_->todoService->addTodo(todoPostData, userId);
@@ -156,7 +155,6 @@ namespace endpoints
                     auto dueDate = jsonObject["dueDate"].get<std::string>();
                     if (Utils::string_to_timepoint(dueDate) < std::chrono::system_clock::now())
                     {
-                        std::cout << "dueDate cannot be in the past" << std::endl;
                         throw std::invalid_argument("dueDate cannot be in the past");
                     }
                     todo->dueDate.value = Utils::string_to_timepoint(dueDate);

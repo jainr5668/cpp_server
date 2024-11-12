@@ -1,0 +1,15 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+.svn
+.hg
+
+# Build directories
+build/
+debug/
+release/
+bin/
+obj/
+dist/
+cmake-build-*/
