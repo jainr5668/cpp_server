@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
   ) {
     this.route.queryParams.subscribe(params => {
       this.returnUrl = params['returnUrl'];
-  });
+    });
   }
 
   ngOnInit(): void {
@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
   submit(event) {
     this.loginService.post(LoginModel, this.loginmodel).subscribe(
       {
-        next: (response:LoginModel) => {
+        next: (response: LoginModel) => {
           this.authService.setToken(response.token);
           if (this.returnUrl) {
             this.router.navigate([this.returnUrl]);
