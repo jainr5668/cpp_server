@@ -1,0 +1,18 @@
+<div *ngIf="formGroup">
+    <div *ngIf="content.title">
+        <h1><b>{{ getLocalizedString$(content.title) |async}}</b></h1>
+        <hr>
+    </div>
+    <a *ngFor="let element of content.description" class="reset-a">
+        {{getLocalizedString$(element)|async}}
+    </a>
+    <div class="row">
+        <div [class]="'col-md-' +(12 / content.cols) * element?.colspan " *ngFor="let element of content.elements">
+            <pattern-element
+        [formGroup]="formGroup"
+        [element]="element"
+        *ngIf="element"
+      ></pattern-element>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<div [id]="footer.id">
+    <div class="row">
+      <div class="col col-lg-10"></div>
+    <div class="col-1 " *ngFor="let button of footer.buttons">
+      <div class="row">
+        <div class="col"></div>
+        <div class="col"><pattern-button [button]="button" (clickListener)="onClicked($event)"></pattern-button></div>
+      </div>
+    </div>
+  </div>
+</div>

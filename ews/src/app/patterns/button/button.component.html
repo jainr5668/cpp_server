@@ -1,0 +1,12 @@
+<div>
+    <button [id]="button.id" (click)="onClicked($event)" mat-raised-button [color]="colour" [ngClass]="class">
+        
+        <ng-container *ngIf = "button.link">
+            
+            <a  [target]="button.target" [href]="button.link">
+                {{ getLocalizedString$(button.text) | async  }}</a>
+        </ng-container>
+        <span *ngIf="!button.link"> 
+            {{ getLocalizedString$(button.text) | async  }} </span>
+    </button>
+</div>

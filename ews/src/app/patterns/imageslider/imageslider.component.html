@@ -1,0 +1,17 @@
+<section class="container">
+  <div class="slider-wrapper">
+    <div class="slider" [ngClass]="hightClass">
+      <img
+        [id]="imageslider.id + index"
+        *ngFor="let image of imageslider.imageList; let index = index"
+        [src] = "imageslider.imageList[index].src"
+        [routerLink]="imageslider.imageList[index].link"
+      />
+    </div>
+    <div class="slider-nav">
+        <a 
+        (click)="navigateToSection('#' + imageslider.id + index)"
+        *ngFor="let image of imageslider.imageList; let index = index"></a>
+    </div>
+  </div>
+</section>
