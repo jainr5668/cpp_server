@@ -1,0 +1,9 @@
+.mat-primary{
+    background-color: rgb(17, 75, 17) ;
+}
+.mat-secondrary{
+    background-color: grey;
+}
+.mat-delete{
+    background-color: orange;
+}

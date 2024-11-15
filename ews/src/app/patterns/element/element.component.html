@@ -1,0 +1,105 @@
+<ng-container>
+  <div>{{ getLocalizedString$(element.label) | async }}</div>
+  <div [ngSwitch]="element.type" style="margin-left: 5px;">
+    <div *ngSwitchCase="elementType.SELECT">
+      <mat-form-field [formGroup]="formGroup" style="width: 100%;">
+        <mat-select
+          class="select form-control"
+          [id]="element.id"
+          (selectionChange)="stateChange($event)"
+          [formControlName]="element.id"
+          style="width: 100%; border-bottom: 1px solid black;"
+          [required] = "element.required"
+        >
+          <mat-option
+            *ngFor="let option of element.options"
+            [disabled]="option.disabled"
+            [value]="option.value"
+            id="nvOption-{{ option.value }}"
+            role="select"
+          >
+            {{ getLocalizedString$(option.label) | async }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div *ngSwitchCase="elementType.TEXT">
+      <mat-form-field [formGroup]="formGroup" style="width: 100%;">
+        <input
+          matInput
+          [formControlName]="element.id"
+          [placeholder]="element.placeholder"
+          (input)="stateChange($event)"
+          style=" border-bottom: 1px solid black; padding-bottom:5px"
+          [required] = "element.required"
+        />
+      </mat-form-field>
+    </div>
+    <div *ngSwitchCase="elementType.NUMBER">
+      <mat-form-field [formGroup]="formGroup" style="width: 100%;">
+        <input
+          matInput
+          type="number"
+          [formControlName]="element.id"
+          [placeholder]="element.placeholder"
+          (input)="stateChange($event)"
+          style=" border-bottom: 1px solid black; padding-bottom:5px"
+          [required] = "element.required"
+        />
+      </mat-form-field>
+    </div>
+    <div *ngSwitchCase="elementType.EMAIL">
+      <mat-form-field [formGroup]="formGroup" style="width: 100%;">
+        <input
+          matInput
+          type="email"
+          [formControlName]="element.id"
+          [placeholder]="element.placeholder"
+          (input)="stateChange($event)"
+          style=" border-bottom: 1px solid black; padding-bottom:5px"
+          [required] = "element.required"
+        />
+      </mat-form-field>
+    </div>
+    <div *ngSwitchCase="elementType.PASSWORD">
+      <mat-form-field [formGroup]="formGroup" style="width: 100%;">
+        <input
+          matInput
+          type="password"
+          [formControlName]="element.id"
+          [placeholder]="element.placeholder"
+          (input)="stateChange($event)"
+          [required] = "element.required"
+        />
+      </mat-form-field>
+    </div>
+    <div *ngSwitchCase="elementType.TOGGLE" >
+      <mat-form-field [formGroup]="formGroup" style="width: 100%; " class="toggle-element">
+        <mat-slide-toggle
+          [formControlName]="element.id"
+          (change)="stateChange($event)"
+          [id]="element.id"
+        ></mat-slide-toggle>
+        <textarea
+          matInput
+          [hidden]="true"
+        ></textarea>
+      </mat-form-field>
+    </div>
+    <div *ngSwitchCase="elementType.FILE" >
+      <mat-form-field [formGroup]="formGroup" style="width: 100%; " class="toggle-element">
+        <input
+          [formControlName]="element.id"
+          (change)="stateChange($event)"
+          [id]="element.id"
+          type="file"
+        >
+        <textarea
+          matInput
+          [hidden]="true"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+</ng-container>
+

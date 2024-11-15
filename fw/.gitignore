@@ -1,0 +1,10 @@
+# Ignore build directory
+build/
+
+# Ignore .vscode directory
+.vscode/
+
+# Other ignore patterns
+*.log
+*.tmp
+*.swp

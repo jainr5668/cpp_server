@@ -1,0 +1,59 @@
+{
+    "services": {
+        "services::TodoService::ITodoService": {
+            "namespace": "services::TodoService::TodoService",
+            "connections": [
+                {
+                    "name": "services::CommonService::IUtilityService",
+                    "from": "services::CommonService::ICommonService"
+                }
+            ],
+            "name": "services::TodoService::ITodoService"
+        },
+        "services::AuthenticationService::IAuthenticationService": {
+            "namespace": "services::AuthenticationService::AuthenticationService",
+            "connections": [
+                {
+                    "name": "services::CommonService::IUtilityService",
+                    "from": "services::CommonService::ICommonService"
+                }
+            ],
+            "name": "services::AuthenticationService::IAuthenticationService"
+        },
+        "services::CommonService::ICommonService": {
+            "namespace": "services::CommonService::CommonService",
+            "connections": [],
+            "name": "services::CommonService::ICommonService"
+        }
+    },
+    "endpoints": {
+        "todos": {
+            "namespace": "endpoints::TodoEndpoint::TodoEndpoint",
+            "connections": [
+                {
+                    "name": "services::TodoService::ITodoService",
+                    "from": "services::TodoService::ITodoService"
+                },
+                {
+                    "name": "services::CommonService::IUtilityService",
+                    "from": "services::CommonService::ICommonService"
+                }
+            ],
+            "name": "todos"
+        },
+        "auth": {
+            "namespace": "endpoints::AuthenticationEndpoint::AuthenticationEndpoint",
+            "connections": [
+                {
+                    "name": "services::AuthenticationService::IAuthenticationService",
+                    "from": "services::AuthenticationService::IAuthenticationService"
+                },
+                {
+                    "name": "services::CommonService::IUtilityService",
+                    "from": "services::CommonService::ICommonService"
+                }
+            ],
+            "name": "auth"
+        }
+    }
+}
