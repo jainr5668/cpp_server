@@ -31,17 +31,57 @@ export class BaseService<T> {
     );
   }
 
-  public post(className: new (data: T) => T, data: any, postUrl?: string) {
+  public post(className: new (data: T) => T, data: T, postUrl?: string) {
     let url = this.getFinalUrl(postUrl);
     console.log(url);
     // url = url.endsWith('/') ? url : url + '/';
     return this.http.post(url, data).pipe(
       map((res) => {
-        let obj = new className(res as T);
+        console.log(res);
+        let obj = <T>res;
+        console.log(obj);
         return obj;
       }),
       catchError((error) => {
         console.log(error);
+        throw throwError(() => error);
+      })
+    );
+  }
+
+  public delete(className: new (data: T) => T, deleteUrl?: string) {
+    let url = this.getFinalUrl(deleteUrl);
+    return this.http.delete(url).pipe(
+      map((res) => {
+        return res;
+      }),
+      catchError((error) => {
+        throw throwError(() => error);
+      })
+    );
+  }
+
+  public put(className: new (data: T) => T, data: T, putUrl?: string) {
+    let url = this.getFinalUrl(putUrl);
+    return this.http.put(url, data).pipe(
+      map((res) => {
+        let obj = <T>res;
+        return obj;
+      }),
+      catchError((error) => {
+        throw throwError(() => error);
+      })
+    );
+  }
+
+  public patch(className: new (data: T) => T, data: T, patchUrl?: string) {
+    let url = this.getFinalUrl(patchUrl);
+    return this.http.patch(url, data).pipe(
+      map((res) => {
+        let obj = <T>res;
+        return obj;
+      }),
+      catchError((error) => {
         throw throwError(() => error);
       })
     );

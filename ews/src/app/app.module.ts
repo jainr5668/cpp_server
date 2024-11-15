@@ -9,6 +9,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { JwtInterceptor } from './interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthService } from '@utills/auth';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -39,7 +40,8 @@ export function createTranslateLoader(http: HttpClient) {
       useClass: JwtInterceptor,
       multi: true
     },
-    AuthGuard
+    AuthGuard,
+    AuthService
   ],
   exports: [TranslateModule],
   bootstrap: [AppComponent]

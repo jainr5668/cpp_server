@@ -1,5 +1,4 @@
 import { Subject } from 'rxjs';
-import {AuthModel} from './auth.model'
 
 export class AuthService{
     public static isAuthenticatedSubject: Subject<boolean> = new Subject<boolean>()
@@ -34,7 +33,6 @@ export class AuthService{
         }
         token = token.split('.')[1];
         token = JSON.parse(atob(token));
-        console.log("token_data:::", token);
         if (token['exp'] > Date.now() / 1000){
             return false;
         } else {

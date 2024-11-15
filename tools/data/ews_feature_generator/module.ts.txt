@@ -1,0 +1,18 @@
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { TranslateModule } from "@ngx-translate/core";
+import { $$RoutingModule } from './##.routing.module';
+import { CardModule } from '@patterns/card';
+import { $$Component } from './##.component';
+
+@NgModule({
+  declarations: [$$Component],
+  imports: [
+    CardModule,
+    CommonModule,
+    TranslateModule,
+    $$RoutingModule
+  ],
+  exports: [$$Component],
+})
+export class $$Module {}

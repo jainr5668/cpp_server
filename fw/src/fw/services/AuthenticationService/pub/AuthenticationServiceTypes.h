@@ -50,35 +50,35 @@ namespace services
             {
             public:
                 CustomDataType<std::string> access_token;
-                CustomDataType<std::string> message;
+                CustomDataType<std::string> token_type;
 
-                LoginResponse(std::string token, std::string message)
+                LoginResponse(std::string token, std::string token_type)
                 {
                     this->access_token.value = token;
-                    this->message.value = message;
+                    this->token_type.value = token_type;
                 }
 
                 LoginResponse()
                 {
                     this->access_token.value = "";
-                    this->message.value = "";
+                    this->token_type.value = "";
                 }
 
                 LoginResponse(LoginResponse *loginResponse)
                 {
                     this->access_token.value = loginResponse->access_token.value;
-                    this->message.value = loginResponse->message.value;
+                    this->token_type.value = loginResponse->token_type.value;
                 }
 
                 friend void from_json(const nlohmann::json &j, LoginResponse &data)
                 {
                     j.at("access_token").get_to(data.access_token.value);
-                    j.at("message").get_to(data.message.value);
+                    j.at("token_type").get_to(data.token_type.value);
                 }
 
                 friend void to_json(nlohmann::json &j, const LoginResponse &data)
                 {
-                    j = nlohmann::json{{"access_token", data.access_token.value}, {"message", data.message.value}};
+                    j = nlohmann::json{{"access_token", data.access_token.value}, {"token_type", data.token_type.value}};
                 }
             };
             class UserDataModel

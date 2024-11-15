@@ -72,7 +72,7 @@ export const routes: Routes = [];
 // login
 routes.push({
   path: 'login',
-  loadChildren: () => import('../../../features/login').then(m => m.LoginModule)
+  loadChildren: () => import('../../../features/auth/login').then(m => m.LoginModule)
 });
 
 // // profile
@@ -92,7 +92,14 @@ routes.push({
 // signup
 routes.push({
   path: 'signup',
-  loadChildren: () => import('../../../features/signup').then(m => m.SignupModule)
+  loadChildren: () => import('../../../features/auth/signup').then(m => m.SignupModule)
+});
+
+// todos
+routes.push({
+  path: 'todos',
+  loadChildren: () => import('../../../features/todos').then(m => m.TodosModule),
+  canActivate:[AuthGuard]
 });
 
 // // timetable
@@ -102,8 +109,8 @@ routes.push({
 //   canActivate:[AuthGuard]
 // });
 
-// // Add new routes before these route
-// // 
+// Add new routes before these route
+// 
 // routes.push({
 //   path: '',
 //   loadChildren: () => import('../../../features/homepage').then((m) => m.HomepageModule)

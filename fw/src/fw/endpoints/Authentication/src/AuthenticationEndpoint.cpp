@@ -85,7 +85,7 @@ namespace endpoints
                 payload.insert(std::make_pair("userId", userId));
                 payload.insert(std::make_pair("accessLevel", "admin")); // This should be fetched from DB
                 loginResponse.access_token.value = authorization.createToken(payload);
-                loginResponse.message.value = "Login Success";
+                loginResponse.token_type.value = "Bearer";
                 routeContext.res->body = objectToJson(loginResponse);
             }
             else
@@ -196,7 +196,7 @@ namespace endpoints
             for (auto &route : routes)
             {
                 routes.push_back(Route{route.path, RouteMethod::OPTIONS, preflightConfig,
-                                       std::function<void(RouteContext)>(std::bind(&AuthenticationEndpoint::handlePreflight, this, std::placeholders::_1))});
+                                       std::function<void(RouteContext)>(std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1))});
             }
 
             logger.info("AuthenticationEndpoint::getRoutes total routes: " + std::to_string(routes.size()));

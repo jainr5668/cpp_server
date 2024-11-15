@@ -2,6 +2,7 @@
 #include <fcntl.h>
 #include <memory>
 #include <sys/time.h>
+#include "Utils.h"
 
 Server::Server(std::unique_ptr<IRouter> router_)
 {
@@ -93,7 +94,8 @@ void Server::start()
       std::string raw_request = read_request(new_socket);
       Request *req = new Request(raw_request);
       Response *res = new Response();
-      if (req->path == "/stopServer"){
+      if (req->path == "/stopServer")
+      {
          stop();
          continue;
       }
@@ -108,16 +110,29 @@ void Server::start()
          res->status_code = 500;
          res->body = "{\"error\": \"" + std::string(e.what()) + "\"}";
       }
-      logger.info("Stop Processing request: " + reqPath + " Method: " + req->method);
+      auto host = Utils::getValueFromMap(req->headers, "Host", "");
+      auto origin = Utils::getValueFromMap(req->headers, "Origin", "");
+      if (origin.empty())
+      {
+         origin = host;
+      }
+      if (host != origin)
+      {
+         res->headers.insert({"Access-Control-Allow-Origin", "*"});
+         res->headers.insert({"Access-Control-Allow-Methods", "GET, POST, OPTIONS"});
+         res->headers.insert({"Access-Control-Allow-Headers", "Content-Type, Authorization"});
+      }
+      logger.info("Stop Processing request: " + reqPath + " Method: " + req->method + " Status: " + std::to_string(res->status_code));
       send(new_socket, res->to_string().c_str(), res->to_string().length(), 0);
       close(new_socket);
-      if(req)
+      if (req)
       {
          delete req;
-      } 
-      if(res)
+      }
+      if (res)
       {
-      delete res;}
+         delete res;
+      }
    }
 }
 void Server::stop()

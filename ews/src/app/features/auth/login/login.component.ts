@@ -82,15 +82,16 @@ export class LoginComponent implements OnInit {
     this.loginService.post(LoginModel, this.loginmodel).subscribe(
       {
         next: (response: LoginModel) => {
-          this.authService.setToken(response.token);
+          console.log(response);
+          this.authService.setToken(response.access_token);
           if (this.returnUrl) {
             this.router.navigate([this.returnUrl]);
           } else {
-            this.router.navigate(['']);
+            // this.router.navigate(['']);
           }
         },
         error: (error) => {
-
+          console.error(error);
         }
       });
   };

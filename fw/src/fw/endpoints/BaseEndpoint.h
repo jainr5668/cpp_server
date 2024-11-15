@@ -29,6 +29,16 @@ public:
         logger.info("BaseEndpoint::jsonToObject Exit");
         return obj;
     }
+    void handlePreflight(RouteContext routeContext)
+    {
+        logger.info("BaseEndpoint::handlePreflight Entry");
+        routeContext.res->headers.insert({"Access-Control-Allow-Origin", "*"});
+        routeContext.res->headers.insert({"Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE, PATCH"});
+        routeContext.res->headers.insert({"Access-Control-Allow-Headers", "Content-Type, Authorization"});
+        routeContext.res->status_code = 204; // No Content
+        routeContext.res->body = "";
+        logger.info("BaseEndpoint::handlePreflight Exit");
+    }
 
     template <typename T>
     std::string objectToJson(const T &obj)

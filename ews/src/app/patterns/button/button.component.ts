@@ -34,16 +34,16 @@ export class ButtonComponent implements OnInit {
   generateClass() {
     switch (this.button.buttonType) {
       case ButtonTypeEnum.PRIMARY:
-        this.class = 'btn btn-primary';
+        this.class = 'btn btn-outline-primary';
         break;
       case ButtonTypeEnum.SECONDRARY:
-        this.class = 'btn btn-secondary';
+        this.class = 'btn btn-outline-secondary';
         break;
       case ButtonTypeEnum.DELETE:
-        this.class = 'btn btn-danger';
+        this.class = 'btn btn-outline-danger';
         break;
       case ButtonTypeEnum.WARNING:
-        this.class = 'btn btn-warning';
+        this.class = 'btn btn-outline-warning';
         break;
       default:
         console.error('type must be provided for the button to be generated');

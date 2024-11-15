@@ -25,8 +25,6 @@ export class ContentComponent implements OnInit {
   };
 
   constructor(private translate: TranslateService) {
-    // translate.setDefaultLang('en');
-    // translate.use('en');
     this.formGroup = new FormGroup({});
   }
 

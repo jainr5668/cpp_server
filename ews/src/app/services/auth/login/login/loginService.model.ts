@@ -1,9 +1,9 @@
 export class LoginModel{
-    token:string;
+  access_token:string;
     token_type: string;
 
     constructor(jsonData){
-        this.token = jsonData['token'];
+        this.access_token = jsonData['access_token'];
         this.token_type = jsonData['token_type'];
     }
 }

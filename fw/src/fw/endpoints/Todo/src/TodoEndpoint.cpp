@@ -148,7 +148,7 @@ namespace endpoints
             {
                 auto jsonObject = Utils::string_to_json(routeContext.req->body);
                 jsonObject.contains("title") ? todo->title.value = jsonObject["title"].get<std::string>() : todo->title.value;
-                jsonObject.contains("description") ? todo->title.value = jsonObject["description"].get<std::string>() : todo->description.value;
+                jsonObject.contains("description") ? todo->description.value = jsonObject["description"].get<std::string>() : todo->description.value;
                 todo->status.value = jsonObject.contains("status") ? jsonObject["status"].get<std::string>() : todo->status.value;
                 if (jsonObject.contains("dueDate"))
                 {
@@ -194,7 +194,7 @@ namespace endpoints
         std::vector<Route> TodoEndpoint::getRoutes()
         {
             std::vector<Route> routes;
-            AuthorizationConfig getTodoConfig, getTodosConfig, addTodoConfig, updateTodoConfig, deleteTodoConfig;
+            AuthorizationConfig getTodoConfig, getTodosConfig, addTodoConfig, updateTodoConfig, deleteTodoConfig, preflightConfig;
 
             // GET /todo/{id}
             getTodoConfig.enabled = true;
@@ -230,6 +230,13 @@ namespace endpoints
             deleteTodoConfig.scope.push_back("api");
             routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteTodoConfig,
                                    std::function<void(RouteContext)>(std::bind(&TodoEndpoint::deleteTodo, this, std::placeholders::_1))});
+            
+            preflightConfig.enabled = false;
+            for (auto &route : routes)
+            {
+                routes.push_back(Route{route.path, RouteMethod::OPTIONS, preflightConfig,
+                                       std::function<void(RouteContext)>(std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1))});
+            }
 
             return routes;
         }

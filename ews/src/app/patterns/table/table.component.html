@@ -1,0 +1,31 @@
+<div *ngIf="formGroup">
+    <div>
+        Action Bar
+    </div>
+    <table [id]="table.id" class="table table-bordered table-hover mt-3">
+        <thead>
+            <th *ngFor="let column of table.columns">
+                {{ getLocalizedString$(column.title) | async }}
+            </th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of table.rows">
+                <td *ngFor="let data of row.data">
+                    <div [ngSwitch]="data.type">
+                        <div *ngSwitchCase="tableElementType.TEXT">
+                            <!-- {{ getLocalizedString$(data.data) | async }} -->
+                              {{data.data}}
+                        </div>
+                        <div *ngSwitchCase="tableElementType.ELEMENT">
+                            <pattern-element [formGroup]="formGroup" [element]="data.data"
+                                *ngIf="formGroup.get(data.data.id)"></pattern-element>
+                        </div>
+                        <div *ngSwitchCase="tableElementType.BUTTON">
+                            <pattern-button [button]="data.data" (clickListener)="data.event($event)"></pattern-button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
