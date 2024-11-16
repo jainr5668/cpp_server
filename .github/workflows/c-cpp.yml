@@ -32,6 +32,7 @@ jobs:
 
     - name: Build and run tests
       run: |
+        cd fw
         mkdir -p build
         cd build
         cmake ..

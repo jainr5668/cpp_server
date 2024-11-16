@@ -13,4 +13,6 @@ REGISTER_SERVICE("services::CommonService::CommonService", services::CommonServi
 #include "TodoEndpoint.h"
 REGISTER_SERVICE("services::TodoService::TodoService", services::TodoService::TodoService);
 REGISTER_ROUTER("endpoints::TodoEndpoint::TodoEndpoint", endpoints::TodoEndpoint::TodoEndpoint);
+#include "ExpenseManagerEndpoint.h"
+REGISTER_ROUTER("endpoints::ExpenseManager::ExpenseManagerEndpoint", endpoints::ExpenseManager::ExpenseManagerEndpoint);
 

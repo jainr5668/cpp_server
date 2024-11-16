@@ -71,6 +71,7 @@ public:
                 interfacePtr = serviceCreator;
             }
         }
+        logger_.info("ObjectFactory::getService " + serviceName);
         logger_.info("ObjectFactory::getService Exit");
         return interfacePtr;
     }
