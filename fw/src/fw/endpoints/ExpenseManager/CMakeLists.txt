@@ -2,7 +2,7 @@ add_library(expenseManager_lib
     src/ExpenseManagerEndpoint.cpp
     src/ExpenseManagerAccountsEndpoint.cpp
     src/ExpenseManagerCategoriesEndpoint.cpp
-    src/ExpenseManagerTransationsEndpoint.cpp
+    src/ExpenseManagerTransactionsEndpoint.cpp
     src/ExpenseManagerTagsEndpoint.cpp
     src/ExpenseManagerReportsEndpoint.cpp
 )

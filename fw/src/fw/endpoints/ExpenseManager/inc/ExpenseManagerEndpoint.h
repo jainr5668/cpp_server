@@ -3,7 +3,7 @@
 #include "ExpenseManagerInjections.h"
 #include "ExpenseManagerAccountsEndpoint.h"
 #include "ExpenseManagerCategoriesEndpoint.h"
-#include "ExpenseManagerTransationsEndpoint.h"
+#include "ExpenseManagerTransactionsEndpoint.h"
 #include "ExpenseManagerTagsEndpoint.h"
 #include "ExpenseManagerReportsEndpoint.h"
 #include "logger.h"
@@ -26,7 +26,7 @@ namespace endpoints
         private:
             std::shared_ptr<endpoints::ExpenseManager::ExpenseManagerAccountsEndpoint> accountsEndpoint_;
             std::shared_ptr<endpoints::ExpenseManager::ExpenseManagerCategoriesEndpoint> categoriesEndpoint_;
-            std::shared_ptr<endpoints::ExpenseManager::ExpenseManagerTransationsEndpoint> transactionEndpoint_;
+            std::shared_ptr<endpoints::ExpenseManager::ExpenseManagerTransactionsEndpoint> transactionEndpoint_;
             std::shared_ptr<endpoints::ExpenseManager::ExpenseManagerTagsEndpoint> tagEndpoint_;
             std::shared_ptr<endpoints::ExpenseManager::ExpenseManagerReportsEndpoint> reportEndpoint_;
             endpoints::ExpenseManager::ExpenseManagerInjections* injections_;

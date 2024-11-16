@@ -29,7 +29,7 @@ namespace endpoints
             categoriesEndpoint_->initialize();
             addSubRouter("categories", categoriesEndpoint_);
             // Transactions Sub-Router
-            transactionEndpoint_ = std::make_shared<endpoints::ExpenseManager::ExpenseManagerTransationsEndpoint>(injections_);
+            transactionEndpoint_ = std::make_shared<endpoints::ExpenseManager::ExpenseManagerTransactionsEndpoint>(injections_);
             transactionEndpoint_->initialize();
             addSubRouter("transactions", transactionEndpoint_);
             // Tags Sub-Router
