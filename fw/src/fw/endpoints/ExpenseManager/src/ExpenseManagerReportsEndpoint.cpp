@@ -107,31 +107,38 @@ namespace endpoints
         std::vector<Route> ExpenseManagerReportsEndpoint::getRoutes(){
             logger_.info("ExpenseManagerReportsEndpoint::getRoutes Entry");
             std::vector<Route> routes;
-            common::authorization::AuthorizationConfig getReportsConfig, getReportConfig, addReportConfig, updateReportConfig, deleteReportConfig;
+            common::authorization::AuthorizationConfig getReportsConfig, getReportConfig, addReportConfig;
+            common::authorization::AuthorizationConfig updateReportConfig, deleteReportConfig;
 
             // Get Reports
             getReportsConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::GET, getReportsConfig, std::bind(&ExpenseManagerReportsEndpoint::getReports, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::GET, getReportsConfig,
+                std::bind(&ExpenseManagerReportsEndpoint::getReports, this, std::placeholders::_1)});
 
             // Get Report
             getReportConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::GET, getReportConfig, std::bind(&ExpenseManagerReportsEndpoint::getReport, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::GET, getReportConfig,
+                std::bind(&ExpenseManagerReportsEndpoint::getReport, this, std::placeholders::_1)});
 
             // Add Report
             addReportConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::POST, addReportConfig, std::bind(&ExpenseManagerReportsEndpoint::addReport, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::POST, addReportConfig,
+                std::bind(&ExpenseManagerReportsEndpoint::addReport, this, std::placeholders::_1)});
 
             // Update Report
             updateReportConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::PATCH, updateReportConfig, std::bind(&ExpenseManagerReportsEndpoint::updateReport, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::PATCH, updateReportConfig,
+                std::bind(&ExpenseManagerReportsEndpoint::updateReport, this, std::placeholders::_1)});
 
             // Delete Report
             deleteReportConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteReportConfig, std::bind(&ExpenseManagerReportsEndpoint::deleteReport, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteReportConfig,
+                std::bind(&ExpenseManagerReportsEndpoint::deleteReport, this, std::placeholders::_1)});
             logger_.info("ExpenseManagerReportsEndpoint::getRoutes Exit");
 
             for(auto route : routes){
-                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteReportConfig, std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
+                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteReportConfig,
+                    std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
             }
             return routes;
         }

@@ -32,7 +32,7 @@ namespace endpoints
         common::authorization::AuthorizationConfig postVfsConfig;
         postVfsConfig.enabled = false;
         routes.push_back(Route{"/", RouteMethod::POST, postVfsConfig,
-                                   std::function<void(RouteContext)>(std::bind(&VfsEndpoint::postVfs, this, std::placeholders::_1))});
+                            std::function<void(RouteContext)>(std::bind(&VfsEndpoint::postVfs, this, std::placeholders::_1))});
         return routes;
     }
 } // namespace endpoints

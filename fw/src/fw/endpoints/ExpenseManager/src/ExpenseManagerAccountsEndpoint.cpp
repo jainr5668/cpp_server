@@ -107,31 +107,38 @@ namespace endpoints
         std::vector<Route> ExpenseManagerAccountsEndpoint::getRoutes(){
             logger_.info("ExpenseManagerAccountsEndpoint::getRoutes Entry");
             std::vector<Route> routes;
-            common::authorization::AuthorizationConfig getAccountsConfig, getAccountConfig, addAccountConfig, updateAccountConfig, deleteAccountConfig;
+            common::authorization::AuthorizationConfig getAccountsConfig, getAccountConfig, addAccountConfig;
+            common::authorization::AuthorizationConfig updateAccountConfig, deleteAccountConfig;
 
             // Get Accounts
             getAccountsConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::GET, getAccountsConfig, std::bind(&ExpenseManagerAccountsEndpoint::getAccounts, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::GET, getAccountsConfig,
+                std::bind(&ExpenseManagerAccountsEndpoint::getAccounts, this, std::placeholders::_1)});
 
             // Get Account
             getAccountConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::GET, getAccountConfig, std::bind(&ExpenseManagerAccountsEndpoint::getAccount, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::GET, getAccountConfig,
+                std::bind(&ExpenseManagerAccountsEndpoint::getAccount, this, std::placeholders::_1)});
 
             // Add Account
             addAccountConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::POST, addAccountConfig, std::bind(&ExpenseManagerAccountsEndpoint::addAccount, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::POST, addAccountConfig,
+                std::bind(&ExpenseManagerAccountsEndpoint::addAccount, this, std::placeholders::_1)});
 
             // Update Account
             updateAccountConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::PATCH, updateAccountConfig, std::bind(&ExpenseManagerAccountsEndpoint::updateAccount, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::PATCH, updateAccountConfig,
+                std::bind(&ExpenseManagerAccountsEndpoint::updateAccount, this, std::placeholders::_1)});
 
             // Delete Account
             deleteAccountConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteAccountConfig, std::bind(&ExpenseManagerAccountsEndpoint::deleteAccount, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteAccountConfig,
+                std::bind(&ExpenseManagerAccountsEndpoint::deleteAccount, this, std::placeholders::_1)});
             logger_.info("ExpenseManagerAccountsEndpoint::getRoutes Exit");
 
             for(auto route : routes){
-                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteAccountConfig, std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
+                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteAccountConfig,
+                    std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
             }
             return routes;
         }

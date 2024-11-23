@@ -41,11 +41,13 @@ namespace endpoints
             logger.info("AuthenticationEndpoint::setInterface Entry");
             if (uid == GET_MODULE_UID(IAuthenticationService))
             {
-                injections_->authenticationService = std::shared_ptr<IAuthenticationService>(static_cast<IAuthenticationService *>(interface));
+                injections_->authenticationService = std::shared_ptr<IAuthenticationService>(
+                    static_cast<IAuthenticationService *>(interface));
             }
             else if (uid == GET_MODULE_UID(services::CommonService::IUtilityService))
             {
-                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(static_cast<services::CommonService::IUtilityService *>(interface));
+                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(
+                    static_cast<services::CommonService::IUtilityService *>(interface));
             }
             logger.info("AuthenticationEndpoint::setInterface Exit");
         }
@@ -177,26 +179,26 @@ namespace endpoints
             // Login endpoint
             loginConfig.enabled = false;
             routes.push_back(Route{"login", RouteMethod::POST, loginConfig,
-                                   std::function<void(RouteContext)>(std::bind(&AuthenticationEndpoint::login, this, std::placeholders::_1))});
+                                std::function<void(RouteContext)>(std::bind(&AuthenticationEndpoint::login, this, std::placeholders::_1))});
 
             // Signup endpoint
             signupConfig.enabled = false;
             routes.push_back(Route{"signup", RouteMethod::POST, signupConfig,
-                                   std::function<void(RouteContext)>(std::bind(&AuthenticationEndpoint::signup, this, std::placeholders::_1))});
+                                std::function<void(RouteContext)>(std::bind(&AuthenticationEndpoint::signup, this, std::placeholders::_1))});
 
             // Timepass endpoint
             timepassConfig.enabled = true;
             timepassConfig.accessLevels.push_back("admin");
             timepassConfig.scope.push_back("api");
             routes.push_back(Route{"timepass", RouteMethod::GET, timepassConfig,
-                                   std::function<void(RouteContext)>(std::bind(&AuthenticationEndpoint::timepass, this, std::placeholders::_1))});
+                                std::function<void(RouteContext)>(std::bind(&AuthenticationEndpoint::timepass, this, std::placeholders::_1))});
 
             // Preflight endpoint
             preflightConfig.enabled = false;
             for (auto &route : routes)
             {
                 routes.push_back(Route{route.path, RouteMethod::OPTIONS, preflightConfig,
-                                       std::function<void(RouteContext)>(std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1))});
+                                std::function<void(RouteContext)>(std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1))});
             }
 
             logger.info("AuthenticationEndpoint::getRoutes total routes: " + std::to_string(routes.size()));

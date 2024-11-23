@@ -1,5 +1,5 @@
-#ifndef HANDLER1_H
-#define HANDLER1_H
+#ifndef FEATURE1_H
+#define FEATURE1_H
 #include <string>
 #include "logger.h"
 #include "Ifeature1.h"
@@ -19,4 +19,4 @@ private:
     Feature1Service *featire1Service_;
     Feature1ServiceInjections* feature1ServiceInjections;
 };
-#endif // HANDLER1_H
+#endif // FEATURE1_H

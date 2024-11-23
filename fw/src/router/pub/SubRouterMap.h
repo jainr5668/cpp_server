@@ -11,7 +11,7 @@ public:
     bool discoverDependencies()
     {
         logger_.info("ObjectFactory::discoverDependencies Entry");
-        std::string dependenciesFile = "/home/ronak/cpp_server/fw/src/router/pub/dependencies.json";
+        std::string dependenciesFile = "/app/src/router/pub/dependencies.json";
         bool result = false;
         std::ifstream inputFile(dependenciesFile);
         if (!inputFile.is_open())

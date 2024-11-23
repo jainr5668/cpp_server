@@ -107,31 +107,38 @@ namespace endpoints
         std::vector<Route> ExpenseManagerTransactionsEndpoint::getRoutes(){
             logger_.info("ExpenseManagerTransactionsEndpoint::getRoutes Entry");
             std::vector<Route> routes;
-            common::authorization::AuthorizationConfig getTransactionsConfig, getTransactionConfig, addTransactionConfig, updateTransactionConfig, deleteTransactionConfig;
+            common::authorization::AuthorizationConfig getTransactionsConfig, getTransactionConfig, addTransactionConfig;
+            common::authorization::AuthorizationConfig updateTransactionConfig, deleteTransactionConfig;
 
             // Get Transactions
             getTransactionsConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::GET, getTransactionsConfig, std::bind(&ExpenseManagerTransactionsEndpoint::getTransactions, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::GET, getTransactionsConfig,
+                std::bind(&ExpenseManagerTransactionsEndpoint::getTransactions, this, std::placeholders::_1)});
 
             // Get Transaction
             getTransactionConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::GET, getTransactionConfig, std::bind(&ExpenseManagerTransactionsEndpoint::getTransaction, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::GET, getTransactionConfig,
+                std::bind(&ExpenseManagerTransactionsEndpoint::getTransaction, this, std::placeholders::_1)});
 
             // Add Transaction
             addTransactionConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::POST, addTransactionConfig, std::bind(&ExpenseManagerTransactionsEndpoint::addTransaction, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::POST, addTransactionConfig,
+                std::bind(&ExpenseManagerTransactionsEndpoint::addTransaction, this, std::placeholders::_1)});
 
             // Update Transaction
             updateTransactionConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::PATCH, updateTransactionConfig, std::bind(&ExpenseManagerTransactionsEndpoint::updateTransaction, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::PATCH, updateTransactionConfig,
+                std::bind(&ExpenseManagerTransactionsEndpoint::updateTransaction, this, std::placeholders::_1)});
 
             // Delete Transaction
             deleteTransactionConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteTransactionConfig, std::bind(&ExpenseManagerTransactionsEndpoint::deleteTransaction, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteTransactionConfig,
+                std::bind(&ExpenseManagerTransactionsEndpoint::deleteTransaction, this, std::placeholders::_1)});
             logger_.info("ExpenseManagerTransactionsEndpoint::getRoutes Exit");
 
             for(auto route : routes){
-                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteTransactionConfig, std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
+                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteTransactionConfig,
+                    std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
             }
             return routes;
         }

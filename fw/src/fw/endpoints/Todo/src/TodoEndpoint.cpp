@@ -201,41 +201,41 @@ namespace endpoints
             getTodoConfig.accessLevels.push_back("admin");
             getTodoConfig.scope.push_back("api");
             routes.push_back(Route{"/:id", RouteMethod::GET, getTodoConfig,
-                                   std::function<void(RouteContext)>(std::bind(&TodoEndpoint::getTodo, this, std::placeholders::_1))});
+                                    std::function<void(RouteContext)>(std::bind(&TodoEndpoint::getTodo, this, std::placeholders::_1))});
 
             // GET /todos
             getTodosConfig.enabled = true;
             getTodosConfig.accessLevels.push_back("admin");
             getTodosConfig.scope.push_back("api");
             routes.push_back(Route{"/", RouteMethod::GET, getTodosConfig,
-                                   std::function<void(RouteContext)>(std::bind(&TodoEndpoint::getTodos, this, std::placeholders::_1))});
+                                    std::function<void(RouteContext)>(std::bind(&TodoEndpoint::getTodos, this, std::placeholders::_1))});
 
             // POST /todos
             addTodoConfig.enabled = true;
             addTodoConfig.accessLevels.push_back("admin");
             addTodoConfig.scope.push_back("api");
             routes.push_back(Route{"/", RouteMethod::POST, addTodoConfig,
-                                   std::function<void(RouteContext)>(std::bind(&TodoEndpoint::addTodo, this, std::placeholders::_1))});
+                                    std::function<void(RouteContext)>(std::bind(&TodoEndpoint::addTodo, this, std::placeholders::_1))});
 
             // PATCH /todos/{id}
             updateTodoConfig.enabled = true;
             updateTodoConfig.accessLevels.push_back("admin");
             updateTodoConfig.scope.push_back("api");
             routes.push_back(Route{"/:id", RouteMethod::PATCH, updateTodoConfig,
-                                   std::function<void(RouteContext)>(std::bind(&TodoEndpoint::updateTodo, this, std::placeholders::_1))});
+                                    std::function<void(RouteContext)>(std::bind(&TodoEndpoint::updateTodo, this, std::placeholders::_1))});
 
             // DELETE /todos/{id}
             deleteTodoConfig.enabled = true;
             deleteTodoConfig.accessLevels.push_back("admin");
             deleteTodoConfig.scope.push_back("api");
             routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteTodoConfig,
-                                   std::function<void(RouteContext)>(std::bind(&TodoEndpoint::deleteTodo, this, std::placeholders::_1))});
-            
+                                    std::function<void(RouteContext)>(std::bind(&TodoEndpoint::deleteTodo, this, std::placeholders::_1))});
+
             preflightConfig.enabled = false;
             for (auto &route : routes)
             {
                 routes.push_back(Route{route.path, RouteMethod::OPTIONS, preflightConfig,
-                                       std::function<void(RouteContext)>(std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1))});
+                                    std::function<void(RouteContext)>(std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1))});
             }
 
             return routes;

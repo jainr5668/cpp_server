@@ -111,27 +111,33 @@ namespace endpoints
 
             // Get Tags
             getTagsConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::GET, getTagsConfig, std::bind(&ExpenseManagerTagsEndpoint::getTags, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::GET, getTagsConfig,
+                std::bind(&ExpenseManagerTagsEndpoint::getTags, this, std::placeholders::_1)});
 
             // Get Tag
             getTagConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::GET, getTagConfig, std::bind(&ExpenseManagerTagsEndpoint::getTag, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::GET, getTagConfig,
+                std::bind(&ExpenseManagerTagsEndpoint::getTag, this, std::placeholders::_1)});
 
             // Add Tag
             addTagConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::POST, addTagConfig, std::bind(&ExpenseManagerTagsEndpoint::addTag, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::POST, addTagConfig,
+                std::bind(&ExpenseManagerTagsEndpoint::addTag, this, std::placeholders::_1)});
 
             // Update Tag
             updateTagConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::PATCH, updateTagConfig, std::bind(&ExpenseManagerTagsEndpoint::updateTag, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::PATCH, updateTagConfig,
+                std::bind(&ExpenseManagerTagsEndpoint::updateTag, this, std::placeholders::_1)});
 
             // Delete Tag
             deleteTagConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteTagConfig, std::bind(&ExpenseManagerTagsEndpoint::deleteTag, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteTagConfig,
+                std::bind(&ExpenseManagerTagsEndpoint::deleteTag, this, std::placeholders::_1)});
             logger_.info("ExpenseManagerTagsEndpoint::getRoutes Exit");
 
             for(auto route : routes){
-                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteTagConfig, std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
+                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteTagConfig,
+                    std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
             }
             return routes;
         }

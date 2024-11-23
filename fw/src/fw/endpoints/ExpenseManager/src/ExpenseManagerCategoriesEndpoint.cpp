@@ -104,23 +104,28 @@ namespace endpoints
 
             // Get Categories
             getCategoriesConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::GET, getCategoriesConfig, std::bind(&ExpenseManagerCategoriesEndpoint::getCategories, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::GET, getCategoriesConfig,
+                std::bind(&ExpenseManagerCategoriesEndpoint::getCategories, this, std::placeholders::_1)});
 
             // Add Category
             addCategoryConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::POST, addCategoryConfig, std::bind(&ExpenseManagerCategoriesEndpoint::addCategory, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::POST, addCategoryConfig,
+                std::bind(&ExpenseManagerCategoriesEndpoint::addCategory, this, std::placeholders::_1)});
 
             // Update Category
             updateCategoryConfig.enabled = true;
-            routes.push_back(Route{"/", RouteMethod::PUT, updateCategoryConfig, std::bind(&ExpenseManagerCategoriesEndpoint::updateCategory, this, std::placeholders::_1)});
+            routes.push_back(Route{"/", RouteMethod::PUT, updateCategoryConfig,
+                std::bind(&ExpenseManagerCategoriesEndpoint::updateCategory, this, std::placeholders::_1)});
 
             // Delete Category
             deleteCategoryConfig.enabled = true;
-            routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteCategoryConfig, std::bind(&ExpenseManagerCategoriesEndpoint::deleteCategory, this, std::placeholders::_1)});
+            routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteCategoryConfig,
+                std::bind(&ExpenseManagerCategoriesEndpoint::deleteCategory, this, std::placeholders::_1)});
 
             for(auto &route : routes)
             {
-                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteCategoryConfig, std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
+                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteCategoryConfig,
+                    std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
             }
 
             logger_.info("ExpenseManagerCategoriesEndpoint::getRoutes Exit");

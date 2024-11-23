@@ -64,7 +64,8 @@ namespace endpoints
             logger_.info("ExpenseManagerEndpoint::setInterface Entry");
             if(uid == GET_MODULE_UID(services::CommonService::IUtilityService))
             {
-                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(static_cast<services::CommonService::IUtilityService *>(interface));
+                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(
+                    static_cast<services::CommonService::IUtilityService *>(interface));
             }
             logger_.info("ExpenseManagerEndpoint::setInterface Exit");
         }

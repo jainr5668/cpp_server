@@ -1,0 +1,19 @@
+services:
+  ews:
+    build: ews
+    ports:
+      - "4200:80"
+    # volumes:
+    #   - ./ews:/code
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - HOST=0.0.0.0
+  fw:
+    build: fw
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./fw/build:/code/build
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - HOST=0.0.0.0
