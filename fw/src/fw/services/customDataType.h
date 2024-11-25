@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUSTOMDATATYPE_H
+#define CUSTOMDATATYPE_H
 #include <type_traits>
 template <typename T>
 class CustomDataType
@@ -24,3 +25,4 @@ public:
         }
     }
 };
+#endif // CUSTOMDATATYPE_H

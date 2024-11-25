@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITODOSERVICE_H
+#define ITODOSERVICE_H
 #include <string>
 #include <vector>
 #include "TodoServiceTypes.h"
@@ -14,7 +15,6 @@ namespace services
         {
         public:
             ~ITodoService() = default;
-            
             virtual TodoDbData* addTodo(TodoPostData, std::string userId) = 0;
             virtual std::vector<TodoDBData> getTodos(std::string userId) = 0;
             virtual TodoDBData* getTodoById(std::string userId, std::string todoId) = 0;
@@ -24,3 +24,4 @@ namespace services
     } // namespace services::AuthenticationServiceData
 } // namespace services
 DEFINE_MODULE_UID(services::TodoService::ITodoService, "0x00000001")
+#endif // ITODOSERVICE_H

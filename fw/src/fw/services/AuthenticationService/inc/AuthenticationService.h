@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AUTHENTICATIONSERVICE_H
+#define AUTHENTICATIONSERVICE_H
 #include "logger.h"
 #include "IAuthenticationService.h"
 #include "AuthenticationServiceInjections.h"
@@ -28,3 +29,4 @@ namespace services
         };
     } // namespace services::AuthenticationService
 } // namespace services
+#endif // AUTHENTICATIONSERVICE_H

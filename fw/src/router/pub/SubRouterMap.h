@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SUBROUTERMAP_H
+#define SUBROUTERMAP_H
 #include <fstream>
 #include <iostream>
 #include "registry.h"
@@ -11,7 +12,7 @@ public:
     bool discoverDependencies()
     {
         logger_.info("ObjectFactory::discoverDependencies Entry");
-        std::string dependenciesFile = "/home/ronak/cpp_server/fw/src/router/pub/dependencies.json";
+        std::string dependenciesFile = "/app/src/router/pub/dependencies.json";
         bool result = false;
         std::ifstream inputFile(dependenciesFile);
         if (!inputFile.is_open())
@@ -71,6 +72,7 @@ public:
                 interfacePtr = serviceCreator;
             }
         }
+        logger_.info("ObjectFactory::getService " + serviceName);
         logger_.info("ObjectFactory::getService Exit");
         return interfacePtr;
     }
@@ -161,3 +163,4 @@ private:
     std::map<std::string, std::shared_ptr<IRouter>> routerMap_;
     Logger logger_;
 };
+#endif // SUBROUTERMAP_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITODOENDPOINT_H
+#define ITODOENDPOINT_H
 #include "BaseEndpoint.h"
 #include "BaseService.h"
 
@@ -19,3 +20,4 @@ namespace endpoints
     }
 } // namespace endpoints::Todo
 DEFINE_MODULE_UID(endpoints::TodoEndpoint::ITodoEndpoint, "0x00000011")
+#endif // ITODOENDPOINT_H

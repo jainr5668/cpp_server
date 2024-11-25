@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TODOSERVICE_H
+#define TODOSERVICE_H
 #include <string>
 #include <vector>
 #include "ITodoService.h"
@@ -56,3 +57,4 @@ namespace services
         };
     } // namespace services::AuthenticationServiceData
 } // namespace services
+#endif // TODOSERVICE_H

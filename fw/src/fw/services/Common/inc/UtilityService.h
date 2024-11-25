@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UTILITYSERVICE_H
+#define UTILITYSERVICE_H
 
 #include "IUtilityService.h"
 #include "logger.h"
@@ -32,3 +33,4 @@ namespace services
         };
     }
 }
+#endif // UTILITYSERVICE_H

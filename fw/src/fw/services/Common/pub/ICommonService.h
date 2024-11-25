@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ICOMMONSERVICE_H
+#define ICOMMONSERVICE_H
 
 #include <string>
 #include "BaseService.h"
@@ -20,3 +21,4 @@ namespace services{
     }
 }
 DEFINE_MODULE_UID(services::CommonService::ICommonService, "0x00000004")
+#endif // ICOMMONSERVICE_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UTILS_H
+#define UTILS_H
 #include <iostream>
 #include <string>
 #include <chrono>
@@ -64,7 +65,6 @@ public:
         std::vector<std::string> tokens;
         std::stringstream ss(str);
         std::string token;
-        
         while (std::getline(ss, token, delimiter)) {
             if (!token.empty()) {  // Skip empty tokens
                 tokens.push_back(token);
@@ -73,3 +73,4 @@ public:
         return tokens;
     }
 };
+#endif // UTILS_H

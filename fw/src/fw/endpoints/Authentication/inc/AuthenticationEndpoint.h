@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AUTHENTICATIONENDPOINT_H
+#define AUTHENTICATIONENDPOINT_H
 #include "IAuthenticationEndpoint.h"
 #include "logger.h"
 #include "RouterType.h"
@@ -57,3 +58,4 @@ namespace endpoints
         };
     }
 } // namespace endpoints::AuthenticationEndpoint
+#endif // AUTHENTICATIONENDPOINT_H

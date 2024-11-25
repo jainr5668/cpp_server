@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TODOENDPOINTTYPES_H
+#define TODOENDPOINTTYPES_H
 #include <string>
 #include <vector>
 #include "TodoServiceTypes.h"
@@ -37,3 +38,4 @@ namespace endpoints {
         };
     }
 }
+#endif // TODOENDPOINTTYPES_H

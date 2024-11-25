@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IAUTHENTICATIONSERVICEDATA_H
+#define IAUTHENTICATIONSERVICEDATA_H
 #include <string>
 #include <vector>
 #include "AuthenticationServiceTypes.h"
@@ -14,3 +15,4 @@ namespace services
         };
     } // namespace services::AuthenticationServiceData
 } // namespace services
+#endif // IAUTHENTICATIONSERVICEDATA_H

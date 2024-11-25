@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COMMONSERVICEINJECTIONS_H
+#define COMMONSERVICEINJECTIONS_H
 #include "UtilityService.h"
 #include <memory>
 
@@ -11,3 +12,4 @@ namespace services{
         };
     }
 }
+#endif // COMMONSERVICEINJECTIONS_H

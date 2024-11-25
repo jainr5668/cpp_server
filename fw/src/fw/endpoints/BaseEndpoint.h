@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BASEENDPOINT_H
+#define BASEENDPOINT_H
 #include "router.h"
 #include <string>
 #include <nlohmann/json.hpp>
@@ -66,3 +67,4 @@ public:
     virtual void *getInstance() = 0;
     virtual void shutdown() = 0;
 };
+#endif // BASEENDPOINT_H

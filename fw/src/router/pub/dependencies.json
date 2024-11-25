@@ -54,6 +54,16 @@
                 }
             ],
             "name": "auth"
+        },
+        "expenseManager": {
+            "namespace": "endpoints::ExpenseManager::ExpenseManagerEndpoint",
+            "connections": [
+                {
+                    "name": "services::CommonService::IUtilityService",
+                    "from": "services::CommonService::ICommonService"
+                }
+            ],
+            "name": "expenseManager"
         }
     }
 }

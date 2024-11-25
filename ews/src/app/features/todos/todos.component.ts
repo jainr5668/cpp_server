@@ -84,6 +84,11 @@ export class TodosComponent implements OnInit {
     this.tableModel = new TableModel();
     this.tableModel.columns = columns;
     this.tableModel.rows = tableData;
+    const addButton = new ButtonModel();
+    addButton.setButtonValues(StringIds.cADD_TODO, ButtonTypeEnum.PRIMARY, "addButton", (event) => {this.onClicked(event)});
+    this.tableModel.actionButtons = [
+      addButton
+    ];
   }
 
   deleteTodo(id:string){

@@ -49,7 +49,8 @@ namespace services
             logger.info("TodoService::setInterface Entry");
             if (uid == GET_MODULE_UID(services::CommonService::IUtilityService))
             {
-                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(static_cast<services::CommonService::IUtilityService *>(interface));
+                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(
+                    static_cast<services::CommonService::IUtilityService *>(interface));
             }
             logger.info("TodoService::setInterface Exit");
         }

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AUTHORIZATION_H
+#define AUTHORIZATION_H
 
 #include <IAuthorization.h>
 #include <string>
@@ -15,5 +16,6 @@ public:
 private:
     std::string authorization_token_;
     const std::string secret = "CXlL52nd68sBwZvD7lQTsx4gc7E4th+h+ETgMz5pVd8=";
-    Logger logger; 
+    Logger logger;
 };
+#endif // AUTHORIZATION_H

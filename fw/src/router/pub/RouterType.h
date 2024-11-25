@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ROUTERTYPE_H
+#define ROUTERTYPE_H
 #include <string>
 #include <functional>
 #include "response.h"
@@ -27,3 +28,4 @@ struct Route{
     common::authorization::AuthorizationConfig authConfig;
     std::function<void(RouteContext)> handler;
 };
+#endif // ROUTERTYPE_H

@@ -26,7 +26,9 @@ namespace services
 
         void AuthenticationServiceData::insertUser(services::AuthenticationService::AuthenticationServiceTypes::SingupData signupData){
             logger.info("AuthenticationServiceData::insertUser Entry");
-            std::string query = "INSERT INTO users (id, username, password, mobile1, mobile2) VALUES ('" + Utils::get_uuid() + "', '" +  signupData.username.value + "', '" + signupData.password.value + "', " + std::to_string(signupData.mobile1.value) + ", " + std::to_string(signupData.mobile2.value()) + ")";
+            std::string query = "INSERT INTO users (id, username, password, mobile1, mobile2) VALUES ('" + Utils::get_uuid() + "', '" + \
+            signupData.username.value + "', '" + signupData.password.value + "', " + std::to_string(signupData.mobile1.value) + ", " + \
+            std::to_string(signupData.mobile2.value()) + ")";
             auto res = data_->execute(query);
             logger.info("AuthenticationServiceData::insertUser "+ data_->getDbPath());
             logger.info("AuthenticationServiceData::insertUser Exit");

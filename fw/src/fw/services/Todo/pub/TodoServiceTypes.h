@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TODOSERVICETYPES_H
+#define TODOSERVICETYPES_H
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>
@@ -95,7 +96,8 @@ namespace services
 
             TodoDbData() = default;
 
-            TodoDbData(std::string title, std::string description, std::string status, time_point created_at, time_point updated_at, time_point dueDate)
+            TodoDbData(std::string title, std::string description, std::string status,
+            time_point created_at, time_point updated_at, time_point dueDate)
             {
                 this->title.value = title;
                 this->description.value = description;
@@ -167,3 +169,4 @@ namespace services
         };
     }
 }
+#endif // TODOSERVICETYPES_H

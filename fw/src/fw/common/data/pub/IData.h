@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IDATA_H
+#define IDATA_H
 #include <string>
 #include <nlohmann/json.hpp>
 
@@ -33,3 +34,4 @@ public:
         return query;
     }
 };
+#endif // IDATA_H

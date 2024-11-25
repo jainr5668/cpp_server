@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AUTHENTICATIONENDPOINTINJECTIONS_H
+#define AUTHENTICATIONENDPOINTINJECTIONS_H
 #include <memory>
 #include "logger.h"
 #include "IAuthenticationService.h"
@@ -17,3 +18,4 @@ namespace endpoints
         };
     } // namespace endpoints::AuthenticationEndpoint
 } // namespace endpoints
+#endif // AUTHENTICATIONENDPOINTINJECTIONS_H

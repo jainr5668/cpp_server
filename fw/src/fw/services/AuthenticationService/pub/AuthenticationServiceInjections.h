@@ -1,5 +1,5 @@
-# pragma once
-
+#ifndef AUTHENTICATIONSERVICEINJECTIONS_H
+#define AUTHENTICATIONSERVICEINJECTIONS_H
 #include "AuthenticationServiceData.h"
 #include <memory>
 #include "IUtilityService.h"
@@ -16,3 +16,4 @@ namespace services
         };
     } // namespace services::AuthenticationServiceData
 } // namespace services
+#endif // AUTHENTICATIONSERVICEINJECTIONS_H
