@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LOGGER_H
+#define LOGGER_H
 #include <iostream>
 #include <fstream>
 
@@ -11,3 +12,4 @@ class Logger {
         static std::ofstream logFile;
         void flushLog(std::string logMessage);
 };
+#endif // LOGGER_H

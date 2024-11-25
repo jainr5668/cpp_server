@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AUTHORIZATIONTYPES_H
+#define AUTHORIZATIONTYPES_H
 #include <vector>
 #include <string>
 namespace common
@@ -18,3 +19,4 @@ namespace common
         };
     }
 }
+#endif // AUTHORIZATIONTYPES_H

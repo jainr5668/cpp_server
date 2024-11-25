@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AUTHENTICATIONSERVICETYPES_H
+#define AUTHENTICATIONSERVICETYPES_H
 #include "customDataType.h"
 #include <string>
 #include <nlohmann/json.hpp>
@@ -218,3 +219,4 @@ namespace services
         } // namespace services::AuthenticationService::AuthenticationServiceTypes
     } // namespace services::AuthenticationService
 } // namespace services
+#endif // AUTHENTICATIONSERVICETYPES_H

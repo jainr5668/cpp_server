@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IUTILITYSERVICE_H
+#define IUTILITYSERVICE_H
 #include "BaseService.h"
 #include <unordered_map>
 #include <string>
@@ -57,3 +58,4 @@ namespace services
     }
 }
 DEFINE_MODULE_UID(services::CommonService::IUtilityService, "0x00000023")
+#endif // IUTILITYSERVICE_H

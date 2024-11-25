@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RESPONSE_H
+#define RESPONSE_H
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -22,7 +23,6 @@ public:
         oss << "Content-Length: " << body.length() << "\r\n";
         oss << "\r\n";
         oss << body;
-        
         return oss.str();
     }
 
@@ -42,3 +42,4 @@ private:
         }
     }
 };
+#endif // RESPONSE_H

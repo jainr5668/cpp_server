@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SERVER_H
+#define SERVER_H
 #include "IRouter.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -26,3 +27,4 @@ private:
    Logger logger;
    std::string read_request(int socket);
 };
+#endif // SERVER_H

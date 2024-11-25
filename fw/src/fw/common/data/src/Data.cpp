@@ -13,7 +13,7 @@ static int callback(void* data, int argc, char** argv, char** azColName) {
     return 0;
 }
 
-Data::Data(std::string dbName) 
+Data::Data(std::string dbName)
 {
     logger_.info("Data::Data Entry");
     dbPath_ = "db/" + dbName;
@@ -55,4 +55,3 @@ std::vector<std::vector<std::string>> Data::execute(std::string query)
     }
     return results;
 }
-

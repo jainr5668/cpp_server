@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IROUTER_H
+#define IROUTER_H
 #include <string>
 #include <functional>
 #include "response.h"
@@ -13,3 +14,4 @@ public:
    virtual void handle_request(Request* req, Response* res) = 0;
    virtual void addSubRouter(const std::string& path, std::shared_ptr<IRouter> subrouter_) = 0;
 };
+#endif // IROUTER_H

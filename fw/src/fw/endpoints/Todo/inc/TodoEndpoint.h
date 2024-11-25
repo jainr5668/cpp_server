@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TODOENDPOINT_H
+#define TODOENDPOINT_H
 #include "ITodoEndpoint.h"
 #include "logger.h"
 #include <memory>
@@ -33,3 +34,4 @@ namespace endpoints
         };
     } // namespace TodoEndpoint
 } // namespace endpoints
+#endif // TODOENDPOINT_H

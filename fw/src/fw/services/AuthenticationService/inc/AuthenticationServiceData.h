@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AUTHENTICATIONSERVICEDATA_H
+#define AUTHENTICATIONSERVICEDATA_H
 #include <IAuthenticationServiceData.h>
 #include "Data.h"
 #include <memory>
@@ -23,3 +24,4 @@ namespace services
         };
     } // namespace services::AuthenticationServiceData
 } // namespace services
+#endif // AUTHENTICATIONSERVICEDATA_H

@@ -1,3 +1,4 @@
+import { ButtonModel } from "@patterns/button";
 import { StringIds } from "src/stringIds";
 
 export class TableColumnModel {
@@ -47,6 +48,7 @@ export class TableModel {
     event: any;
     columns: TableColumnModel[];
     rows: TableRowModel[];
+    actionButtons: ButtonModel[];
     setTableValues(id: string, columns: TableColumnModel[], rows: TableDataModel[], event?: any) {
         this.id = id;
         this.columns = columns;

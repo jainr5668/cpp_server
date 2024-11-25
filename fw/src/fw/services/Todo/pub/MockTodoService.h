@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MOCKTODOSERVICE_H
+#define MOCKTODOSERVICE_H
 #include "ITodoService.h"
 #include "TodoServiceTypes.h"
 #include <gmock/gmock.h>
@@ -15,3 +16,4 @@ namespace services{
         };
     }
 }
+#endif // MOCKTODOSERVICE_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MOCKIAUTHENTICATIONENDPOINT_H
+#define MOCKIAUTHENTICATIONENDPOINT_H
 #include "IAuthenticationEndpoint.h"
 namespace endpoints
 {
@@ -10,3 +11,4 @@ namespace endpoints
         };
     } // namespace endpoints::AuthenticationEndpoint
 } // namespace endpoints
+#endif // MOCKIAUTHENTICATIONENDPOINT_H

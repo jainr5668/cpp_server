@@ -40,7 +40,8 @@ namespace services
         {
             logger.info("AuthenticationService::isCredValid Entry");
             std::string isLoginSuccess;
-            std::vector<std::vector<std::string>> users = injections_->authenticationServiceData_->retriveUsers("SELECT * FROM users WHERE username = '" + loginData_.username.value + "' AND password = '" + loginData_.password.value + "'");
+            std::vector<std::vector<std::string>> users = injections_->authenticationServiceData_->retriveUsers(
+                "SELECT * FROM users WHERE username = '" + loginData_.username.value + "' AND password = '" + loginData_.password.value + "'");
             if (users.size() == 1)
             {
                 isLoginSuccess = users[0][0];
@@ -57,7 +58,8 @@ namespace services
         {
             logger.info("AuthenticationService::initialize Entry");
             injections_ = new AuthenticationServiceInjections();
-            injections_->authenticationServiceData_ = std::make_unique<AuthenticationServiceData>(std::make_unique<Data>("AuthenticationServiceData.db"));
+            injections_->authenticationServiceData_ = std::make_unique<AuthenticationServiceData>(
+                std::make_unique<Data>("AuthenticationServiceData.db"));
             logger.info("AuthenticationService::initialize Exit");
         }
         void *AuthenticationService::getInterface(ModuleUid uid)
@@ -97,7 +99,8 @@ namespace services
             logger.info("AuthenticationService::setInterface Entry");
             if (uid == GET_MODULE_UID(services::CommonService::IUtilityService))
             {
-                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(static_cast<services::CommonService::IUtilityService *>(interface));
+                injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(
+                    static_cast<services::CommonService::IUtilityService *>(interface));
             }
             logger.info("AuthenticationService::setInterface Exit");
         }
@@ -106,7 +109,8 @@ namespace services
         {
             logger.info("AuthenticationService::createUser Entry");
             bool isUserCreated = false;
-            std::vector<std::vector<std::string>> users = injections_->authenticationServiceData_->retriveUsers("SELECT * FROM users WHERE username = '" + singupData_.username.value + "'");
+            std::vector<std::vector<std::string>> users = injections_->authenticationServiceData_->retriveUsers(
+                "SELECT * FROM users WHERE username = '" + singupData_.username.value + "'");
             if (users.size() == 0)
             {
                 uint32_t mobile2 = 0;

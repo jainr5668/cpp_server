@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ISERVER_H
+#define ISERVER_H
 #include "IRouter.h"
 #include <string.h>
 
@@ -8,3 +9,4 @@ public:
    virtual void start() = 0;
    virtual void stop() = 0;
 };
+#endif // ISERVER_H

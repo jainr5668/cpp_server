@@ -79,7 +79,7 @@ private:
 #define REGISTER_SERVICE(name, type)                                                                                                      \
     namespace                                                                                                                             \
     {                                                                                                                                     \
-        const bool UNIQUE_VAR = []() {                                                                                 \
+        const bool UNIQUE_VAR = []() {                                                                                                    \
             ServiceRegistry::instance().registerService(name, []() -> std::shared_ptr<BaseService> { return std::make_shared<type>(); }); \
             return true;                                                                                                                  \
         }();                                                                                                                              \

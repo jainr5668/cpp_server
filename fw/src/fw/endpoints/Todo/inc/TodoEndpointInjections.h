@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TODOENDPOINTINJECTIONS_H
+#define TODOENDPOINTINJECTIONS_H
 
 #include "ITodoService.h"
 #include <memory>
@@ -14,3 +15,4 @@ namespace endpoints
         };
     } // namespace TodoEndpoint
 } // namespace endpoints
+#endif // TODOENDPOINTINJECTIONS_H

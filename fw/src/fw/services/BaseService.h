@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BASESERVICE_H
+#define BASESERVICE_H
 #include <string>
 #include <map>
 #include <regex>
@@ -11,9 +12,9 @@ inline ModuleUid getModuleUid();
 static std::map<std::string, ModuleUid> moduleUidMap;
 
 #ifndef UNIQUE_ID
-#define UNIQUE_ID_IMPL(line) _unique_id_##line
-#define UNIQUE_ID(line) UNIQUE_ID_IMPL(line)
-#define UNIQUE_VAR UNIQUE_ID(__LINE__)
+#define UNIQUE_ID_IMPL(line, counter) _unique_id_##line##_##counter
+#define UNIQUE_ID(line, counter) UNIQUE_ID_IMPL(line, counter)
+#define UNIQUE_VAR UNIQUE_ID(__LINE__, __COUNTER__)
 #endif
 
 
@@ -43,3 +44,5 @@ public:
     virtual ModuleUid getInterfaceUID() = 0;
     virtual ~BaseService() = default;
 };
+
+#endif // BASESERVICE_H
