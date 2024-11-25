@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IAUTHENTICATIONSERVICE_H
+#define IAUTHENTICATIONSERVICE_H
 #include "AuthenticationServiceTypes.h"
 #include <string>
 #include "BaseService.h"
@@ -17,3 +18,4 @@ namespace services
     } // namespace services::AuthenticationService
 } // namespace services
 DEFINE_MODULE_UID(services::AuthenticationService::IAuthenticationService, "0x98235f");
+#endif // IAUTHENTICATIONSERVICE_H

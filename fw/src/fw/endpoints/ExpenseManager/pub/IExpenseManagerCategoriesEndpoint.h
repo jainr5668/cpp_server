@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IEXPENSEMANAGERCATEGORIESENDPOINT_H
+#define IEXPENSEMANAGERCATEGORIESENDPOINT_H
 #include "BaseEndpoint.h"
 
 namespace endpoints
@@ -15,9 +16,5 @@ namespace endpoints
         };
     }
 }
-
-
-
-
-
 DEFINE_MODULE_UID(endpoints::ExpenseManager::IExpenseManagerCategoriesEndpoint, "852728487")
+#endif // IEXPENSEMANAGERCATEGORIESENDPOINT_H

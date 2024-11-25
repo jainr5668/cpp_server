@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EXPENSEMANAGERENDPOINT_H
+#define EXPENSEMANAGERENDPOINT_H
 #include "IExpenseManagerEndpoint.h"
 #include "ExpenseManagerInjections.h"
 #include "ExpenseManagerAccountsEndpoint.h"
@@ -34,3 +35,4 @@ namespace endpoints
         };
     }
 }
+#endif // EXPENSEMANAGERENDPOINT_H

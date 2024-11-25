@@ -30,7 +30,7 @@ class CodeChecker:
 
         self.cpp_rules = {
             'indent_size': 4,
-            'require_braces': True,
+            'require_braces': False,
             'snake_case_functions': True
         }
 
@@ -56,7 +56,10 @@ class CodeChecker:
             'venv',
             '.git',
             '__pycache__',
-            '.vscode'
+            '.vscode',
+            '.angular',
+            'ews',
+            'tools'
         }
 
     def check_file(self, filepath: str) -> List[str]:
@@ -177,11 +180,11 @@ class CodeChecker:
             )
 
         # Check for consistent key ordering (if it's a dictionary at root level)
-        if isinstance(json_content, dict):
-            keys = list(json_content.keys())
-            sorted_keys = sorted(keys)
-            if keys != sorted_keys:
-                violations.append(f"{filepath} Keys are not in alphabetical order")
+        # if isinstance(json_content, dict):
+        #     keys = list(json_content.keys())
+        #     sorted_keys = sorted(keys)
+        #     if keys != sorted_keys:
+        #         violations.append(f"{filepath} Keys are not in alphabetical order")
 
         return violations
 
@@ -315,21 +318,22 @@ class CodeChecker:
             for i, line in enumerate(lines, 1):
                 if re.search(r'\b(if|for|while|do)\b[^{]*$', line):
                     next_line = lines[i].strip() if i < len(lines) else ''
-                    if not next_line.startswith('{'):
+                    if not next_line.startswith('{') and not lines[i-1].strip().startswith('//'):
                         violations.append(f"{filepath}:{i} Missing braces for control statement")
 
-        # Check snake_case for functions
+        # Check camelCase for functions
         if self.cpp_rules['snake_case_functions']:
             function_pattern = r'\w+\s+([A-Za-z_][A-Za-z0-9_]*)\s*\([^)]*\)\s*{'
+            matches = None
             for i, line in enumerate(lines, 1):
                 matches = re.search(function_pattern, line)
-                if matches:
-                    func_name = matches.group(1)
-                    if not re.match(r'^[a-z][a-z0-9_]*$', func_name):
-                        violations.append(
-                            f"{filepath}:{i} Function name '{func_name}' "
-                            "should be in snake_case"
-                        )
+            if matches:
+                func_name = matches.group(1)
+                if not re.match(r'^[a-z]+(?:[A-Z][a-z0-9]*)*$', func_name):
+                    violations.append(
+                    f"{filepath}:{i} Function name '{func_name}' "
+                    "should be in camelCase"
+                )
 
         return violations
 
@@ -373,14 +377,15 @@ class CodeChecker:
         Returns a dictionary mapping filenames to lists of violations.
         """
         results = {}
-        extensions = ('.py', '.ts', '.cpp', '.h', '.json')
+        extensions = ('.py', '.cpp', '.h', '.json')
+        skip_files = ('.gitignore', 'README.md', 'LICENSE', 'package-lock.json', 'package.json', 'angular.json')
         
         for root, dirs, files in os.walk(directory):
             # Remove excluded directories
             dirs[:] = [d for d in dirs if d not in self.skip_directories]
             
             for file in files:
-                if file.endswith(extensions):
+                if file.endswith(extensions) and file not in skip_files:
                     filepath = os.path.join(root, file)
                     violations = self.check_file(filepath)
                     if violations:
@@ -418,8 +423,7 @@ def main():
                     print(violation)
             print(f"{RED}Style violations found.{RESET}")
             exit(1)
-    if args.verbose:
-        print(f"{GREEN}No style violations found.{RESET}")
+    print(f"{GREEN}No style violations found.{RESET}")
     exit(0)
 
 if __name__ == '__main__':

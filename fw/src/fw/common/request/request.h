@@ -1,4 +1,5 @@
-#pragma once
+#ifndef REQUEST_H
+#define REQUEST_H
 
 #include <iostream>
 #include <sstream>
@@ -27,3 +28,4 @@ private:
     std::vector<std::string> split(const std::string& s, char delimiter);
     Utils utils_;
 };
+#endif // REQUEST_H

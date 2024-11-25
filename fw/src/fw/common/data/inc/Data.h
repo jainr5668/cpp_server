@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DATA_H
+#define DATA_H
 #include "IData.h"
 #include <iostream>
 #include <sqlite3.h>
@@ -11,10 +12,10 @@ public:
     Data(std::string);
     std::vector<std::vector<std::string>> execute(std::string);
     std::string getDbPath() { return dbPath_; }
-    
-
 private:
     sqlite3 *db_;
     std::string dbPath_;
     Logger logger_;
 };
+
+#endif // DATA_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COMMONSERVICE_H
+#define COMMONSERVICE_H
 #include "CommonServiceInjections.h"
 #include "ICommonService.h"
 #include "logger.h"
@@ -26,3 +27,4 @@ namespace services
         };
     }
 }
+#endif // COMMONSERVICE_H

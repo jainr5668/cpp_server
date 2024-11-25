@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EXPENSEMANAGERCATEGORIESENDPOINT_H
+#define EXPENSEMANAGERCATEGORIESENDPOINT_H
 #include "IExpenseManagerCategoriesEndpoint.h"
 #include "ExpenseManagerInjections.h"
 
@@ -25,3 +26,4 @@ namespace endpoints{
         };
     }
 }
+#endif // EXPENSEMANAGERCATEGORIESENDPOINT_H

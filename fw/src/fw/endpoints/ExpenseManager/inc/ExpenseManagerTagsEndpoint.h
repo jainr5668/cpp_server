@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EXPENSEMANAGERTAGSENDPOINT_H
+#define EXPENSEMANAGERTAGSENDPOINT_H
 #include "ExpenseManagerInjections.h"
 #include "IExpenseManagerTagsEndpoint.h"
 
@@ -29,3 +30,4 @@ namespace endpoints
         };
     }
 }
+#endif // EXPENSEMANAGERTAGSENDPOINT_H

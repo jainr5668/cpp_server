@@ -1,4 +1,5 @@
-#pragma once
+#ifndef REGISTRY_H
+#define REGISTRY_H
 #include "ServiceRegistry.h"
 
 #include "AuthenticationService.h"
@@ -16,3 +17,5 @@ REGISTER_ROUTER("endpoints::TodoEndpoint::TodoEndpoint", endpoints::TodoEndpoint
 #include "ExpenseManagerEndpoint.h"
 REGISTER_ROUTER("endpoints::ExpenseManager::ExpenseManagerEndpoint", endpoints::ExpenseManager::ExpenseManagerEndpoint);
 
+
+#endif // REGISTRY_H

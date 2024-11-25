@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EXPENSEMANAGERINJECTIONS_H
+#define EXPENSEMANAGERINJECTIONS_H
 #include <memory>
 #include "IUtilityService.h"
 
@@ -13,3 +14,4 @@ namespace endpoints
         };
     }
 }
+#endif // EXPENSEMANAGERINJECTIONS_H

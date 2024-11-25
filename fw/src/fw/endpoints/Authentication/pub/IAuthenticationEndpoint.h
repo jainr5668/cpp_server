@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IAUTHENTICATIONENDPOINT_H
+#define IAUTHENTICATIONENDPOINT_H
 #include "BaseEndpoint.h"
 
 
@@ -16,3 +17,4 @@ namespace endpoints
 } // namespace endpoints::AuthenticationEndpoint
 
 DEFINE_MODULE_UID(endpoints::AuthenticationEndpoint::IAuthenticationEndpoint, "1234567890")
+#endif // IAUTHENTICATIONENDPOINT_H

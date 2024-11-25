@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TODOSERVICEINJECTIONS_H
+#define TODOSERVICEINJECTIONS_H
 #include "ITodoServiceData.h"
 #include <memory>
 #include "IUtilityService.h"
@@ -15,3 +16,4 @@ namespace services
         };
     } // namespace services::TodoService
 } // namespace services
+#endif // TODOSERVICEINJECTIONS_H

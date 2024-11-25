@@ -1,6 +1,6 @@
 <div *ngIf="formGroup">
-    <div>
-        Action Bar
+    <div *ngIf="table.actionButtons.length > 0">
+        <pattern-button [button]="actionButton" *ngFor="let actionButton of table.actionButtons"></pattern-button>
     </div>
     <table [id]="table.id" class="table table-bordered table-hover mt-3">
         <thead>

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IEXPENSEMANAGERTAGSENDPOINT_H
+#define IEXPENSEMANAGERTAGSENDPOINT_H
 #include "BaseEndpoint.h"
 
 namespace endpoints{
@@ -12,14 +13,5 @@ namespace endpoints{
         };
     }
 }
-
-
-
-
-
-
-
-
-
-
-DEFINE_MODULE_UID(endpoints::ExpenseManager::IExpenseManagerTagsEndpoint, "852728486")
+DEFINE_MODULE_UID(endpoints::ExpenseManager::IExpenseManagerTagsEndpoint, "852728489")
+#endif // IEXPENSEMANAGERTAGSENDPOINT_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SUBROUTERMAP_H
+#define SUBROUTERMAP_H
 #include <fstream>
 #include <iostream>
 #include "registry.h"
@@ -162,3 +163,4 @@ private:
     std::map<std::string, std::shared_ptr<IRouter>> routerMap_;
     Logger logger_;
 };
+#endif // SUBROUTERMAP_H

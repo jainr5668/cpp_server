@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EXPENSEMANAGERTRANSACTIONSENDPOINT_H
+#define EXPENSEMANAGERTRANSACTIONSENDPOINT_H
 #include "ExpenseManagerInjections.h"
 #include "IExpenseManagerTransactionsEndpoint.h"
 
@@ -6,7 +7,7 @@ namespace endpoints
 {
     namespace ExpenseManager
     {
-        class ExpenseManagerTransactionsEndpoint : public IExpenseManagerTransactionsEndpoint
+        class ExpenseManagerTransactionsEndpoint : public endpoints::ExpenseManager::IExpenseManagerTransactionsEndpoint
         {
         public:
             ExpenseManagerTransactionsEndpoint(endpoints::ExpenseManager::ExpenseManagerInjections* &injection);
@@ -29,3 +30,4 @@ namespace endpoints
         };
     }
 }
+#endif // EXPENSEMANAGERTRANSACTIONSENDPOINT_H

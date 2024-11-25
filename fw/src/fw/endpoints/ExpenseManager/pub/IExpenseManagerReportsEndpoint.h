@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IEXPENSEMANAGERREPORTSENDPOINT_H
+#define IEXPENSEMANAGERREPORTSENDPOINT_H
 #include "BaseEndpoint.h"
 
 namespace endpoints{
@@ -12,16 +13,5 @@ namespace endpoints{
         };
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-DEFINE_MODULE_UID(endpoints::ExpenseManager::IExpenseManagerReportsEndpoint, "852728486")
+DEFINE_MODULE_UID(endpoints::ExpenseManager::IExpenseManagerReportsEndpoint, "852728488")
+#endif // IEXPENSEMANAGERREPORTSENDPOINT_H
