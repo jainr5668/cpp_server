@@ -10,7 +10,7 @@ namespace endpoints
         class ExpenseManagerAccountsEndpoint : public IExpenseManagerAccountsEndpoint
         {
         public:
-            ExpenseManagerAccountsEndpoint(endpoints::ExpenseManager::ExpenseManagerInjections* &injection);
+            ExpenseManagerAccountsEndpoint(endpoints::ExpenseManager::ExpenseManagerEndpointInjections* &injection);
             ~ExpenseManagerAccountsEndpoint();
             void addAccount(RouteContext routeContext);
             void connect();
@@ -24,7 +24,7 @@ namespace endpoints
             void shutdown();
             void updateAccount(RouteContext routeContext);
         private:
-            endpoints::ExpenseManager::ExpenseManagerInjections* injections_;
+            endpoints::ExpenseManager::ExpenseManagerEndpointInjections* injections_;
             std::vector<Route> getRoutes();
             Logger logger_;
         };

@@ -30,7 +30,7 @@ namespace endpoints
             std::shared_ptr<endpoints::ExpenseManager::ExpenseManagerTransactionsEndpoint> transactionEndpoint_;
             std::shared_ptr<endpoints::ExpenseManager::ExpenseManagerTagsEndpoint> tagEndpoint_;
             std::shared_ptr<endpoints::ExpenseManager::ExpenseManagerReportsEndpoint> reportEndpoint_;
-            endpoints::ExpenseManager::ExpenseManagerInjections* injections_;
+            endpoints::ExpenseManager::ExpenseManagerEndpointInjections* injections_;
             Logger logger_;
         };
     }

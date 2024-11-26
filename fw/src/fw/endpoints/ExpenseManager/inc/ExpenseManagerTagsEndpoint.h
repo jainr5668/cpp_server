@@ -10,7 +10,7 @@ namespace endpoints
         class ExpenseManagerTagsEndpoint : public IExpenseManagerTagsEndpoint
         {
         public:
-            ExpenseManagerTagsEndpoint(endpoints::ExpenseManager::ExpenseManagerInjections* &injection);
+            ExpenseManagerTagsEndpoint(endpoints::ExpenseManager::ExpenseManagerEndpointInjections* &injection);
             ~ExpenseManagerTagsEndpoint();
             void addTag(RouteContext routeContext);
             void connect();
@@ -24,7 +24,7 @@ namespace endpoints
             void shutdown();
             void updateTag(RouteContext routeContext);
         private:
-            endpoints::ExpenseManager::ExpenseManagerInjections* injections_;
+            endpoints::ExpenseManager::ExpenseManagerEndpointInjections* injections_;
             std::vector<Route> getRoutes();
             Logger logger_;
         };

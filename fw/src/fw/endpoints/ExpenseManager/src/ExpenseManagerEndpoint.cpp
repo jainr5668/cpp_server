@@ -19,7 +19,7 @@ namespace endpoints
         void ExpenseManagerEndpoint::initialize()
         {
             logger_.info("ExpenseManagerEndpoint::initialize Entry");
-            injections_ = new endpoints::ExpenseManager::ExpenseManagerInjections();
+            injections_ = new endpoints::ExpenseManager::ExpenseManagerEndpointInjections();
             // Accounts Sub-Router
             accountsEndpoint_ = std::make_shared<endpoints::ExpenseManager::ExpenseManagerAccountsEndpoint>(injections_);
             accountsEndpoint_->initialize();

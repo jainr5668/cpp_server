@@ -8,13 +8,13 @@ class ExpenseManagerReportsEndpointTest : public ::testing::Test {
 protected:
     virtual void SetUp() override;
     virtual void TearDown() override;
-    endpoints::ExpenseManager::ExpenseManagerInjections* injections_;
+    endpoints::ExpenseManager::ExpenseManagerEndpointInjections* injections_;
     endpoints::ExpenseManager::ExpenseManagerReportsEndpoint* endpoint;
     RouteContext routeContext;
 };
 
 void ExpenseManagerReportsEndpointTest::SetUp(){
-    injections_ = new endpoints::ExpenseManager::ExpenseManagerInjections();
+    injections_ = new endpoints::ExpenseManager::ExpenseManagerEndpointInjections();
     injections_->utilityService = std::make_shared<services::CommonService::MockIUtilityService>();
     endpoint = new endpoints::ExpenseManager::ExpenseManagerReportsEndpoint(injections_);
     routeContext.req = new Request();

@@ -7,7 +7,7 @@ namespace endpoints
 {
     namespace ExpenseManager
     {
-        class ExpenseManagerInjections
+        class ExpenseManagerEndpointInjections
         {
         public:
             std::shared_ptr<services::CommonService::IUtilityService> utilityService;
