@@ -24,6 +24,16 @@
             "namespace": "services::CommonService::CommonService",
             "connections": [],
             "name": "services::CommonService::ICommonService"
+        },
+        "services::ExpenseManagerService::IExpenseManagerService": {
+            "namespace": "services::ExpenseManagerService::ExpenseManagerService",
+            "connections": [
+                {
+                    "name": "services::CommonService::IUtilityService",
+                    "from": "services::CommonService::ICommonService"
+                }
+            ],
+            "name": "services::ExpenseManagerService::IExpenseManagerService"
         }
     },
     "endpoints": {
@@ -61,6 +71,26 @@
                 {
                     "name": "services::CommonService::IUtilityService",
                     "from": "services::CommonService::ICommonService"
+                },
+                {
+                    "name": "services::ExpenseManagerService::IExpenseManagerAccountsService",
+                    "from": "services::ExpenseManagerService::IExpenseManagerService"
+                },
+                {
+                    "name": "services::ExpenseManagerService::IExpenseManagerCategoriesService",
+                    "from": "services::ExpenseManagerService::IExpenseManagerService"
+                },
+                {
+                    "name": "services::ExpenseManagerService::IExpenseManagerReportsService",
+                    "from": "services::ExpenseManagerService::IExpenseManagerService"
+                },
+                {
+                    "name": "services::ExpenseManagerService::IExpenseManagerTagsService",
+                    "from": "services::ExpenseManagerService::IExpenseManagerService"
+                },
+                {
+                    "name": "services::ExpenseManagerService::IExpenseManagerTransactionsService",
+                    "from": "services::ExpenseManagerService::IExpenseManagerService"
                 }
             ],
             "name": "expenseManager"

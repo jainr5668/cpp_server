@@ -67,6 +67,31 @@ namespace endpoints
                 injections_->utilityService = std::shared_ptr<services::CommonService::IUtilityService>(
                     static_cast<services::CommonService::IUtilityService *>(interface));
             }
+            else if(uid == GET_MODULE_UID(services::ExpenseManagerService::IExpenseManagerAccountsService))
+            {
+                injections_->accountsService_ = std::shared_ptr<services::ExpenseManagerService::IExpenseManagerAccountsService>(
+                    static_cast<services::ExpenseManagerService::IExpenseManagerAccountsService *>(interface));
+            }
+            else if(uid == GET_MODULE_UID(services::ExpenseManagerService::IExpenseManagerCategoriesService))
+            {
+                injections_->categoriesService_ = std::shared_ptr<services::ExpenseManagerService::IExpenseManagerCategoriesService>(
+                    static_cast<services::ExpenseManagerService::IExpenseManagerCategoriesService *>(interface));
+            }
+            else if(uid == GET_MODULE_UID(services::ExpenseManagerService::IExpenseManagerReportsService))
+            {
+                injections_->reportsService_ = std::shared_ptr<services::ExpenseManagerService::IExpenseManagerReportsService>(
+                    static_cast<services::ExpenseManagerService::IExpenseManagerReportsService *>(interface));
+            }
+            else if(uid == GET_MODULE_UID(services::ExpenseManagerService::IExpenseManagerTagsService))
+            {
+                injections_->tagsService_ = std::shared_ptr<services::ExpenseManagerService::IExpenseManagerTagsService>(
+                    static_cast<services::ExpenseManagerService::IExpenseManagerTagsService *>(interface));
+            }
+            else if(uid == GET_MODULE_UID(services::ExpenseManagerService::IExpenseManagerTransactionsService))
+            {
+                injections_->transactionsService_ = std::shared_ptr<services::ExpenseManagerService::IExpenseManagerTransactionsService>(
+                    static_cast<services::ExpenseManagerService::IExpenseManagerTransactionsService *>(interface));
+            }
             logger_.info("ExpenseManagerEndpoint::setInterface Exit");
         }
 
@@ -74,6 +99,11 @@ namespace endpoints
         {
             logger_.info("ExpenseManagerEndpoint::connect Entry");
             assert(injections_->utilityService != nullptr), "Utility Service is not set";
+            assert(injections_->accountsService_ != nullptr), "Accounts Service is not set";
+            assert(injections_->categoriesService_ != nullptr), "Categories Service is not set";
+            assert(injections_->reportsService_ != nullptr), "Reports Service is not set";
+            assert(injections_->tagsService_ != nullptr), "Tags Service is not set";
+            assert(injections_->transactionsService_ != nullptr), "Transactions Service is not set";
             logger_.info("ExpenseManagerEndpoint::connect Exit");
         }
 
@@ -87,8 +117,11 @@ namespace endpoints
         void ExpenseManagerEndpoint::shutdown()
         {
             logger_.info("ExpenseManagerEndpoint::shutdown Entry");
-            accountsEndpoint_->shutdown();
+            reportEndpoint_->shutdown();
+            tagEndpoint_->shutdown();
+            transactionEndpoint_->shutdown();
             categoriesEndpoint_->shutdown();
+            accountsEndpoint_->shutdown();
             logger_.info("ExpenseManagerEndpoint::shutdown Exit");
         }
     }

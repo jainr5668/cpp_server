@@ -1,5 +1,6 @@
-#ifndef EXPENSEMANAGERINJECTIONS_H
-#define EXPENSEMANAGERINJECTIONS_H
+#ifndef EXPENSEMANAGERSERVICEINJECTIONS_H
+#define EXPENSEMANAGERSERVICEINJECTIONS_H
+
 #include <memory>
 #include "IUtilityService.h"
 #include "IExpenseManagerAccountsService.h"
@@ -8,14 +9,14 @@
 #include "IExpenseManagerTagsService.h"
 #include "IExpenseManagerTransactionsService.h"
 
-namespace endpoints
+namespace services
 {
-    namespace ExpenseManager
+    namespace ExpenseManagerService
     {
-        class ExpenseManagerEndpointInjections
+        class ExpenseManagerServiceInjections
         {
         public:
-            std::shared_ptr<services::CommonService::IUtilityService> utilityService;
+            std::shared_ptr<services::CommonService::IUtilityService> utilityService{nullptr};
             std::shared_ptr<services::ExpenseManagerService::IExpenseManagerAccountsService> accountsService_{nullptr};
             std::shared_ptr<services::ExpenseManagerService::IExpenseManagerCategoriesService> categoriesService_{nullptr};
             std::shared_ptr<services::ExpenseManagerService::IExpenseManagerReportsService> reportsService_{nullptr};
@@ -24,4 +25,4 @@ namespace endpoints
         };
     }
 }
-#endif // EXPENSEMANAGERINJECTIONS_H
+#endif // EXPENSEMANAGERSERVICEINJECTIONS_H
