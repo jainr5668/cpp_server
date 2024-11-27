@@ -17,7 +17,7 @@ public:
     std::unordered_map<std::string, std::string> query_params;
     std::string body;
     Authorization* authorization = nullptr;
-
+    Request() = default;
     Request(const std::string& raw_request);
 
 private:

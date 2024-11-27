@@ -32,7 +32,7 @@ COPY . /app
 WORKDIR /app
 RUN chmod +x ./entrypoint.sh
 EXPOSE 8080
-RUN mkdir -p build && cd build && cmake .. && make && cd ..
+# RUN mkdir -p build && cd build && cmake .. && make && cd ..
 
 # Run the application
 ENTRYPOINT ["./entrypoint.sh"]

@@ -4,7 +4,7 @@ namespace endpoints
 {
     namespace ExpenseManager
     {
-        ExpenseManagerCategoriesEndpoint::ExpenseManagerCategoriesEndpoint(endpoints::ExpenseManager::ExpenseManagerInjections* &injection)
+        ExpenseManagerCategoriesEndpoint::ExpenseManagerCategoriesEndpoint(endpoints::ExpenseManager::ExpenseManagerEndpointInjections* &injection)
         {
             logger_.info("ExpenseManagerCategoriesEndpoint::ExpenseManagerCategoriesEndpoint Entry");
             injections_ = injection;
