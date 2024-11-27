@@ -14,6 +14,7 @@ namespace services
         void ExpenseManagerAccountsService::initialize()
         {
             logger.info("ExpenseManagerAccountsService::initialize Entry");
+            data_ = new ExpenseManagerAccountsServiceData(injections_->data);
             logger.info("ExpenseManagerAccountsService::initialize Exit");
         }
 
@@ -39,6 +40,7 @@ namespace services
         {
             logger.info("ExpenseManagerAccountsService::connect Entry");
             assert(injections_->utilityService != nullptr), "Utility Service is not set";
+            assert(injections_->data != nullptr), "Data is not set";
             logger.info("ExpenseManagerAccountsService::connect Exit");
         }
 

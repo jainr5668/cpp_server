@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "IUtilityService.h"
+#include "Data.h"
 #include "IExpenseManagerAccountsService.h"
 #include "IExpenseManagerCategoriesService.h"
 #include "IExpenseManagerReportsService.h"
@@ -17,6 +18,7 @@ namespace services
         {
         public:
             std::shared_ptr<services::CommonService::IUtilityService> utilityService{nullptr};
+            std::shared_ptr<Data> data{nullptr};
             std::shared_ptr<services::ExpenseManagerService::IExpenseManagerAccountsService> accountsService_{nullptr};
             std::shared_ptr<services::ExpenseManagerService::IExpenseManagerCategoriesService> categoriesService_{nullptr};
             std::shared_ptr<services::ExpenseManagerService::IExpenseManagerReportsService> reportsService_{nullptr};

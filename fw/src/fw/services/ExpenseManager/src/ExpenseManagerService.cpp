@@ -19,6 +19,7 @@ namespace services
         {
             logger.info("ExpenseManagerService::initialize Entry");
             injections_ = new ExpenseManagerServiceInjections();
+            injections_->data = std::make_shared<Data>("ExpenseManagerServiceData.db");
             injections_->accountsService_ = std::make_shared<services::ExpenseManagerService::ExpenseManagerAccountsService>(injections_);
             injections_->categoriesService_ = std::make_shared<services::ExpenseManagerService::ExpenseManagerCategoriesService>(injections_);
             injections_->reportsService_ = std::make_shared<services::ExpenseManagerService::ExpenseManagerReportsService>(injections_);
@@ -75,6 +76,7 @@ namespace services
             logger.info("ExpenseManagerService::connect Entry");
             assert(injections_->utilityService != nullptr), "Utility Service is not set";
             injections_->accountsService_->connect();
+            injections_->accountsService_->initialize();
             injections_->categoriesService_->connect();
             injections_->reportsService_->connect();
             injections_->tagsService_->connect();

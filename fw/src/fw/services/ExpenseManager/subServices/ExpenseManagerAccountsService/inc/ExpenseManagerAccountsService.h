@@ -2,6 +2,7 @@
 #define EXPENSEMANAGERACCOUNTSSERVICE_H
 #include "IExpenseManagerAccountsService.h"
 #include "ExpenseManagerServiceInjections.h"
+#include "ExpenseManagerAccountsServiceData.h"
 #include "logger.h"
 
 namespace services
@@ -24,6 +25,7 @@ namespace services
         private:
             Logger logger;
             ExpenseManagerServiceInjections *injections_;
+            ExpenseManagerAccountsServiceData *data_;
         };
     }
 }

@@ -17,6 +17,7 @@ Data::Data(std::string dbName)
 {
     logger_.info("Data::Data Entry");
     dbPath_ = "db/" + dbName;
+    logger_.info("Database path: " + dbPath_);
     struct stat info;
     if (stat("db", &info) != 0) {
         // Directory does not exist, create it
