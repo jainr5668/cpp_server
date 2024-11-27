@@ -1,13 +1,13 @@
 #ifndef EXPENSEMANAGERCATEGORIESENDPOINT_H
 #define EXPENSEMANAGERCATEGORIESENDPOINT_H
 #include "IExpenseManagerCategoriesEndpoint.h"
-#include "ExpenseManagerInjections.h"
+#include "ExpenseManagerEndpointInjections.h"
 
 namespace endpoints{
     namespace ExpenseManager{
         class ExpenseManagerCategoriesEndpoint : public IExpenseManagerCategoriesEndpoint{
         public:
-            ExpenseManagerCategoriesEndpoint(endpoints::ExpenseManager::ExpenseManagerInjections* &injection);
+            ExpenseManagerCategoriesEndpoint(endpoints::ExpenseManager::ExpenseManagerEndpointInjections* &injection);
             ~ExpenseManagerCategoriesEndpoint();
             void getCategories(RouteContext routeContext);
             void addCategory(RouteContext routeContext);
@@ -20,7 +20,7 @@ namespace endpoints{
             void setInterface(ModuleUid uid, void *interface);
             void shutdown();
         private:
-            endpoints::ExpenseManager::ExpenseManagerInjections* injections_;
+            endpoints::ExpenseManager::ExpenseManagerEndpointInjections* injections_;
             std::vector<Route> getRoutes();
             Logger logger_;
         };

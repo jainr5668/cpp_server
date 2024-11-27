@@ -1,6 +1,6 @@
 #ifndef EXPENSEMANAGERTRANSACTIONSENDPOINT_H
 #define EXPENSEMANAGERTRANSACTIONSENDPOINT_H
-#include "ExpenseManagerInjections.h"
+#include "ExpenseManagerEndpointInjections.h"
 #include "IExpenseManagerTransactionsEndpoint.h"
 
 namespace endpoints
@@ -10,7 +10,7 @@ namespace endpoints
         class ExpenseManagerTransactionsEndpoint : public endpoints::ExpenseManager::IExpenseManagerTransactionsEndpoint
         {
         public:
-            ExpenseManagerTransactionsEndpoint(endpoints::ExpenseManager::ExpenseManagerInjections* &injection);
+            ExpenseManagerTransactionsEndpoint(endpoints::ExpenseManager::ExpenseManagerEndpointInjections* &injection);
             ~ExpenseManagerTransactionsEndpoint();
             void addTransaction(RouteContext routeContext);
             void connect();
@@ -24,7 +24,7 @@ namespace endpoints
             void shutdown();
             void updateTransaction(RouteContext routeContext);
         private:
-            endpoints::ExpenseManager::ExpenseManagerInjections* injections_;
+            endpoints::ExpenseManager::ExpenseManagerEndpointInjections* injections_;
             std::vector<Route> getRoutes();
             Logger logger_;
         };
