@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <MockIUtilityService.h>
-#include <ExpenseManagerInjections.h>
+#include "ExpenseManagerEndpointInjections.h"
 #include "ExpenseManagerCategoriesEndpoint.h"
 
 class ExpenseManagerCategoriesEndpointTest : public ::testing::Test {

@@ -57,6 +57,8 @@ namespace services
 
         ModuleUid ExpenseManagerAccountsService::getInterfaceUID()
         {
+            logger.info("ExpenseManagerAccountsService::getInterfaceUID Entry");
+            logger.info("ExpenseManagerAccountsService::getInterfaceUID Exit");
             return GET_MODULE_UID(services::ExpenseManagerService::IExpenseManagerAccountsService);
         }
     }

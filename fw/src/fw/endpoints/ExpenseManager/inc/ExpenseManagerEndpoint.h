@@ -1,7 +1,7 @@
 #ifndef EXPENSEMANAGERENDPOINT_H
 #define EXPENSEMANAGERENDPOINT_H
 #include "IExpenseManagerEndpoint.h"
-#include "ExpenseManagerInjections.h"
+#include "ExpenseManagerEndpointInjections.h"
 #include "ExpenseManagerAccountsEndpoint.h"
 #include "ExpenseManagerCategoriesEndpoint.h"
 #include "ExpenseManagerTransactionsEndpoint.h"

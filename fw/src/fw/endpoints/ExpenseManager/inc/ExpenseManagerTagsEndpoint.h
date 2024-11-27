@@ -1,6 +1,6 @@
 #ifndef EXPENSEMANAGERTAGSENDPOINT_H
 #define EXPENSEMANAGERTAGSENDPOINT_H
-#include "ExpenseManagerInjections.h"
+#include "ExpenseManagerEndpointInjections.h"
 #include "IExpenseManagerTagsEndpoint.h"
 
 namespace endpoints

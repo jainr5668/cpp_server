@@ -19,9 +19,8 @@ namespace services
             void connect() override;
             void *getInstance() override;
             void shutdown() override;
-            ModuleUid getInterfaceUID(){return GET_MODULE_UID(IExpenseManagerService);}
+            ModuleUid getInterfaceUID();
             ~ExpenseManagerService() override;
-
         private:
             ExpenseManagerServiceInjections* injections_;
             Logger logger;

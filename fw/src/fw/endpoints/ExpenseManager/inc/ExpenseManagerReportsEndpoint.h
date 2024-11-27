@@ -1,6 +1,6 @@
 #ifndef EXPENSEMANAGERREPORTSENDPOINT_H
 #define EXPENSEMANAGERREPORTSENDPOINT_H
-#include "ExpenseManagerInjections.h"
+#include "ExpenseManagerEndpointInjections.h"
 #include "IExpenseManagerReportsEndpoint.h"
 
 namespace endpoints

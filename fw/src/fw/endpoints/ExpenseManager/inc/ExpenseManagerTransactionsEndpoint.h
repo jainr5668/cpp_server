@@ -1,6 +1,6 @@
 #ifndef EXPENSEMANAGERTRANSACTIONSENDPOINT_H
 #define EXPENSEMANAGERTRANSACTIONSENDPOINT_H
-#include "ExpenseManagerInjections.h"
+#include "ExpenseManagerEndpointInjections.h"
 #include "IExpenseManagerTransactionsEndpoint.h"
 
 namespace endpoints

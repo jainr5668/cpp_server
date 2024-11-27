@@ -105,5 +105,12 @@ namespace services
             logger.info("ExpenseManagerService::~ExpenseManagerService Entry");
             logger.info("ExpenseManagerService::~ExpenseManagerService Exit");
         }
+
+        ModuleUid ExpenseManagerService::getInterfaceUID()
+        {
+            logger.info("ExpenseManagerService::getInterfaceUID Entry");
+            logger.info("ExpenseManagerService::getInterfaceUID Exit");
+            return GET_MODULE_UID(services::ExpenseManagerService::IExpenseManagerService);
+        }
     }
 }

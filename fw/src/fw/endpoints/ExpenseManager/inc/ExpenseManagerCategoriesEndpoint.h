@@ -1,7 +1,7 @@
 #ifndef EXPENSEMANAGERCATEGORIESENDPOINT_H
 #define EXPENSEMANAGERCATEGORIESENDPOINT_H
 #include "IExpenseManagerCategoriesEndpoint.h"
-#include "ExpenseManagerInjections.h"
+#include "ExpenseManagerEndpointInjections.h"
 
 namespace endpoints{
     namespace ExpenseManager{
