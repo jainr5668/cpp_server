@@ -1,6 +1,7 @@
 #ifndef IEXPENSEMANAGERACCOUNTSSERVICE_H
 #define IEXPENSEMANAGERACCOUNTSSERVICE_H
 #include "BaseService.h"
+#include "ExpenseManagerAccountsServiceTypes.h"
 
 namespace services
 {
@@ -17,6 +18,12 @@ namespace services
             virtual void shutdown() = 0;
             virtual ModuleUid getInterfaceUID() = 0;
             virtual ~IExpenseManagerAccountsService() = default;
+
+            /***
+             * @brief Create a new account
+             * @param expenseManagerAccountsPostData The account data
+             */
+            virtual std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> createAccount(ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPostData) = 0;
         };
     }
 }

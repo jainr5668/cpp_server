@@ -54,5 +54,6 @@ std::vector<std::vector<std::string>> Data::execute(std::string query)
             result = true;
         }
     }
+    logger_.info("Data::execute Exit");
     return results;
 }

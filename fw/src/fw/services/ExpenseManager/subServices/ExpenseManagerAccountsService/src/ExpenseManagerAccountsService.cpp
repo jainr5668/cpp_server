@@ -1,10 +1,11 @@
 #include "ExpenseManagerAccountsService.h"
+#include <chrono>
 
 namespace services
 {
     namespace ExpenseManagerService
     {
-        ExpenseManagerAccountsService::ExpenseManagerAccountsService(ExpenseManagerServiceInjections* injections)
+        ExpenseManagerAccountsService::ExpenseManagerAccountsService(ExpenseManagerServiceInjections *injections)
         {
             logger.info("ExpenseManagerAccountsService::ExpenseManagerAccountsService Entry");
             injections_ = injections;
@@ -62,6 +63,74 @@ namespace services
             logger.info("ExpenseManagerAccountsService::getInterfaceUID Entry");
             logger.info("ExpenseManagerAccountsService::getInterfaceUID Exit");
             return GET_MODULE_UID(services::ExpenseManagerService::IExpenseManagerAccountsService);
+        }
+
+        std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> ExpenseManagerAccountsService::createAccount(ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPostData expenseManagerAccountsPostData)
+        {
+            logger.info("ExpenseManagerAccountsService::createAccount Entry");
+            std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> result{
+                false, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData{}};
+            auto validationResult = isPostDataValid(expenseManagerAccountsPostData);
+            if (validationResult)
+            {
+                ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData expenseManagerAccountsDbData;
+                expenseManagerAccountsDbData.id.value = injections_->utilityService->get_uuid();
+                expenseManagerAccountsDbData.userId = expenseManagerAccountsPostData.userId.value;
+                expenseManagerAccountsDbData.accountName = expenseManagerAccountsPostData.name;
+                expenseManagerAccountsDbData.accountType.value = expenseManagerAccountsPostData.accountTypeToString();
+                expenseManagerAccountsDbData.currencyCode = expenseManagerAccountsPostData.currencyCode;
+                expenseManagerAccountsDbData.balance.value = std::to_string(expenseManagerAccountsPostData.balance.value);
+                expenseManagerAccountsDbData.isActive.value = "true";
+                expenseManagerAccountsDbData.createdAt.value = injections_->utilityService->timepoint_to_string(std::chrono::system_clock::now());
+                expenseManagerAccountsDbData.updatedAt = expenseManagerAccountsDbData.createdAt;
+                expenseManagerAccountsDbData.description = expenseManagerAccountsPostData.description;
+                result.first = data_->insertAccount(expenseManagerAccountsDbData);
+                if (result.first)
+                {
+                    result.second = expenseManagerAccountsDbData;
+                    result.second.userId.reset();
+                }
+                else
+                {
+                    logger.error("ExpenseManagerAccountsService::createAccount Account Creation Failed");
+                }
+            }
+
+            logger.info("ExpenseManagerAccountsService::createAccount Exit");
+            return result;
+        }
+
+        bool ExpenseManagerAccountsService::isPostDataValid(ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPostData expenseManagerAccountsPostData)
+        {
+            logger.info("ExpenseManagerAccountsService::isPostDataValid Entry");
+            bool result = true;
+            if (!expenseManagerAccountsPostData.name.has_value())
+            {
+                result = false;
+                logger.error("ExpenseManagerAccountsService::isPostDataValid Name is not set");
+            }
+            if (!expenseManagerAccountsPostData.userId.has_value())
+            {
+                result = false;
+                logger.error("ExpenseManagerAccountsService::isPostDataValid UserId is not set");
+            }
+            if (!expenseManagerAccountsPostData.accountType.has_value())
+            {
+                result = false;
+                logger.error("ExpenseManagerAccountsService::isPostDataValid Account Type is not set");
+            }
+            if (!expenseManagerAccountsPostData.currencyCode.has_value())
+            {
+                result = false;
+                logger.error("ExpenseManagerAccountsService::isPostDataValid Currency is not set");
+            }
+            if (!expenseManagerAccountsPostData.balance.has_value())
+            {
+                result = false;
+                logger.error("ExpenseManagerAccountsService::isPostDataValid Balance is not set");
+            }
+            logger.info("ExpenseManagerAccountsService::isPostDataValid Exit");
+            return result;
         }
     }
 }
