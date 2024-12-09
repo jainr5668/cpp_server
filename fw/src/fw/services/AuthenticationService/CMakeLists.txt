@@ -29,7 +29,7 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS}/testResources)
 
 # Link the test executable with the library
-target_link_libraries(authenticationService_lib_test PUBLIC authenticationService_lib common_lib server_lib GTest::GTest GTest::Main)
+target_link_libraries(authenticationService_lib_test PUBLIC authenticationService_lib common_lib server_lib GTest::GTest GTest::Main gmock pthread)
 
 # Enable testing
 enable_testing()
