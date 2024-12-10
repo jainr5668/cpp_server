@@ -2,6 +2,7 @@
 #define EXPENSEMANAGERACCOUNTSSERVICE_H
 #include "IExpenseManagerAccountsService.h"
 #include "ExpenseManagerServiceInjections.h"
+#include "ExpenseManagerAccountsServiceData.h"
 #include "logger.h"
 
 namespace services
@@ -21,9 +22,21 @@ namespace services
             ModuleUid getInterfaceUID() override;
             ~ExpenseManagerAccountsService() = default;
 
+            /***
+             * @brief Create a new account
+             * @param expenseManagerAccountsPostData The account data
+             */
+            std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> createAccount(ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPostData expenseManagerAccountsPostData) override;
+
         private:
             Logger logger;
             ExpenseManagerServiceInjections *injections_;
+            ExpenseManagerAccountsServiceData *data_;
+
+            /**
+             * @brief Check if the post data is valid
+             */
+            bool isPostDataValid(ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPostData expenseManagerAccountsPostData);
         };
     }
 }

@@ -30,6 +30,7 @@ private:
     std::string get_status_text() const {
         switch (status_code) {
             case 200: return "OK";
+            case 201: return "Created";
             case 204: return "No Content";
             case 400: return "Bad Request";
             case 401: return "Unauthorized";

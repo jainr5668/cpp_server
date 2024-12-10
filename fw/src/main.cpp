@@ -2,11 +2,18 @@
 #include "router.h"
 #include "SubRouterMap.h"
 
-int main(){
+int main()
+{
     std::unique_ptr<Router> router = std::make_unique<Router>();
     SubRouterMap subRouterMap;
     for (auto &subRouter : subRouterMap.getRouterMap())
         router->addSubRouter(subRouter.first, subRouter.second);
+    Request req;
+    req.method = "POST";
+    req.path = "/auth/signup";
+    req.body = "{\"username\": \"admin\",\"password\": \"admin\",\"mobile1\": 9064308765}";
+    Response res;
+    router->handle_request(&req, &res);
     std::shared_ptr<Server> server = std::make_shared<Server>(std::move(router));
     server->start();
     return 0;
