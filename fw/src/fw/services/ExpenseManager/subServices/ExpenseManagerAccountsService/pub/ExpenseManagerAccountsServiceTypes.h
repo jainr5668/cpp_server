@@ -31,7 +31,7 @@ namespace services
             class ExpenseManagerAccountsPostData
             {
             public:
-                CustomDataType<std::string> name;
+                CustomDataType<std::string> accountName;
                 CustomDataType<std::string> description;
                 CustomDataType<AccountType> accountType;
                 CustomDataType<std::string> currencyCode;
@@ -44,7 +44,7 @@ namespace services
 
                 ExpenseManagerAccountsPostData(const ExpenseManagerAccountsPostData &other)
                 {
-                    name.value = other.name.value;
+                    accountName.value = other.accountName.value;
                     description.value = other.description.value;
                     accountType.value = other.accountType.value;
                     currencyCode.value = other.currencyCode.value;
@@ -54,7 +54,7 @@ namespace services
 
                 ExpenseManagerAccountsPostData(std::vector<std::string> data)
                 {
-                    name.value = data[0];
+                    accountName.value = data[0];
                     description.value = data[1];
                     accountType.value = stringToAccountType(data[2]);
                     currencyCode.value = data[3];
@@ -119,7 +119,7 @@ namespace services
                 friend void to_json(nlohmann::json &j, const ExpenseManagerAccountsPostData &p)
                 {
                     j = nlohmann::json{
-                        {"name", p.name.value},
+                        {"name", p.accountName.value},
                         {"description", p.description.value},
                         {"accountType", p.accountTypeToString()},
                         {"currencyCode", p.currencyCode.value},
@@ -133,7 +133,7 @@ namespace services
 
                 friend void from_json(const nlohmann::json &j, ExpenseManagerAccountsPostData &p)
                 {
-                    j.at("accountName").get_to(p.name.value);
+                    j.at("accountName").get_to(p.accountName.value);
                     j.at("description").get_to(p.description.value);
                     p.accountType.value = p.stringToAccountType(j.at("accountType").get<std::string>());;
                     j.at("currencyCode").get_to(p.currencyCode.value);

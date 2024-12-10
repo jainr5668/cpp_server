@@ -22,6 +22,9 @@ namespace endpoints
         void ExpenseManagerAccountsEndpoint::addAccount(RouteContext routeContext)
         {
             logger_.info("ExpenseManagerAccountsEndpoint::addAccount Entry");
+            for (auto &header : routeContext.req->headers){
+                logger_.info("ExpenseManagerAccountsEndpoint::addAccount Header: " + header.first + " : " + header.second);
+            }
             std::string userId = injections_->utilityService->getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
             ExpenseManagerAccountsPostData account;
             bool isbodyValid = false;

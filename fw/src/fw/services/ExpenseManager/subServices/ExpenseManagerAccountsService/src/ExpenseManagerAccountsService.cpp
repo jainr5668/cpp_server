@@ -76,7 +76,7 @@ namespace services
                 ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData expenseManagerAccountsDbData;
                 expenseManagerAccountsDbData.id.value = injections_->utilityService->get_uuid();
                 expenseManagerAccountsDbData.userId = expenseManagerAccountsPostData.userId.value;
-                expenseManagerAccountsDbData.accountName = expenseManagerAccountsPostData.name;
+                expenseManagerAccountsDbData.accountName = expenseManagerAccountsPostData.accountName;
                 expenseManagerAccountsDbData.accountType.value = expenseManagerAccountsPostData.accountTypeToString();
                 expenseManagerAccountsDbData.currencyCode = expenseManagerAccountsPostData.currencyCode;
                 expenseManagerAccountsDbData.balance.value = std::to_string(expenseManagerAccountsPostData.balance.value);
@@ -104,7 +104,7 @@ namespace services
         {
             logger.info("ExpenseManagerAccountsService::isPostDataValid Entry");
             bool result = true;
-            if (!expenseManagerAccountsPostData.name.has_value())
+            if (!expenseManagerAccountsPostData.accountName.has_value())
             {
                 result = false;
                 logger.error("ExpenseManagerAccountsService::isPostDataValid Name is not set");
