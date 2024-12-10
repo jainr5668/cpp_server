@@ -14,6 +14,7 @@ namespace services
     {
         namespace ExpenseManagerAccountsServiceTypes
         {
+
             enum class AccountType
             {
                 Other = 1,
@@ -24,6 +25,61 @@ namespace services
                 Investment,
                 Loan
             };
+            static std::unordered_map<AccountType, std::string> accountTypeToString{
+                {AccountType::Savings, "savings"},
+                {AccountType::Checking, "checking"},
+                {AccountType::CreditCard, "creditCard"},
+                {AccountType::Cash, "cash"},
+                {AccountType::Investment, "investment"},
+                {AccountType::Loan, "loan"},
+                {AccountType::Other, "other"}};
+            
+            static std::unordered_map<std::string, AccountType> stringToAccountType{
+                {"savings", AccountType::Savings},
+                {"checking", AccountType::Checking},
+                {"creditCard", AccountType::CreditCard},
+                {"cash", AccountType::Cash},
+                {"investment", AccountType::Investment},
+                {"loan", AccountType::Loan},
+                {"other", AccountType::Other}};
+
+            enum class CurrencyCode
+            {
+                USD = 1,
+                EUR,
+                GBP,
+                INR,
+                AUD,
+                CAD,
+                SGD,
+                JPY,
+                CNY,
+                HKD
+            };
+
+            static std::unordered_map<CurrencyCode, std::string> currencyCodeToString{
+                {CurrencyCode::USD, "USD"},
+                {CurrencyCode::EUR, "EUR"},
+                {CurrencyCode::GBP, "GBP"},
+                {CurrencyCode::INR, "INR"},
+                {CurrencyCode::AUD, "AUD"},
+                {CurrencyCode::CAD, "CAD"},
+                {CurrencyCode::SGD, "SGD"},
+                {CurrencyCode::JPY, "JPY"},
+                {CurrencyCode::CNY, "CNY"},
+                {CurrencyCode::HKD, "HKD"}};
+
+            static std::unordered_map<std::string, CurrencyCode> stringToCurrencyCode{
+                {"USD", CurrencyCode::USD},
+                {"EUR", CurrencyCode::EUR},
+                {"GBP", CurrencyCode::GBP},
+                {"INR", CurrencyCode::INR},
+                {"AUD", CurrencyCode::AUD},
+                {"CAD", CurrencyCode::CAD},
+                {"SGD", CurrencyCode::SGD},
+                {"JPY", CurrencyCode::JPY},
+                {"CNY", CurrencyCode::CNY},
+                {"HKD", CurrencyCode::HKD}};
 
             /**
              * @brief This class is used to store the data of the accounts that are posted
@@ -34,7 +90,7 @@ namespace services
                 CustomDataType<std::string> accountName;
                 CustomDataType<std::string> description;
                 CustomDataType<AccountType> accountType;
-                CustomDataType<std::string> currencyCode;
+                CustomDataType<CurrencyCode> currencyCode;
                 CustomDataType<double> balance;
                 CustomDataType<std::string> userId;
 
@@ -56,73 +112,19 @@ namespace services
                 {
                     accountName.value = data[0];
                     description.value = data[1];
-                    accountType.value = stringToAccountType(data[2]);
-                    currencyCode.value = data[3];
+                    accountType.value = stringToAccountType[data[2]];
+                    currencyCode.value = stringToCurrencyCode[data[3]];
                     balance.value = atof(data[4].c_str());
                     userId.value = data[5];
                 };
 
-                std::string accountTypeToString() const
-                {
-                    switch (accountType.value)
-                    {
-                    case AccountType::Savings:
-                        return "savings";
-                    case AccountType::Checking:
-                        return "checking";
-                    case AccountType::CreditCard:
-                        return "creditCard";
-                    case AccountType::Cash:
-                        return "cash";
-                    case AccountType::Investment:
-                        return "investment";
-                    case AccountType::Loan:
-                        return "loan";
-                    case AccountType::Other:
-                        return "other";
-                    default:
-                        return "other";
-                    }
-                }
-
-                AccountType stringToAccountType(std::string accountType) const
-                {
-                    if (accountType == "savings")
-                    {
-                        return AccountType::Savings;
-                    }
-                    else if (accountType == "checking")
-                    {
-                        return AccountType::Checking;
-                    }
-                    else if (accountType == "creditCard")
-                    {
-                        return AccountType::CreditCard;
-                    }
-                    else if (accountType == "cash")
-                    {
-                        return AccountType::Cash;
-                    }
-                    else if (accountType == "investment")
-                    {
-                        return AccountType::Investment;
-                    }
-                    else if (accountType == "loan")
-                    {
-                        return AccountType::Loan;
-                    }
-                    else
-                    {
-                        return AccountType::Other;
-                    }
-                }
                 friend void to_json(nlohmann::json &j, const ExpenseManagerAccountsPostData &p)
                 {
                     j = nlohmann::json{
                         {"name", p.accountName.value},
                         {"description", p.description.value},
-                        {"accountType", p.accountTypeToString()},
-                        {"currencyCode", p.currencyCode.value},
+                        {"accountType", accountTypeToString[p.accountType.value]},
+                        {"currencyCode", currencyCodeToString[p.currencyCode.value]},
                         {"balance", p.balance.value}
                     };
                     if(p.userId.value != "")
@@ -135,8 +137,22 @@ namespace services
                 {
                     j.at("accountName").get_to(p.accountName.value);
                     j.at("description").get_to(p.description.value);
-                    p.accountType.value = p.stringToAccountType(j.at("accountType").get<std::string>());;
-                    j.at("currencyCode").get_to(p.currencyCode.value);
+                    if (stringToAccountType.find(j.at("accountType").get<std::string>()) != stringToAccountType.end())
+                    {
+                        p.accountType.value = stringToAccountType.at(j.at("accountType").get<std::string>());
+                    }
+                    else
+                    {
+                        throw std::invalid_argument("Invalid Account Type");
+                    }
+                    if (stringToCurrencyCode.find(j.at("currencyCode").get<std::string>()) != stringToCurrencyCode.end())
+                    {
+                        p.currencyCode.value = stringToCurrencyCode.at(j.at("currencyCode").get<std::string>());
+                    }
+                    else
+                    {
+                        throw std::invalid_argument("Invalid Currency Code");
+                    }
                     j.at("balance").get_to(p.balance.value);
                     if (j.contains("userId"))
                     {

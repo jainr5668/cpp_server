@@ -65,7 +65,8 @@ namespace services
             return GET_MODULE_UID(services::ExpenseManagerService::IExpenseManagerAccountsService);
         }
 
-        std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> ExpenseManagerAccountsService::createAccount(ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPostData expenseManagerAccountsPostData)
+        std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> ExpenseManagerAccountsService::createAccount(
+            ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPostData expenseManagerAccountsPostData)
         {
             logger.info("ExpenseManagerAccountsService::createAccount Entry");
             std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> result{
@@ -77,8 +78,10 @@ namespace services
                 expenseManagerAccountsDbData.id.value = injections_->utilityService->get_uuid();
                 expenseManagerAccountsDbData.userId = expenseManagerAccountsPostData.userId.value;
                 expenseManagerAccountsDbData.accountName = expenseManagerAccountsPostData.accountName;
-                expenseManagerAccountsDbData.accountType.value = expenseManagerAccountsPostData.accountTypeToString();
-                expenseManagerAccountsDbData.currencyCode = expenseManagerAccountsPostData.currencyCode;
+                expenseManagerAccountsDbData.accountType.value = ExpenseManagerAccountsServiceTypes::accountTypeToString.at(
+                    expenseManagerAccountsPostData.accountType.value);
+                expenseManagerAccountsDbData.currencyCode.value = ExpenseManagerAccountsServiceTypes::currencyCodeToString.at(
+                    expenseManagerAccountsPostData.currencyCode.value);
                 expenseManagerAccountsDbData.balance.value = std::to_string(expenseManagerAccountsPostData.balance.value);
                 expenseManagerAccountsDbData.isActive.value = "true";
                 expenseManagerAccountsDbData.createdAt.value = injections_->utilityService->timepoint_to_string(std::chrono::system_clock::now());
@@ -124,7 +127,13 @@ namespace services
                 result = false;
                 logger.error("ExpenseManagerAccountsService::isPostDataValid Currency is not set");
             }
-            if (!expenseManagerAccountsPostData.balance.has_value())
+            if (ExpenseManagerAccountsServiceTypes::currencyCodeToString.find(expenseManagerAccountsPostData.currencyCode.value) ==
+                ExpenseManagerAccountsServiceTypes::currencyCodeToString.end())
+            {
+                result = false;
+                logger.error("ExpenseManagerAccountsService::isPostDataValid Currency is not valid");
+            }
+            if (expenseManagerAccountsPostData.balance.value < 0)
             {
                 result = false;
                 logger.error("ExpenseManagerAccountsService::isPostDataValid Balance is not set");
