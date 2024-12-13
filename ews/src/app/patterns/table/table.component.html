@@ -1,4 +1,8 @@
-<div *ngIf="formGroup">
+<div *ngIf="formGroup" style="border: solid black 1px; padding:25px; border-radius:20px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+    <div *ngIf="table.title">
+        <h3>{{ getLocalizedString$(table.title) | async }}</h3>
+        <hr>
+    </div>
     <div *ngIf="table.actionButtons.length > 0">
         <pattern-button [button]="actionButton" *ngFor="let actionButton of table.actionButtons"></pattern-button>
     </div>

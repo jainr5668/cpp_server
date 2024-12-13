@@ -45,12 +45,14 @@ export class TableRowModel{
 
 export class TableModel {
     id: string;
+    title: StringIds;
     event: any;
     columns: TableColumnModel[];
     rows: TableRowModel[];
     actionButtons: ButtonModel[];
-    setTableValues(id: string, columns: TableColumnModel[], rows: TableDataModel[], event?: any) {
+    setTableValues(id: string, title:StringIds, columns: TableColumnModel[], rows: TableDataModel[], event?: any) {
         this.id = id;
+        this.title = title;
         this.columns = columns;
         this.rows = rows;
         this.event = event ?? null;

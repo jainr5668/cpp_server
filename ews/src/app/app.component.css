@@ -1,0 +1,30 @@
+.sidebar {
+    height: 100%;
+    background-color: #6fa9cf;
+    overflow-x: hidden;
+    padding-top: 16px;
+  }
+  
+  .sidebar a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #000000;
+    display: block;
+  }
+  
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+
+  .sidebar a span {
+    border-bottom: solid black 1px;
+}
+mat-drawer{
+    width: 200px;
+}
+
+mat-drawer-content{
+    padding: 0;
+    height: 100vh;
+}

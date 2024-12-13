@@ -62,6 +62,11 @@ export const routes: Routes = [];
 //   canActivate:[AuthGuard]
 // });
 
+routes.push({
+  path: 'expenseManager',
+  loadChildren: () => import('../../../features/expenseManager').then(m => m.ExpenseManagerModule)
+});
+
 // // history
 // routes.push({
 //   path: 'history',
@@ -119,7 +124,7 @@ routes.push({
 // ** -> wildcard
 routes.push({
   path: '**',
-  redirectTo: '/',
+  redirectTo: '',
   pathMatch: 'full'
 })
 

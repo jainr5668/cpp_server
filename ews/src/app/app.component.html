@@ -1,27 +1,18 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" routerLink="/">
-        <img src="https://w7.pngwing.com/pngs/579/803/png-transparent-the-c-programming-language-programmer-computer-programming-programming-blue-logo-computer-program-thumbnail.png"
-            width="30" height="30" class="d-inline-block align-top" alt="">
-        CPP-SERVER
-    </a>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" routerLink="/">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/login">Login</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/signup">Signup</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/todos">Todos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" tabindex="-1" aria-disabled="true">Disabled</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-<router-outlet />
+
+<mat-drawer-container>
+    <mat-drawer mode="side" opened>
+        <div class="sidebar">
+            <a class="navbar-brand" routerLink="/">
+                <img src="https://w7.pngwing.com/pngs/579/803/png-transparent-the-c-programming-language-programmer-computer-programming-programming-blue-logo-computer-program-thumbnail.png"
+                    width="30" height="30" class="d-inline-block align-top" alt="">
+                CPP-SERVER
+            </a>
+            <br>
+            <a routerLink="signup"><i class="fa fa-fw fa-user"></i> <span>SignUp</span></a>
+            <a routerLink="login"><i class="fa fa-fw fa-sign-in"></i> <span>SignIn</span></a>
+            <a routerLink="todos"><i class="fa fa-fw fa-check-square"></i> <span>Todo</span></a>
+            <a routerLink="expenseManager/dashboard"><i class="fa fa-fw fa-tachometer"></i> <span>Dashboard</span></a>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content style="padding: 10px;"><router-outlet></router-outlet></mat-drawer-content>
+</mat-drawer-container>
