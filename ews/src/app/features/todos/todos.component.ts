@@ -82,6 +82,8 @@ export class TodosComponent implements OnInit {
       }
     );
     this.tableModel = new TableModel();
+    this.tableModel.id = "todosTable";
+    this.tableModel.title = StringIds.cTODOS;
     this.tableModel.columns = columns;
     this.tableModel.rows = tableData;
     const addButton = new ButtonModel();

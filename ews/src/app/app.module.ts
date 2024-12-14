@@ -10,6 +10,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { JwtInterceptor } from './interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from '@utills/auth';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -23,6 +24,7 @@ export function createTranslateLoader(http: HttpClient) {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    MatSidenavModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot({
       extend: true,
