@@ -2,6 +2,7 @@
 #include "ExpenseManagerAccountsServiceTypes.h"
 
 using ExpenseManagerAccountsPostData = services::ExpenseManagerService::ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPostData;
+using ExpenseManagerAccountsPatchData = services::ExpenseManagerService::ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPatchData;
 namespace endpoints
 {
     namespace ExpenseManager
@@ -80,16 +81,37 @@ namespace endpoints
         void ExpenseManagerAccountsEndpoint::getAccount(RouteContext routeContext)
         {
             logger_.info("ExpenseManagerAccountsEndpoint::getAccount Entry");
-            routeContext.res->status_code = 500;
-            routeContext.res->body = "Not Implemented";
+            std::string userId = injections_->utilityService->getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
+            std::string accountId = routeContext.path_params.at("id");
+            auto result = injections_->accountsService_->getAccount(userId, accountId);
+            if (result.first)
+            {
+                routeContext.res->status_code = 200;
+                routeContext.res->body = objectToJson(result.second);
+            }
+            else
+            {
+                routeContext.res->status_code = 500;
+                routeContext.res->body = "Internal Server Error";
+            }
             logger_.info("ExpenseManagerAccountsEndpoint::getAccount Exit");
         }
 
         void ExpenseManagerAccountsEndpoint::getAccounts(RouteContext routeContext)
         {
             logger_.info("ExpenseManagerAccountsEndpoint::getAccounts Entry");
-            routeContext.res->status_code = 500;
-            routeContext.res->body = "Not Implemented";
+            std::string userId = injections_->utilityService->getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
+            auto result = injections_->accountsService_->getAccounts(userId);
+            if (result.first)
+            {
+                routeContext.res->status_code = 200;
+                routeContext.res->body = objectToJson(result.second);
+            }
+            else
+            {
+                routeContext.res->status_code = 500;
+                routeContext.res->body = "Internal Server Error";
+            }
             logger_.info("ExpenseManagerAccountsEndpoint::getAccounts Exit");
         }
 
@@ -137,8 +159,40 @@ namespace endpoints
         void ExpenseManagerAccountsEndpoint::updateAccount(RouteContext routeContext)
         {
             logger_.info("ExpenseManagerAccountsEndpoint::updateAccount Entry");
-            routeContext.res->status_code = 500;
-            routeContext.res->body = "Not Implemented";
+            std::string userId = injections_->utilityService->getValueFromMap(*(routeContext.req->authorization->isAuthorized()), "userId", "");
+            std::string accountId = routeContext.path_params.at("id");
+            ExpenseManagerAccountsPatchData account;
+            bool isbodyValid = false;
+            std::string errorMessage = "";
+            try
+            {
+                account = jsonToObject<ExpenseManagerAccountsPatchData>(routeContext.req->body);
+                isbodyValid = true;
+            }
+            catch (const std::exception &e)
+            {
+                errorMessage = std::string(e.what());
+                logger_.error("ExpenseManagerAccountsEndpoint::addAccount Error: " + errorMessage);
+            }
+            if (isbodyValid)
+            {
+                auto result = injections_->accountsService_->updateAccount(userId, accountId, account);
+                if (result.first)
+                {
+                    routeContext.res->status_code = 200;
+                    routeContext.res->body = objectToJson(result.second);
+                }
+                else
+                {
+                    routeContext.res->status_code = 500;
+                    routeContext.res->body = "Internal Server Error";
+                }
+            }
+            else
+            {
+                routeContext.res->status_code = 400;
+                routeContext.res->body = errorMessage;
+            }
             logger_.info("ExpenseManagerAccountsEndpoint::updateAccount Exit");
         }
 

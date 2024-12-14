@@ -103,6 +103,104 @@ namespace services
             return result;
         }
 
+        std::pair<bool, std::vector<ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData>> ExpenseManagerAccountsService::getAccounts(std::string userId)
+        {
+            logger.info("ExpenseManagerAccountsService::getAccounts Entry");
+            auto dataResult = data_->retriveAccounts(userId);
+            if (dataResult.first)
+            {
+                for (auto &account : dataResult.second)
+                {
+                    account.userId.reset();
+                }
+            }
+            logger.info("ExpenseManagerAccountsService::getAccounts Exit");
+            return dataResult;
+        }
+
+        std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> ExpenseManagerAccountsService::getAccount(std::string userId, std::string accountId)
+        {
+            logger.info("ExpenseManagerAccountsService::getAccount Entry");
+            auto dataResult = data_->retriveAccountById(userId, accountId);
+            if (dataResult.first)
+            {
+                dataResult.second.userId.reset();
+            }
+            logger.info("ExpenseManagerAccountsService::getAccount Exit");
+            return dataResult;
+        }
+
+        std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> ExpenseManagerAccountsService::updateAccount(std::string userId, std::string accountId,
+            ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPatchData updateData)
+        {
+            logger.info("ExpenseManagerAccountsService::updateAccount Entry");
+            ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData account;
+            std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> result;
+            result.first = false;
+            result.second = account;
+            auto accountResult = getAccount(userId, accountId);
+            if (accountResult.first)
+            {
+                account = accountResult.second;
+                if (updateData.accountName.has_value())
+                {
+                    account.accountName.value = updateData.accountName.value();
+                }
+                if (updateData.description.has_value())
+                {
+                    account.description.value = updateData.description.value();
+                }
+                if (updateData.accountType.has_value())
+                {
+                    account.accountType.value = ExpenseManagerAccountsServiceTypes::accountTypeToString.at(updateData.accountType.value());
+                }
+                if (updateData.currencyCode.has_value())
+                {
+                    // TODO: When changing currency, convert the balance to the new currency if balance is not being updated
+                    account.currencyCode.value = ExpenseManagerAccountsServiceTypes::currencyCodeToString.at(updateData.currencyCode.value());
+                }
+                if (updateData.balance.has_value())
+                {
+                    account.balance.value = std::to_string(updateData.balance.value());
+                }
+                if (updateData.isActive.has_value())
+                {
+                    account.isActive.value = updateData.isActive.value();
+                }
+                account.updatedAt.value = injections_->utilityService->timepoint_to_string(std::chrono::system_clock::now());
+                result.first = data_->updateAccountById(account);
+                if (!result.first)
+                {
+                    logger.error("ExpenseManagerAccountsService::updateAccount Account Update Failed");
+                }
+                else
+                {
+                    result.second = account;
+                    result.second.userId.reset();
+                }
+            }
+            else
+            {
+                result.first = false;
+                logger.error("ExpenseManagerAccountsService::updateAccount Account Not Found");
+            }
+            logger.info("ExpenseManagerAccountsService::updateAccount Exit");
+            return result;
+        }
+
+        bool ExpenseManagerAccountsService::removeAccount(std::string userId, std::string accountId)
+        {
+            logger.info("ExpenseManagerAccountsService::removeAccount Entry");
+            auto account = getAccount(userId, accountId);
+            bool result = false;
+            if (account.first)
+            {
+                result = data_->deleteAccount(userId, accountId);
+            }
+            logger.info("ExpenseManagerAccountsService::removeAccount Exit");
+            return result;
+        }
+
         bool ExpenseManagerAccountsService::isPostDataValid(ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPostData expenseManagerAccountsPostData)
         {
             logger.info("ExpenseManagerAccountsService::isPostDataValid Entry");

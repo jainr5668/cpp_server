@@ -27,8 +27,18 @@ namespace services
             logger.info("ExpenseManagerAccountsServiceData::retriveAccounts Entry");
             std::vector<ExpenseManagerAccountsDbData> accounts;
             std::pair<bool, std::vector<ExpenseManagerAccountsDbData>> result;
-            result.first = false;
+            result.first = true;
             result.second = accounts;
+            std::string query = "SELECT * FROM accounts WHERE userId = '" + userId + "'";
+            auto data = data_->execute(query);
+            if (data.size() > 0)
+            {
+                for (auto &row : data)
+                {
+                    
+                    result.second.push_back(ExpenseManagerAccountsDbData{row});
+                }
+            }
             logger.info("ExpenseManagerAccountsServiceData::retriveAccounts Exit");
             return result;
         }
@@ -36,10 +46,17 @@ namespace services
         std::pair<bool, ExpenseManagerAccountsDbData> ExpenseManagerAccountsServiceData::retriveAccountById(std::string userId, std::string accountId)
         {
             logger.info("ExpenseManagerAccountsServiceData::retriveAccountById Entry");
-            ExpenseManagerAccountsDbData account;
-            std::pair<bool, ExpenseManagerAccountsDbData> result;
-            result.first = false;
-            result.second = account;
+            std::pair<bool, ExpenseManagerAccountsDbData> result{false, ExpenseManagerAccountsDbData{}};
+            std::string query = "SELECT * FROM accounts WHERE userId = '" + userId + "' AND id = '" + accountId + "'";
+            auto data = data_->execute(query);
+            if (data.size() == 1)
+            {
+                result.first = true;
+                for (auto &row : data)
+                {
+                    result.second = ExpenseManagerAccountsDbData{row};
+                }
+            }
             logger.info("ExpenseManagerAccountsServiceData::retriveAccountById Exit");
             return result;
         }
@@ -62,15 +79,25 @@ namespace services
         bool ExpenseManagerAccountsServiceData::deleteAccount(std::string userId, std::string accountId)
         {
             logger.info("ExpenseManagerAccountsServiceData::deleteAccount Entry");
+            bool result = false;
+            std::string query = "DELETE FROM accounts WHERE userId = '" + userId + "' AND id = '" + accountId + "'";
+            data_->execute(query);
+            result = true;
             logger.info("ExpenseManagerAccountsServiceData::deleteAccount Exit");
-            return false;
+            return result;
         }
 
         bool ExpenseManagerAccountsServiceData::updateAccountById(ExpenseManagerAccountsDbData account)
         {
             logger.info("ExpenseManagerAccountsServiceData::updateAccountById Entry");
+            bool result = false;
+            std::string query = "UPDATE accounts SET accountName = '" + account.accountName.value + "', description = '" + account.description.value + "', accountType = '" 
+                + account.accountType.value + "', currencyCode = '" + account.currencyCode.value + "', balance = '" + account.balance.value + "', updatedAt = '" + 
+                account.updatedAt.value + "', isActive = '" + account.isActive.value + "' WHERE id = '" + account.id.value + "'";
+            data_->execute(query);
+            result = true;
             logger.info("ExpenseManagerAccountsServiceData::updateAccountById Exit");
-            return false;
+            return result;
         }
     }
 }

@@ -27,6 +27,10 @@ namespace services
              * @param expenseManagerAccountsPostData The account data
              */
             std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> createAccount(ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPostData expenseManagerAccountsPostData) override;
+            std::pair<bool, std::vector<ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData>> getAccounts(std::string userId) override;
+            std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> getAccount(std::string userId, std::string accountId) override;
+            std::pair<bool, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsDbData> updateAccount(std::string userId, std::string accountId, ExpenseManagerAccountsServiceTypes::ExpenseManagerAccountsPatchData updateData) override;
+            bool removeAccount(std::string userId, std::string accountId) override;
 
         private:
             Logger logger;

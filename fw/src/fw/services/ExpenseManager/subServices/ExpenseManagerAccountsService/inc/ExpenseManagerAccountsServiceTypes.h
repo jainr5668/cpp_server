@@ -180,6 +180,20 @@ namespace services
 
                 ExpenseManagerAccountsDbData() = default;
 
+                ExpenseManagerAccountsDbData(std::vector<std::string> data)
+                {
+                    id.value = data[0];
+                    userId = data[1];
+                    accountName.value = data[2];
+                    description.value = data[3];
+                    accountType.value = data[4];
+                    currencyCode.value = data[5];
+                    balance.value = data[6];
+                    updatedAt.value = data[7];
+                    isActive.value = data[8];
+                    createdAt.value = data[9];
+                };
+
                 friend void to_json(nlohmann::json &j, const ExpenseManagerAccountsDbData &p)
                 {
                     j = nlohmann::json{
@@ -198,6 +212,77 @@ namespace services
                         j["userId"] = p.userId.value();
                     }
                 }
+            };
+
+            class ExpenseManagerAccountsPatchData
+            {
+                public:
+                    boost::optional<std::string> accountName;
+                    boost::optional<std::string> description;
+                    boost::optional<AccountType> accountType;
+                    boost::optional<CurrencyCode> currencyCode;
+                    boost::optional<double> balance;
+                    boost::optional<std::string> isActive;
+
+                    ExpenseManagerAccountsPatchData() = default;
+
+                    ~ExpenseManagerAccountsPatchData() = default;
+
+                    friend void to_json(nlohmann::json &j, const ExpenseManagerAccountsPatchData &p)
+                    {
+                        if(p.accountName.has_value())
+                        {
+                            j["accountName"] = p.accountName.value();
+                        }
+                        if(p.description.has_value())
+                        {
+                            j["description"] = p.description.value();
+                        }
+                        if(p.accountType.has_value())
+                        {
+                            j["accountType"] = accountTypeToString[p.accountType.value()];
+                        }
+                        if(p.currencyCode.has_value())
+                        {
+                            j["currencyCode"] = currencyCodeToString[p.currencyCode.value()];
+                        }
+                        if(p.balance.has_value())
+                        {
+                            j["balance"] = p.balance.value();
+                        }
+                        if(p.isActive.has_value())
+                        {
+                            j["isActive"] = p.isActive.value();
+                        }
+                    }
+
+                    friend void from_json(const nlohmann::json &j, ExpenseManagerAccountsPatchData &p)
+                    {
+                        if (j.contains("accountName"))
+                        {
+                            p.accountName = j.at("accountName").get<std::string>();
+                        }
+                        if (j.contains("description"))
+                        {
+                            p.description = j.at("description").get<std::string>();
+                        }
+                        if (stringToAccountType.find(j.at("accountType").get<std::string>()) != stringToAccountType.end())
+                        {
+                            p.accountType = stringToAccountType.at(j.at("accountType").get<std::string>());
+                        }
+                        if (stringToCurrencyCode.find(j.at("currencyCode").get<std::string>()) != stringToCurrencyCode.end())
+                        {
+                            p.currencyCode = stringToCurrencyCode.at(j.at("currencyCode").get<std::string>());
+                        }
+                        if (j.contains("balance"))
+                        {
+                            p.balance = j.at("balance").get<double>();
+                        }
+                        if (j.contains("isActive"))
+                        {
+                            p.isActive = j.at("isActive").get<std::string>();
+                        }
+                    }
             };
         } // namespace ExpenseManagerAccountsService
     } // namespace ExpenseManagerAccountsService
