@@ -1,7 +1,10 @@
+add_subdirectory(
+    subServices/ExpenseManagerAccountsService
+)
+
 # Add the library
 add_library(expenseManagerService_lib
     src/ExpenseManagerService.cpp
-    src/ExpenseManagerAccountsService.cpp
     src/ExpenseManagerCategoriesService.cpp
     src/ExpenseManagerReportsService.cpp
     src/ExpenseManagerTagsService.cpp
@@ -15,7 +18,13 @@ target_include_directories(expenseManagerService_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
-target_link_libraries(expenseManagerService_lib common_lib server_lib commonService_lib)
+
+target_link_libraries(expenseManagerService_lib PUBLIC
+    common_lib
+    server_lib
+    commonService_lib
+    INTERFACE expenseManagerAccountsService_lib
+)
 
 # Add the test executable
 add_executable(expenseManagerService_lib_test
