@@ -1,18 +1,47 @@
-
 <mat-drawer-container>
     <mat-drawer mode="side" opened>
-        <div class="sidebar">
+        <div class="sidebar" [class.sidebar-close]="!openSidebar">
             <a class="navbar-brand" routerLink="/">
                 <img src="https://w7.pngwing.com/pngs/579/803/png-transparent-the-c-programming-language-programmer-computer-programming-programming-blue-logo-computer-program-thumbnail.png"
-                    width="30" height="30" class="d-inline-block align-top" alt="">
+                    width="30" height="30" class="d-inline-block align-top" alt="" style="margin-left: 50px; margin-bottom: 20px">
                 CPP-SERVER
             </a>
-            <br>
-            <a routerLink="signup"><i class="fa fa-fw fa-user"></i> <span>SignUp</span></a>
-            <a routerLink="login"><i class="fa fa-fw fa-sign-in"></i> <span>SignIn</span></a>
-            <a routerLink="todos"><i class="fa fa-fw fa-check-square"></i> <span>Todo</span></a>
-            <a routerLink="expenseManager/dashboard"><i class="fa fa-fw fa-tachometer"></i> <span>Dashboard</span></a>
+            <ul class="">
+                <li *ngFor="let item of menuSidebar">
+                    <div *ngIf="item.sub_menu.length == 0" class="dropdown-title">
+                        <a [routerLink]="[item.link]" *ngIf="item.required_auth == isAuthenticated">
+                            <i [class]="item.icon" *ngIf="item.icon.length >0 "></i>
+                            <span class="link_name">{{ item.link_name }}</span>
+                        </a>
+                    </div>
+                    <div *ngIf="item.sub_menu.length > 0 && item.required_auth == isAuthenticated"  class="dropdown-title" (click)="showSubmenu(itemEl)" >
+                        <a>
+                            <i [class]="item.icon"  *ngIf="item.icon.length >0 "></i>
+                            <span class="link_name">{{ item.link_name }}</span>
+                            <i class="fa fa-fw fa-angle-down"></i>
+                        </a>
+                    </div>
+                    <ul class="sub-menu showMenu" #itemEl [class.blank]="item.sub_menu.length == 0">
+                        <li *ngFor="let item_sub of item.sub_menu">
+                            <a [routerLink]="[item_sub.link]"  *ngIf="item_sub.required_auth == isAuthenticated">
+                                <i [class]="item_sub.icon"  *ngIf="item_sub.icon.length >0 "></i>
+                                {{ item_sub.link_name }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngIf="isAuthenticated">
+                    <div>
+                        <a (click)="logout($event)">
+                            <i class="fa fa-fw fa-sign-out"></i>
+                            <span class="link_name">Logout</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
         </div>
+
+
     </mat-drawer>
     <mat-drawer-content style="padding: 10px;"><router-outlet></router-outlet></mat-drawer-content>
 </mat-drawer-container>
