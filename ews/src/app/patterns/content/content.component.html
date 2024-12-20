@@ -8,11 +8,13 @@
     </a>
     <div class="row">
         <div [class]="'col-md-' +(12 / content.cols) * element?.colspan " *ngFor="let element of content.elements">
-            <pattern-element
-        [formGroup]="formGroup"
-        [element]="element"
-        *ngIf="element"
-      ></pattern-element>
+            <pattern-element [formGroup]="formGroup" [element]="element" *ngIf="element"></pattern-element>
+        </div>
+    </div>
+    <div class="row">
+        <div [class]="'col-md-' +(12 / content.cols) * summaryCard?.colspan "
+            *ngFor="let summaryCard of content.summaryCards">
+            <pattern-summaryCard [summaryCardModel]="summaryCard" *ngIf="summaryCard"></pattern-summaryCard>
         </div>
     </div>
 </div>
