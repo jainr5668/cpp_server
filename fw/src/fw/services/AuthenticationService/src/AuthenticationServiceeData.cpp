@@ -1,5 +1,6 @@
 #include "AuthenticationServiceData.h"
 #include "AuthenticationServiceTypes.h"
+#include "Authorization.h"
 #include "Utils.h"
 
 namespace services
@@ -11,7 +12,8 @@ namespace services
             logger.info("AuthenticationServiceData::AuthenticationServiceData Constructor Entry");
             data_ = std::move(data);
             std::vector<std::string> queries = {
-                "CREATE TABLE IF NOT EXISTS users (id TEXT, username TEXT, password TEXT, mobile1 NUMBER, mobile2 NUMBER);"
+                "CREATE TABLE IF NOT EXISTS users (id TEXT, username TEXT, password TEXT, mobile1 NUMBER, mobile2 NUMBER);",
+                "CREATE TABLE IF NOT EXISTS logout(token TEXT, exp NUMBER);"
             };
             for (std::string query : queries)
             {
@@ -30,8 +32,31 @@ namespace services
             signupData.username.value + "', '" + signupData.password.value + "', " + std::to_string(signupData.mobile1.value) + ", " + \
             std::to_string(signupData.mobile2.value()) + ")";
             auto res = data_->execute(query);
-            logger.info("AuthenticationServiceData::insertUser "+ data_->getDbPath());
             logger.info("AuthenticationServiceData::insertUser Exit");
+        }
+
+        bool AuthenticationServiceData::logoutUser(std::string token){
+            logger.info("AuthenticationServiceData::logoutUser Entry");
+            Authorization authorization;
+            authorization.setAuthorizationToken(token);
+            std::string exp;
+            try{
+                auto payloadClaims = authorization.isAuthorized();
+                if(!payloadClaims){
+                    exp = "0";
+                }
+                else {
+                    exp = Utils::getValueFromMap(*payloadClaims, "exp", "0");
+                }
+            }
+            catch(const std::exception& e){
+                logger.error("AuthenticationServiceData::logoutUser " + std::string(e.what()));
+                exp = "0";
+            }
+            std::string query = "INSERT INTO logout (token, exp) VALUES ('" + authorization.getAuthorizationToken() + "', " + exp + ")";
+            auto res = data_->execute(query);
+            logger.info("AuthenticationServiceData::logoutUser Exit");
+            return true;
         }
     } // namespace services::AuthenticationServiceData
 } // namespace services

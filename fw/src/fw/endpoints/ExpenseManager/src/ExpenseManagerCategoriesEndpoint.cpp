@@ -121,13 +121,6 @@ namespace endpoints
             deleteCategoryConfig.enabled = true;
             routes.push_back(Route{"/:id", RouteMethod::DELETE, deleteCategoryConfig,
                 std::bind(&ExpenseManagerCategoriesEndpoint::deleteCategory, this, std::placeholders::_1)});
-
-            for(auto &route : routes)
-            {
-                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteCategoryConfig,
-                    std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
-            }
-
             logger_.info("ExpenseManagerCategoriesEndpoint::getRoutes Exit");
             return routes;
         }

@@ -136,10 +136,6 @@ namespace endpoints
                 std::bind(&ExpenseManagerReportsEndpoint::deleteReport, this, std::placeholders::_1)});
             logger_.info("ExpenseManagerReportsEndpoint::getRoutes Exit");
 
-            for(auto route : routes){
-                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteReportConfig,
-                    std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
-            }
             return routes;
         }
     }

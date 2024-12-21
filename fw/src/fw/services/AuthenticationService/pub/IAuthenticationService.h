@@ -14,6 +14,8 @@ namespace services
         ~IAuthenticationService() = default;
             virtual std::string isCredValid(services::AuthenticationService::AuthenticationServiceTypes::LoginData) = 0;
             virtual bool createUser(services::AuthenticationService::AuthenticationServiceTypes::SingupData) = 0;
+            virtual bool logoutUser(std::string token) = 0;
+            virtual bool isUserLoggedOut(std::string token) = 0;
         };
     } // namespace services::AuthenticationService
 } // namespace services

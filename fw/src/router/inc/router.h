@@ -15,6 +15,7 @@
 #include <vector>
 #include <sstream>
 #include "BaseService.h"
+#include "AuthenticationService.h"
 
 class Router : public IRouter
 {
@@ -29,13 +30,20 @@ public:
    void addRoute(Route route);
    void handle_request(Request *req, Response *res);
    void addSubRouter(const std::string &path, std::shared_ptr<IRouter> subrouter_);
+   void setSupportsOptions(bool supportsOptions_) { this->supportsOptions = supportsOptions_; };
+   bool getSupportsOptions() { return this->supportsOptions; };
+   void setCorsHandler(std::string path, CORSHandler corsHandler);
+   void setAuthenticationService(std::shared_ptr<BaseService> authenticationService_);
 
 private:
+   static std::shared_ptr<services::AuthenticationService::AuthenticationService> authenticationService;
    std::vector<Route> routes;
    std::map<std::string, std::shared_ptr<IRouter>> subRoutes;
    Logger logger;
    std::string routeToRegex(const std::string &route);
    std::vector<std::string> extractParamNames(const std::string &route);
    std::string requestMethodToString(RouteMethod method);
+   bool supportsOptions = false;
+   std::unordered_map<std::string, CORSHandler> corsHandlers;
 };
 #endif // ROUTER_H

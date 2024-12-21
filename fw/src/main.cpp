@@ -5,6 +5,7 @@
 int main(){
     std::unique_ptr<Router> router = std::make_unique<Router>();
     SubRouterMap subRouterMap;
+    router->setAuthenticationService(subRouterMap.getServiceMap().at("services::AuthenticationService::IAuthenticationService"));
     for (auto &subRouter : subRouterMap.getRouterMap())
         router->addSubRouter(subRouter.first, subRouter.second);
     std::shared_ptr<Server> server = std::make_shared<Server>(std::move(router));

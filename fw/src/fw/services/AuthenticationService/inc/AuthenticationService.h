@@ -15,6 +15,8 @@ namespace services
             ~AuthenticationService();
             std::string isCredValid(services::AuthenticationService::AuthenticationServiceTypes::LoginData);
             bool createUser(services::AuthenticationService::AuthenticationServiceTypes::SingupData);
+            bool logoutUser(std::string token);
+            bool isUserLoggedOut(std::string token);
             void initialize() override;
             void *getInterface(ModuleUid uid);
             void setInterface(ModuleUid uid, void *interface);

@@ -18,6 +18,7 @@ namespace services
             AuthenticationServiceData(std::unique_ptr<Data> data);
             std::vector<std::vector<std::string>> retriveUsers(std::string query);
             void insertUser(services::AuthenticationService::AuthenticationServiceTypes::SingupData singupData);
+            bool logoutUser(std::string token);
         private:
             std::unique_ptr<Data> data_{nullptr};
             Logger logger;

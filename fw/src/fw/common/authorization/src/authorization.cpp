@@ -16,7 +16,7 @@ void Authorization::setAuthorizationToken(std::string authorization_token)
 std::string Authorization::createToken(const std::unordered_map<std::string, std::string>& payload) {
     auto token = jwt::create()
         .set_issuer("auth0")
-        .set_type("JWS")
+        .set_type("JWT")
         .set_expires_at(std::chrono::system_clock::now() + std::chrono::hours{24});
     for (const auto& [key, value] : payload) {
         token.set_payload_claim(key, jwt::claim(value));

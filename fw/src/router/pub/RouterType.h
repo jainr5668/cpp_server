@@ -22,6 +22,15 @@ struct RouteContext {
     std::map<std::string, std::string> path_params;
 };
 
+struct CORSHandler
+{
+   std::string origin;
+   std::vector<RouteMethod> methods;
+   std::string headers;
+   bool useDefaultHandler = true;
+   std::function<void(RouteContext, bool)> optionsHandler;
+};
+
 struct Route{
     std::string path;
     RouteMethod method;
