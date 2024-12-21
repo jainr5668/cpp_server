@@ -109,18 +109,6 @@ void Server::start()
             res->status_code = 500;
             res->body = "{\"error\": \"" + std::string(e.what()) + "\"}";
         }
-        auto host = Utils::getValueFromMap(req->headers, "Host", "");
-        auto origin = Utils::getValueFromMap(req->headers, "Origin", "");
-        if (origin.empty())
-        {
-            origin = host;
-        }
-        if (host != origin)
-        {
-            res->headers.insert({"Access-Control-Allow-Origin", "*"});
-            res->headers.insert({"Access-Control-Allow-Methods", "GET, POST, OPTIONS"});
-            res->headers.insert({"Access-Control-Allow-Headers", "Content-Type, Authorization"});
-        }
         logger.info("Stop Processing request: " + reqPath + " Method: " + req->method + " Status: " + std::to_string(res->status_code));
         send(new_socket, res->to_string().c_str(), res->to_string().length(), 0);
         close(new_socket);

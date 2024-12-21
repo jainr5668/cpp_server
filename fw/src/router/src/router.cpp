@@ -1,5 +1,6 @@
 #include "router.h"
 #include "Utils.h"
+std::shared_ptr<services::AuthenticationService::AuthenticationService> Router::authenticationService = nullptr;
 
 void Router::addRoute(Route route)
 {
@@ -16,6 +17,14 @@ void Router::addSubRouter(const std::string &path, std::shared_ptr<IRouter> subr
     subRoutes[path] = subrouter_;
     logger.info("Router::addSubRouter Exit");
 }
+
+void Router::setAuthenticationService(std::shared_ptr<BaseService> authenticationService_)
+{
+    logger.info("Router::setAuthenticationService Entry");
+    Router::authenticationService = std::static_pointer_cast<services::AuthenticationService::AuthenticationService>(authenticationService_);
+    logger.info("Router::setAuthenticationService Exit");
+}
+
 void Router::handle_request(Request *req, Response *res)
 {
     logger.info("Processing request: " + req->path + " Method: " + req->method);
@@ -47,11 +56,26 @@ void Router::handle_request(Request *req, Response *res)
         if (std::regex_match(req->path, matches, pattern))
         {
             routeFound = true;
+            if(req->method == requestMethodToString(RouteMethod::OPTIONS) && getSupportsOptions())
+            {
+                for(auto &corsHandler : corsHandlers)
+                {
+                    std::regex pattern(routeToRegex(corsHandler.first));
+                    std::smatch matches;
+                    if (std::regex_match(req->path, matches, pattern)){
+                        if(corsHandlers[route.path].optionsHandler)
+                        {
+                            corsHandlers[route.path].optionsHandler(RouteContext{req, res, path_params}, true);
+                        }
+                        return;
+                    }
+                }
+            }
             if (req->method == requestMethodToString(route.method))
             {
                 if (route.authConfig.enabled)
                 {
-                    if (req->authorization->isAuthorized() == nullptr)
+                    if (req->authorization->isAuthorized() == nullptr || Router::authenticationService->isUserLoggedOut(req->authorization->getAuthorizationToken()))
                     {
                         res->status_code = 401;
                         res->body = "Unauthorized";
@@ -106,6 +130,21 @@ void Router::handle_request(Request *req, Response *res)
                 routeContext.res = res;
                 routeContext.path_params = params;
                 route.handler(routeContext);
+                if (getSupportsOptions())
+                {
+                    for(auto &corsHandler : corsHandlers)
+                    {
+                        std::regex pattern(routeToRegex(corsHandler.first));
+                        std::smatch matches;
+                        if (std::regex_match(req->path, matches, pattern)){
+                            if(corsHandlers[route.path].optionsHandler)
+                            {
+                                corsHandlers[route.path].optionsHandler(routeContext, false);
+                            }
+                            break;
+                        }
+                    }
+                }
                 return;
             }
         }
@@ -191,4 +230,33 @@ std::vector<std::string> Router::extractParamNames(const std::string &route)
         }
     }
     return names;
+}
+
+void Router::setCorsHandler(std::string path, CORSHandler corsHandler)
+{
+    logger.info("Router::setCorsHandler Entry");
+    if (corsHandler.useDefaultHandler)
+    {
+        corsHandler.optionsHandler = [corsHandler, this](RouteContext routeContext, bool updateStatusCode = true)
+        {
+            std::string methods;
+            for(int i = 0; i < corsHandler.methods.size(); i++)
+            {
+                methods += requestMethodToString(corsHandler.methods[i]);
+                if(i < corsHandler.methods.size() - 1)
+                {
+                    methods += ", ";
+                }
+            }
+            routeContext.res->headers.insert({"Access-Control-Allow-Origin", corsHandler.origin});
+            routeContext.res->headers.insert({"Access-Control-Allow-Methods", methods});
+            routeContext.res->headers.insert({"Access-Control-Allow-Headers", corsHandler.headers});
+            if(updateStatusCode)
+            {
+                routeContext.res->status_code = 204; // No Content
+            }
+        };
+    }
+    corsHandlers[path] = corsHandler;
+    logger.info("Router::setCorsHandler Exit");
 }

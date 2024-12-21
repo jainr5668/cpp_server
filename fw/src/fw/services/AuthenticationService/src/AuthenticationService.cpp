@@ -8,8 +8,6 @@ namespace services
         AuthenticationService::AuthenticationService()
         {
             logger.info("AuthenticationService::AuthenticationService Constructor Entry");
-
-            // instance_ = std::shared_ptr<AuthenticationService>(this);
             logger.info("AuthenticationService::AuthenticationService Constructor Exit");
         }
 
@@ -62,6 +60,7 @@ namespace services
                 std::make_unique<Data>("AuthenticationServiceData.db"));
             logger.info("AuthenticationService::initialize Exit");
         }
+        
         void *AuthenticationService::getInterface(ModuleUid uid)
         {
             logger.info("AuthenticationService::getInterface Entry");
@@ -73,6 +72,7 @@ namespace services
             logger.info("AuthenticationService::getInterface Exit");
             return interfacePtr;
         }
+        
         void AuthenticationService::shutdown()
         {
             logger.info("AuthenticationService::shutdown Entry");
@@ -84,6 +84,7 @@ namespace services
             logger.info("AuthenticationService::~AuthenticationService Entry");
             logger.info("AuthenticationService::~AuthenticationService Exit");
         }
+
         void *AuthenticationService::getInstance()
         {
             logger.info("AuthenticationService::getInstance Entry");
@@ -94,6 +95,7 @@ namespace services
             return static_cast<void *>(instance_.get());
             logger.info("AuthenticationService::getInstance Exit");
         }
+
         void AuthenticationService::setInterface(ModuleUid uid, void *interface)
         {
             logger.info("AuthenticationService::setInterface Entry");
@@ -127,6 +129,33 @@ namespace services
             }
             logger.info("AuthenticationService::createUser Exit");
             return isUserCreated;
+        }
+
+        bool AuthenticationService::logoutUser(std::string token)
+        {
+            logger.info("AuthenticationService::logoutUser Entry");
+            if(isUserLoggedOut(token))
+            {
+                logger.info("AuthenticationService::logoutUser User is not logged in");
+                return false;
+            }
+            bool isUserLoggedOut = injections_->authenticationServiceData_->logoutUser(token);
+            logger.info("AuthenticationService::logoutUser Exit");
+            return isUserLoggedOut;
+        }
+
+        bool AuthenticationService::isUserLoggedOut(std::string token)
+        {
+            logger.info("AuthenticationService::isUserLoggedOut Entry");
+            bool isUserLoggedOut = false;
+            std::vector<std::vector<std::string>> users = injections_->authenticationServiceData_->retriveUsers(
+                "SELECT * FROM logout WHERE token = '" + token + "'");
+            if (users.size() > 0)
+            {
+                isUserLoggedOut = true;
+            }
+            logger.info("AuthenticationService::isUserLoggedOut Exit");
+            return isUserLoggedOut;
         }
     } // namespace services::AuthenticationService
 } // namespace services

@@ -137,10 +137,6 @@ namespace endpoints
                 std::bind(&ExpenseManagerTransactionsEndpoint::deleteTransaction, this, std::placeholders::_1)});
             logger_.info("ExpenseManagerTransactionsEndpoint::getRoutes Exit");
 
-            for(auto route : routes){
-                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteTransactionConfig,
-                    std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
-            }
             return routes;
         }
     }

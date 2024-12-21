@@ -27,13 +27,7 @@ namespace endpoints
              * @param routeContext
              */
             void signup(RouteContext routeContext);
-
-            /**
-             * @brief timepass
-             * @param routeContext
-             */
-            void timepass(RouteContext routeContext);
-            void handlePreflight(RouteContext routeContext);
+            void logoutUser(RouteContext routeContext);
             void initialize();
             void *getInterface(ModuleUid uid);
             void setInterface(ModuleUid uid, void *interface);
@@ -50,11 +44,6 @@ namespace endpoints
              * @brief Get the vector of Routes object
              */
             std::vector<Route> getRoutes();
-
-            /**
-             * Update the headers for cors request
-             */
-            void updateCorsHeaders(RouteContext &routeContext);
         };
     }
 } // namespace endpoints::AuthenticationEndpoint

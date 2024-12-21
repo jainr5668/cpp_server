@@ -13,6 +13,7 @@ public:
     std::unordered_map<std::string, std::string>* isAuthorized();
     std::string createToken(const std::unordered_map<std::string, std::string>& payload);
     std::unordered_map<std::string, std::string>* validateToken(const std::string& token);
+    std::string getAuthorizationToken() { return authorization_token_; }
 private:
     std::string authorization_token_;
     const std::string secret = "CXlL52nd68sBwZvD7lQTsx4gc7E4th+h+ETgMz5pVd8=";

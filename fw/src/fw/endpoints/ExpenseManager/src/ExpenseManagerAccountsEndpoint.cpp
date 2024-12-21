@@ -136,10 +136,6 @@ namespace endpoints
                 std::bind(&ExpenseManagerAccountsEndpoint::deleteAccount, this, std::placeholders::_1)});
             logger_.info("ExpenseManagerAccountsEndpoint::getRoutes Exit");
 
-            for(auto route : routes){
-                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteAccountConfig,
-                    std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
-            }
             return routes;
         }
     }

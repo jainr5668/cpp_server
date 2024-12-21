@@ -135,10 +135,6 @@ namespace endpoints
                 std::bind(&ExpenseManagerTagsEndpoint::deleteTag, this, std::placeholders::_1)});
             logger_.info("ExpenseManagerTagsEndpoint::getRoutes Exit");
 
-            for(auto route : routes){
-                routes.push_back(Route{route.path, RouteMethod::OPTIONS, deleteTagConfig,
-                    std::bind(&BaseEndpoint::handlePreflight, this, std::placeholders::_1)});
-            }
             return routes;
         }
     }
