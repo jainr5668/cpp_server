@@ -52,15 +52,6 @@ namespace Server
         RequestContent *request = new RequestContent(requestData);
         ResponseContent *response = new ResponseContent();
         std::cout << "Request Route: " << request->getRoute() <<" Method: " << request->getMethod() << std::endl;
-        for (auto header : request->getHeaders())
-        {
-            std::cout << header.first << ": " << header.second << std::endl;
-        }
-        for (auto param : request->getQueryParameters())
-        {
-            std::cout << param.first << ": " << param.second << std::endl;
-        }
-        // std::string response = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello World!";
         response->setStatusCode(200);
         response->setBody("Hello World! from Ravi");
         auto serverResponse = response->getServerResponse();

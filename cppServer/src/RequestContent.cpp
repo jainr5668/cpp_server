@@ -1,6 +1,5 @@
 #include "RequestContent.h"
 #include <sstream>
-#include <iostream>
 
 using RequestContent = Server::RequestContent;
 
@@ -13,14 +12,22 @@ namespace Server
 
     void RequestContent::parseRequest(std::string rawRequest)
     {
-        std::cout << "Request: " << rawRequest << std::endl;
-        std::vector<std::string> lines = splitString(rawRequest, '\n');
-        std::vector<std::string> requestLine = splitString(lines[0], ' ');
-        method = requestLine[0];
-        route = requestLine[1];
+        std::istringstream stream(rawRequest);
+        std::string line;
+        std::getline(stream, line);
+        std::vector<std::string> requestParts = splitString(line, ' ');
+        if (requestParts.size() < 3) throw std::runtime_error("Invalid request");
+        method = requestParts[0];
+        route = requestParts[1];
         queryParameters = parseQueryParameters(route);
-        headers = parseHeaders(lines[1]);
-        body = lines[lines.size() - 1];
+        std::string headerString;
+        while (std::getline(stream, line))
+        {
+            if (line == "\r") break;
+            headerString += line + "\n";
+        }
+        headers = parseHeaders(headerString);
+        while(std::getline(stream, line)) body += line + "\n";
     }
 
     std::unordered_map<std::string, std::string> RequestContent::parseQueryParameters(std::string query)
