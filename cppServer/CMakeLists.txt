@@ -2,6 +2,7 @@ add_library(cppServer_lib
     src/RequestContent.cpp
     src/ResponseContent.cpp
     src/Server.cpp
+    src/Router.cpp
 )
 
 target_include_directories(cppServer_lib PUBLIC

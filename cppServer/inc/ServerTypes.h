@@ -2,6 +2,11 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include "IRequestContent.h"
+#include "IResponseContent.h"
+
+using IRequestContent = Server::IRequestContent;
+using IResponseContent = Server::IResponseContent;
 
 namespace Server{
 namespace ServerTypes{
@@ -19,7 +24,10 @@ namespace ServerTypes{
     };
 
     
-    struct RouteContext{};
+    struct RouteContext{
+        IRequestContent* requestContext;
+        IResponseContent* responseContext;
+    };
 
     struct AuthorizationConfiguration{
         bool enabled;
@@ -30,9 +38,9 @@ namespace ServerTypes{
 
     struct Route{
         RouteType type;
-        const char* route;
+        std::string route;
         AuthorizationConfiguration authorization;
-        std::function<void(void)> handler;
+        std::function<void(RouteContext)> handler;
     };
 } // namespace ServerTypes
 } // namespace Server

@@ -7,20 +7,17 @@
 #include <thread>
 #include <stdexcept>
 #include <iostream>
+#include "IRouter.h"
 
 #include "RequestContent.h"
 #include "ResponseContent.h"
 
 using RequestContent = Server::RequestContent;
 using ResponseContent = Server::ResponseContent;
+using RouteContext = Server::ServerTypes::RouteContext;
 
 namespace Server
 {
-    bool Server::addRoute(ServerTypes::Route route)
-    {
-        return false;
-    }
-
     std::string Server::readRequest(int socket)
     {
         const int BufferSize = 1024;
@@ -52,13 +49,28 @@ namespace Server
         RequestContent *request = new RequestContent(requestData);
         ResponseContent *response = new ResponseContent();
         std::cout << "Request Route: " << request->getRoute() <<" Method: " << request->getMethod() << std::endl;
-        response->setStatusCode(200);
-        response->setBody("Hello World! from Ravi");
+        if (router)
+        {
+            RouteContext routeContext;
+            routeContext.requestContext = request;
+            routeContext.responseContext = response;
+            router->routeHandler(routeContext);
+        }
+        else
+        {
+            response->setStatusCode(500);
+            response->setBody("Initial Router is not set.");
+        }
         auto serverResponse = response->getServerResponse();
         send(socket, serverResponse.c_str(), serverResponse.size(), 0);
         delete request;
         delete response;
         close(socket);
+    }
+
+    void Server::setRouter(std::shared_ptr<IRouter> router)
+    {
+        this->router = router;
     }
 
     void Server::start()

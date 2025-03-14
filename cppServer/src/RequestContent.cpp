@@ -16,7 +16,7 @@ namespace Server
         std::string line;
         std::getline(stream, line);
         std::vector<std::string> requestParts = splitString(line, ' ');
-        if (requestParts.size() < 3) throw std::runtime_error("Invalid request");
+        if (requestParts.size() < 3) return;
         method = requestParts[0];
         route = requestParts[1];
         queryParameters = parseQueryParameters(route);

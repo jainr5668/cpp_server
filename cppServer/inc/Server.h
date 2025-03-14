@@ -10,7 +10,7 @@ namespace Server
     public:
         Server() = default;
         ~Server() = default;
-        bool addRoute(ServerTypes::Route route) override;
+        void setRouter(std::shared_ptr<IRouter> router) override;
         void start() override;
         void stop() override;
     private:
@@ -20,5 +20,6 @@ namespace Server
         bool isRunning = false;
         void handlerThread(int socket);
         std::string readRequest(int socket);
+        std::shared_ptr<IRouter> router;
     };
 } // namespace Server
