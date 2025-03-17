@@ -1,7 +1,8 @@
 #pragma once
 
-#include "ServerTypes.h"
 #include "IRouter.h"
+#include "ServerTypes.h"
+
 #include <memory>
 
 namespace Server
@@ -12,5 +13,5 @@ namespace Server
         virtual void setRouter(std::shared_ptr<IRouter> router) = 0;
         virtual void start() = 0;
         virtual void stop() = 0;
-    };
-}
+    }; // namespace IServer
+} // namespace Server

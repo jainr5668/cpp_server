@@ -18,24 +18,25 @@ using RouteContext = Server::ServerTypes::RouteContext;
 
 namespace Server
 {
+
     std::string Server::readRequest(int socket)
     {
         const int BufferSize = 1024;
         std::vector<char> buffer(BufferSize);
         std::string requestData;
-        while(true)
+        while( true )
         {
             const ssize_t bytesRead = recv(socket, buffer.data(), buffer.size(), 0);
-            if (bytesRead < 0)
+            if ( bytesRead < 0 )
             {
                 throw std::runtime_error("Error reading from socket");
             }
-            else if (bytesRead == 0)
+            else if ( bytesRead == 0 )
             {
                 break;
             }
             requestData.append(buffer.data(), bytesRead);
-            if (bytesRead < BufferSize)
+            if ( bytesRead < BufferSize )
             {
                 break;
             }
@@ -49,7 +50,7 @@ namespace Server
         RequestContent *request = new RequestContent(requestData);
         ResponseContent *response = new ResponseContent();
         std::cout << "Request Route: " << request->getRoute() <<" Method: " << request->getMethod() << std::endl;
-        if (router)
+        if ( router )
         {
             RouteContext routeContext;
             routeContext.requestContext = request;
@@ -79,12 +80,12 @@ namespace Server
         struct sockaddr_in address;
         int addrlen = sizeof(address);
         int opt = 1;
-        if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+        if ( (server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0 )
         {
             throw std::runtime_error("Failed to create socket");
             exit(EXIT_FAILURE);
         }
-        if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+        if ( setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) )
         {
             throw std::runtime_error("Failed to set socket options");
             exit(EXIT_FAILURE);
@@ -92,12 +93,12 @@ namespace Server
         address.sin_family = AF_INET;
         address.sin_addr.s_addr = INADDR_ANY;
         address.sin_port = htons(port);
-        if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
+        if ( bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0 )
         {
             throw std::runtime_error("Failed to bind socket");
             exit(EXIT_FAILURE);
         }
-        if (listen(server_fd, 3) < 0)
+        if ( listen(server_fd, 3) < 0 )
         {
             throw std::runtime_error("Failed to listen on socket");
             exit(EXIT_FAILURE);
@@ -105,12 +106,12 @@ namespace Server
         isRunning = true;
         while (isRunning)
         {
-            if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
+            if ( (new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0 )
             {
                 throw std::runtime_error("Failed to accept connection");
                 exit(EXIT_FAILURE);
             }
-            if (new_socket < 0)
+            if ( new_socket < 0 )
             {
                 throw std::runtime_error("Failed to accept connection");
                 exit(EXIT_FAILURE);
@@ -125,4 +126,5 @@ namespace Server
     {
         isRunning = false;
     }
+
 } // namespace Server

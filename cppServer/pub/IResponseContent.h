@@ -15,5 +15,5 @@ namespace Server{
         virtual void setBody(std::string body) = 0;
         virtual void setHeaders(std::unordered_map<std::string, std::string> headers) = 0;
         virtual void setStatusCode(int statusCode) = 0;
-    };    
+    }; // namespace IResponseContent
 } // namespace Server

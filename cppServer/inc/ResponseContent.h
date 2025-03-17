@@ -23,4 +23,4 @@ namespace Server{
         std::unordered_map<std::string, std::string> headers;
         int statusCode;
     }; // class ResponseContent
-}
+} // namespace Server

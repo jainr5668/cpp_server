@@ -4,6 +4,7 @@
 using ResponseContent = Server::ResponseContent;
 
 namespace Server{
+
     std::string ResponseContent::getServerResponse()
     {
         std::ostringstream response;
@@ -28,4 +29,5 @@ namespace Server{
             return "Internal Server Error";
         }
     }
-}
+
+} // namespace Server

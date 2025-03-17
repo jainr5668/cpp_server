@@ -15,11 +15,11 @@ namespace Server
         void stop() override;
     private:
         void *impl;
-        int port = 8080;
         int intitalBufferSize = 1024;
         bool isRunning = false;
+        int port = 8080;
+        std::shared_ptr<IRouter> router;
         void handlerThread(int socket);
         std::string readRequest(int socket);
-        std::shared_ptr<IRouter> router;
     };
 } // namespace Server

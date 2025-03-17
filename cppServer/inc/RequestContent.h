@@ -1,14 +1,15 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <unordered_map>
+
 #include "IRequestContent.h"
+
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 using IRequestContent = Server::IRequestContent;
 
 namespace Server
 {
-
     class RequestContent : public IRequestContent
     {
     public:
@@ -24,15 +25,16 @@ namespace Server
         void setMethod(std::string method) { this->method = method; }
         void setQueryParameters(std::unordered_map<std::string, std::string> queryParameters) { this->queryParameters = queryParameters; }
         void setRoute(std::string route) { this->route = route; }
+
     private:
-        std::string method;
-        std::string route;
         std::string body;
         std::unordered_map<std::string, std::string> headers;
+        std::string method;
         std::unordered_map<std::string, std::string> queryParameters;
-        void parseRequest(std::string rawRequest);
-        std::unordered_map<std::string, std::string> parseQueryParameters(std::string query);
+        std::string route;
         std::unordered_map<std::string, std::string> parseHeaders(std::string headers);
+        std::unordered_map<std::string, std::string> parseQueryParameters(std::string query);
+        void parseRequest(std::string rawRequest);
         std::vector<std::string> splitString(std::string str, char delimiter);
     }; // class RequestContent
 } // namespace Server

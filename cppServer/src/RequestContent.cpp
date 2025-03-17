@@ -5,6 +5,7 @@ using RequestContent = Server::RequestContent;
 
 namespace Server
 {
+
     RequestContent::RequestContent(std::string rawRequest)
     {
         parseRequest(rawRequest);
@@ -16,7 +17,7 @@ namespace Server
         std::string line;
         std::getline(stream, line);
         std::vector<std::string> requestParts = splitString(line, ' ');
-        if (requestParts.size() < 3) return;
+        if ( requestParts.size() < 3 ) return;
         method = requestParts[0];
         route = requestParts[1];
         queryParameters = parseQueryParameters(route);
@@ -27,14 +28,17 @@ namespace Server
             headerString += line + "\n";
         }
         headers = parseHeaders(headerString);
-        while(std::getline(stream, line)) body += line + "\n";
+        while(std::getline(stream, line))
+        {
+            body += line + "\n";
+        }
     }
 
     std::unordered_map<std::string, std::string> RequestContent::parseQueryParameters(std::string query)
     {
         std::vector<std::string> queryParts = splitString(query, '?');
         std::unordered_map<std::string, std::string> queryParameters_;
-        if (queryParts.size() > 1)
+        if ( queryParts.size() > 1 )
         {
             std::vector<std::string> parameters = splitString(queryParts[1], '&');
             for (auto parameter : parameters)
@@ -53,7 +57,7 @@ namespace Server
         for (auto headerLine : headerLines)
         {
             std::vector<std::string> header = splitString(headerLine, ':');
-            if (header.size() > 1)
+            if ( header.size() > 1 )
             {
                 headers_[header[0]] = header[1];
             }
@@ -72,4 +76,5 @@ namespace Server
         }
         return parts;
     }
+
 }

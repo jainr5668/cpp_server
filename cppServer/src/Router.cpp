@@ -1,6 +1,7 @@
 #include "Router.h"
 
 namespace Server{
+
     void Router::addRoute(ServerTypes::Route route)
     {
         routes.push_back(route);
@@ -10,7 +11,7 @@ namespace Server{
     {
         for(auto route : routes)
         {
-            if(route.route == requestContent.requestContext->getRoute())
+            if( route.route == requestContent.requestContext->getRoute() )
             {
                 route.handler(requestContent);
                 return;
@@ -24,4 +25,5 @@ namespace Server{
     {
         subRouters[path] = router;
     }
-}
+
+} // namespace Server

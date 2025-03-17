@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <unordered_map>
 
@@ -17,6 +18,5 @@ namespace Server
         virtual void setMethod(std::string method) = 0;
         virtual void setQueryParameters(std::unordered_map<std::string, std::string> queryParameters) = 0;
         virtual void setRoute(std::string route) = 0;
-    };
-
-}
+    }; // namespace IRequestContent
+} // namespace Server
