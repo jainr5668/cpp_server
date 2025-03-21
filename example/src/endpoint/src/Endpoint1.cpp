@@ -1,4 +1,5 @@
 #include "Endpoint1.h"
+#include "ServerTypes.h"
 #include <iostream>
 
 namespace Example
@@ -7,9 +8,12 @@ namespace Example
     {
         Endpoint1::Endpoint1()
         {
+            Server::ServerTypes::AuthorizationConfiguration authorizationConfiguration;
+            authorizationConfiguration.enabled = true;
             Server::ServerTypes::Route route;
             route.type = Server::ServerTypes::RouteType::GET;
             route.route = "/test";
+            route.authorization = authorizationConfiguration;
             route.handler = std::bind(&Endpoint1::function1, this, std::placeholders::_1);
             addRoute(route);
         }

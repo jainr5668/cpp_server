@@ -7,6 +7,9 @@ namespace Server
 {
     class IAuthentication
     {
+        public:
+        IAuthentication() = default;
+        ~IAuthentication() = default;
         virtual std::string getAuthorizationToken() = 0;
         virtual std::unordered_map<std::string, std::string> getPayload() = 0;
         virtual bool isAuthenticated() = 0;

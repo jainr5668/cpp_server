@@ -3,7 +3,8 @@
 
 using ResponseContent = Server::ResponseContent;
 
-namespace Server{
+namespace Server
+{
 
     std::string ResponseContent::getServerResponse()
     {
@@ -23,6 +24,8 @@ namespace Server{
         {
         case 200:
             return "OK";
+        case 401:
+            return "Unauthorized";
         case 404:
             return "Not Found";
         default:

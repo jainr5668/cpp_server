@@ -1,4 +1,5 @@
 add_library(cppServer_lib
+    src/Authentication.cpp
     src/RequestContent.cpp
     src/ResponseContent.cpp
     src/Server.cpp

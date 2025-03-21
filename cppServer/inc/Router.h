@@ -1,11 +1,13 @@
 #pragma once
 
+#include "IAuthentication.h"
 #include "IRouter.h"
 #include "ServerTypes.h"
 
 #include <memory>
 #include <string>
 
+using IAuthentication = Server::IAuthentication;
 using IRouter = Server::IRouter;
 
 namespace Server
@@ -15,6 +17,7 @@ namespace Server
     public:
         Router() = default;
         ~Router() = default;
+        void addAuthenticator(std::shared_ptr<IAuthentication> authenticator) override;
         void addRoute(ServerTypes::Route route) override;
         void addSubRouter(std::string path, std::shared_ptr<IRouter> router) override;
         void routeHandler(ServerTypes::RouteContext requestContent) override;
@@ -22,5 +25,6 @@ namespace Server
     private:
         std::vector<ServerTypes::Route> routes;
         std::unordered_map<std::string, std::shared_ptr<IRouter>> subRouters;
+        std::shared_ptr<IAuthentication> authenticator_;
     };
 }// namespace Server
