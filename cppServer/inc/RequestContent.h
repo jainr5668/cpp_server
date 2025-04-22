@@ -5,6 +5,9 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <nlohmann/json.hpp>
+#include <stdexcept>
+#include <sstream>
 
 using IRequestContent = Server::IRequestContent;
 
@@ -16,12 +19,27 @@ namespace Server
         RequestContent() = default;
         RequestContent(std::string rawRequest);
 
+        // template <typename T>
+        // T getBody()
+        // {
+        //     T body;
+        //     try
+        //     {
+        //         body = nlohmann::json::parse(this->body);
+        //     }
+        //     catch (const std::exception &e)
+        //     {
+        //         throw std::runtime_error("Failed to parse request body: " + std::string(e.what()));
+        //     }
+        //     return body;
+        // }
+
         /**
-         * @brief Gets the request body
+         * @brief Gets the raw request body
          * 
          * @return std::string
          */
-        std::string getBody() { return body; }
+        std::string getRawBody() { return body; }
 
         /**
          * @brief Gets the request headers

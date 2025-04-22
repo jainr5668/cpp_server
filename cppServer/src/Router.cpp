@@ -31,7 +31,15 @@ namespace Server
                         return;
                     }
                 }
-                route.handler(requestContent);
+                try
+                {
+                    route.handler(requestContent);
+                }
+                catch (const std::exception &e)
+                {
+                    requestContent.responseContext->setStatusCode(500);
+                    requestContent.responseContext->setBody("Internal Server Error: " + std::string(e.what()));
+                }
                 return;
             }
         }

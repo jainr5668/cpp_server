@@ -6,6 +6,11 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../cppServer ${CMAKE_CURRENT_BINARY
 
 # Add additional sub directories as needed.
 add_subdirectory(src/endpoint)
+add_subdirectory(src/commonTypes)
 
 add_executable(exampleCppServer main.cpp)
-target_link_libraries(exampleCppServer cppServer_lib exampleEndpoints_lib pthread)
+target_link_libraries(exampleCppServer
+    cppServer_lib
+    commonTypes_lib
+    exampleEndpoints_lib
+    pthread)

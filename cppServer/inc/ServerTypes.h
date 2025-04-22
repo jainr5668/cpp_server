@@ -32,6 +32,50 @@ namespace Server
             IResponseContent *responseContext;
         };
 
+        // template <typename T1, typename T2>
+        // class RouteContextWrapper
+        // {
+        //     public:
+        //     RouteContextWrapper(RouteContext &context)
+        //         : requestContext(context.requestContext), responseContext(context.responseContext)
+        //     {
+        //     }
+        //     RouteContextWrapper(const RouteContextWrapper &other)
+        //         : requestContext(other.requestContext), responseContext(other.responseContext)
+        //     {
+        //     }
+        //     RouteContextWrapper &operator=(const RouteContextWrapper &other)
+        //     {
+        //         if (this != &other)
+        //         {
+        //             requestContext = other.requestContext;
+        //             responseContext = other.responseContext;
+        //         }
+        //         return *this;
+        //     }
+        //     IRequestContent *requestContext;
+        //     IResponseContent *responseContext;
+        //     T1 *getRequestContext()
+        //     {
+        //         T1 *requestBody = nullptr;
+        //         requestJson = from_json<T1>(requestContext->getBody());
+        //         if (requestJson != nullptr)
+        //         {
+        //             requestBody = static_cast<T1 *>(requestJson);
+        //         }
+        //         return requestBody;
+        //     }
+        //     T2 *getResponseContext()
+        //     {
+        //         return static_cast<T2 *>(responseContext->getBody());
+        //     }
+        //     void setResponseContext(T2 *response)
+        //     {
+        //         responseContext->setBody(toJson(response));
+        //     }
+
+        // };
+
         struct AuthorizationConfiguration
         {
             bool enabled;

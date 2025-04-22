@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <unordered_map>
 
@@ -8,7 +10,27 @@ namespace Server
     class IRequestContent
     {
     public:
-        virtual std::string getBody() = 0;
+        template <typename T>
+        T* getBody()
+        {
+            T *body = nullptr;
+            auto requestBody = getRawBody();
+            if (!requestBody.empty())
+            {
+                try
+                {
+                    body = new T();
+                    // auto jsonBody = nlohmann::json::parse(requestBody);
+                    body->build(requestBody);
+                }
+                catch (const std::exception &e)
+                {
+                    throw std::runtime_error("Failed to parse request body: " + std::string(e.what()));
+                }
+            }
+            return body;
+        }
+        virtual std::string getRawBody() = 0;
         virtual std::unordered_map<std::string, std::string> getHeaders() = 0;
         virtual std::string getMethod() = 0;
         virtual std::unordered_map<std::string, std::string> getQueryParameters() = 0;
