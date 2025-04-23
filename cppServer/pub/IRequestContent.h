@@ -20,7 +20,6 @@ namespace Server
                 try
                 {
                     body = new T();
-                    // auto jsonBody = nlohmann::json::parse(requestBody);
                     body->build(requestBody);
                 }
                 catch (const std::exception &e)
