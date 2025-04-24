@@ -13,8 +13,10 @@ namespace Example
         {
             Server::ServerTypes::AuthorizationConfiguration authorizationConfiguration;
             authorizationConfiguration.enabled = true;
+            authorizationConfiguration.scopes = {};
+            authorizationConfiguration.accessLevels = {};
             Server::ServerTypes::Route route;
-            route.type = Server::ServerTypes::RouteType::GET;
+            route.type = Server::ServerTypes::RouteType::POST;
             route.route = "/test";
             route.authorization = authorizationConfiguration;
             route.handler = std::bind(&Endpoint1::function1, this, std::placeholders::_1);
@@ -38,7 +40,6 @@ namespace Example
             }
             std::cout << "Endpoint1::function1 - exiting" << std::endl;
             // Send the response
-            
         }
     } // namespace Endpoint
 } // namespace Example
