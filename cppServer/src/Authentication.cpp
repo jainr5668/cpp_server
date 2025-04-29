@@ -32,7 +32,7 @@ namespace Server
             iAuthorization = std::make_unique<Authorization>(secret, token);
             
         }
-        return iAuthorization;
+        return std::move(iAuthorization);
     }
 
     std::unordered_map<std::string, std::string> Authentication::getPayload()

@@ -33,14 +33,17 @@ namespace Server
             setResponse(requestContent, 405, "Method Not Allowed");
         }
 
-        if (requestContent.responseContext->getBody().empty() && route.authorization.enabled && !isAuthorized(requestContent))
+        if (route.authorization.enabled)
         {
-            setResponse(requestContent, 401, "Unauthorized");
-        }
-
-        if (requestContent.responseContext->getBody().empty() && !validateScopeAndAccessLevel(route, requestContent))
-        {
-            setResponse(requestContent, 403, "Forbidden");
+            if (requestContent.responseContext->getBody().empty() && !isAuthorized(requestContent))
+            {
+                setResponse(requestContent, 401, "Unauthorized");
+            }
+    
+            if (requestContent.responseContext->getBody().empty() && !validateScopeAndAccessLevel(route, requestContent))
+            {
+                setResponse(requestContent, 403, "Forbidden");
+            }
         }
 
         try
@@ -110,6 +113,10 @@ namespace Server
     bool Router::validateScopeAndAccessLevel(const ServerTypes::Route &route, ServerTypes::RouteContext &context)
     {
         bool result = false;
+        if (!authHandler_)
+        {
+            throw std::runtime_error("Authenticator not defined");
+        }
         const auto &payload = authHandler_->getPayload();
         const auto &accessLevels = route.authorization.accessLevels;
         const auto &scopes = route.authorization.scopes;

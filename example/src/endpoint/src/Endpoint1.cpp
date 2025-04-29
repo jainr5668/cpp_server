@@ -22,6 +22,7 @@ namespace Example
             route.handler = std::bind(&Endpoint1::function1, this, std::placeholders::_1);
             addRoute(route);
         }
+
         void Endpoint1::function1(Server::ServerTypes::RouteContext context)
         {
             std::cout << "Endpoint1::function1 - entering" << std::endl;
