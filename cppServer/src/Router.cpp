@@ -32,8 +32,6 @@ namespace Server
         {
             setResponse(requestContent, 405, "Method Not Allowed");
         }
-        std::unique_ptr<Server::IAuthorization> authHandler = nullptr;
-        authHandler = authenticator_->getAuthorization(requestContent.requestContext->getHeaders()["Authorization"]);
 
         if (requestContent.responseContext->getBody().empty() && route.authorization.enabled && !isAuthorized(requestContent))
         {
@@ -53,6 +51,7 @@ namespace Server
                 {
                     throw std::runtime_error("Handler not defined");
                 }
+                requestContent.responseContext->setAuthorizationHandler(std::move(authHandler_));
                 route.handler(requestContent);
             }
         }
@@ -60,6 +59,7 @@ namespace Server
         {
             setResponse(requestContent, 500, "Internal Server Error: " + std::string(e.what()));
         }
+        authHandler_ = nullptr;
     }
 
     void Router::addSubRouter(std::string path, std::shared_ptr<IRouter> router)
@@ -91,6 +91,7 @@ namespace Server
 
     bool Router::isAuthorized(ServerTypes::RouteContext &context)
     {
+        authHandler_ = nullptr;
         if (!authenticator_)
         {
             throw std::runtime_error("Authenticator not defined");
@@ -102,15 +103,14 @@ namespace Server
         {
             return false;
         }
-
-        authenticator_->setAuthorizationToken(authHeaderIt->second);
-        return authenticator_->isAuthenticated();
+        authHandler_ = authenticator_->getAuthorization(authHeaderIt->second);
+        return authHandler_->isAuthenticated();
     }
 
     bool Router::validateScopeAndAccessLevel(const ServerTypes::Route &route, ServerTypes::RouteContext &context)
     {
         bool result = false;
-        const auto &payload = authenticator_->getPayload();
+        const auto &payload = authHandler_->getPayload();
         const auto &accessLevels = route.authorization.accessLevels;
         const auto &scopes = route.authorization.scopes;
 
