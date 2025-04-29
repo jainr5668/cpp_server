@@ -1,8 +1,9 @@
 #pragma once
-
+#include <memory>
 #include "IResponseContent.h"
 
 using IResponseContent = Server::IResponseContent;
+using IAuthentication = Server::IAuthorization;
 
 namespace Server
 {
@@ -61,10 +62,13 @@ namespace Server
          */
         void setStatusCode(int statusCode) { this->statusCode = statusCode; }
 
+        void setAuthorizationHandler(std::unique_ptr<IAuthorization> authHandler);
+
     private:
         std::string body;
         std::unordered_map<std::string, std::string> headers;
         int statusCode;
+        std::unique_ptr<IAuthorization> authorizationHandler = nullptr;
 
         /**
          * @brief Gets the status text

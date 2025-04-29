@@ -21,11 +21,12 @@ namespace Server
         {
             if (route.route == requestContent.requestContext->getRoute())
             {
+                std::unique_ptr<Server::IAuthorization> authHandler = nullptr;
                 if (route.authorization.enabled)
                 {
                     if (!authenticator_) throw std::runtime_error("Authenticator not defined");
-                    authenticator_->setAuthorizationToken(requestContent.requestContext->getHeaders()["Authorization"]);
-                    if(!authenticator_->isAuthenticated())
+                    authHandler = authenticator_->getAuthorization(requestContent.requestContext->getHeaders()["Authorization"]);
+                    if(!authHandler->isAuthenticated())
                     {
                         requestContent.responseContext->setStatusCode(401);
                         return;
@@ -33,6 +34,7 @@ namespace Server
                 }
                 try
                 {
+                    requestContent.responseContext->setAuthorizationHandler(std::move(authHandler));
                     route.handler(requestContent);
                 }
                 catch (const std::exception &e)

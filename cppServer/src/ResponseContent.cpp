@@ -32,5 +32,9 @@ namespace Server
             return "Internal Server Error";
         }
     }
+    void ResponseContent::setAuthorizationHandler(std::unique_ptr<IAuthorization> authHandler)
+    {
+        this->authorizationHandler = std::move(authHandler);
+    }
 
 } // namespace Server
