@@ -2,6 +2,9 @@
 
 #include <string>
 #include <unordered_map>
+#include <IAuthorization.h>
+
+using IAuthorization = Server::IAuthorization;
 
 namespace Server{
     class IResponseContent
@@ -15,5 +18,6 @@ namespace Server{
         virtual void setBody(std::string body) = 0;
         virtual void setHeaders(std::unordered_map<std::string, std::string> headers) = 0;
         virtual void setStatusCode(int statusCode) = 0;
+        virtual void setAuthorizationHandler(std::unique_ptr<IAuthorization> authHandler) = 0;
     }; // namespace IResponseContent
 } // namespace Server

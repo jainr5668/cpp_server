@@ -12,7 +12,7 @@ namespace Server
     class Authentication : public IAuthentication
     {
     public:
-        Authentication() = default;
+        Authentication();
         ~Authentication() = default;
         /**
          * ======================================================================
@@ -23,9 +23,9 @@ namespace Server
         /**
          * @brief Returns the authorization token stored
          *
-         * @return std::string token
+         * @return std::unique_ptr<IAuthorization> token
          */
-        std::string getAuthorizationToken();
+        std::unique_ptr<IAuthorization> getAuthorization(std::string token);
 
         /**
          * @brief Returns the payload of the token stored
@@ -34,12 +34,6 @@ namespace Server
          */
         std::unordered_map<std::string, std::string> getPayload();
 
-        /**
-         * @brief Validates the token provided
-         *
-         * @return bool: true if valid else false
-         */
-        bool isAuthenticated();
 
         /**
          * @brief Sets the token in object
@@ -47,17 +41,18 @@ namespace Server
          * @param authorization_token std::string
          */
         void setAuthorizationToken(const std::string authorization_token);
-
     private:
         std::string token_;
         std::unordered_map<std::string, std::string> payload_;
+        std::string secret;
 
         /**
-         * @brief Validates the token
+         * @brief Generates a random secret
          *
-         * @return bool - true if valid else false
+         * @return std::string - random secret
          */
-        bool isTokenValid();
+        std::string generateRandomSecret(size_t length = 32);
+        
     };
 
 }
