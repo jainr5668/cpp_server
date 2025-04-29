@@ -13,8 +13,10 @@ namespace Example
         {
             Server::ServerTypes::AuthorizationConfiguration authorizationConfiguration;
             authorizationConfiguration.enabled = true;
+            authorizationConfiguration.scopes = {};
+            authorizationConfiguration.accessLevels = {};
             Server::ServerTypes::Route route;
-            route.type = Server::ServerTypes::RouteType::GET;
+            route.type = Server::ServerTypes::RouteType::POST;
             route.route = "/test";
             route.authorization = authorizationConfiguration;
             route.handler = std::bind(&Endpoint1::function1, this, std::placeholders::_1);
@@ -22,22 +24,22 @@ namespace Example
         }
         void Endpoint1::function1(Server::ServerTypes::RouteContext context)
         {
-            // Example of how to use the request and response context
-            // You can access the request body, headers, and other information
             std::cout << "Endpoint1::function1 - entering" << std::endl;
-            auto requestBody = context.requestContext->getBody<Example::Endpoint::Endpoint1Response>();
-            if (requestBody == nullptr)
-            {
-                context.responseContext->setStatusCode(400);
-                context.responseContext->setBody("Invalid request body");
-                return;
-            }
-            // Process the request
-            std::cout << "Request Body: " << requestBody->getEndpoint1Request().value().getId().value() << std::endl;
-            std::cout << "Request Body: " << requestBody->getMessage().has_value() << std::endl;
+            auto requestBody = context.requestContext->getBody<Example::Endpoint::Endpoint1Request>();
 
-            context.responseContext->setStatusCode(200);
-            context.responseContext->setBody("Hello from Endpoint route");
+            auto response = m_service.processRequest1(*requestBody);
+            if (response.first)
+            {
+                context.responseContext->setStatusCode(200);
+                context.responseContext->setBody(response.second.toString(4));
+            }
+            else
+            {
+                context.responseContext->setStatusCode(500);
+                context.responseContext->setBody("Internal Server Error");
+            }
+            std::cout << "Endpoint1::function1 - exiting" << std::endl;
+            // Send the response
         }
     } // namespace Endpoint
 } // namespace Example
