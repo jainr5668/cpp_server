@@ -1,17 +1,28 @@
 #pragma once
-#include <memory>
 #include "IResponseContent.h"
+#include "logger.h"
+
+#include <memory>
 
 using IResponseContent = Server::IResponseContent;
 using IAuthentication = Server::IAuthorization;
+using Logger = Server::Logger;
 
 namespace Server
 {
     class ResponseContent : public IResponseContent
     {
     public:
-        ResponseContent() = default;
-        ResponseContent(std::string body, std::unordered_map<std::string, std::string> headers, int statusCode) : body(body), headers(headers), statusCode(statusCode) {};
+    ResponseContent() = default;
+    ResponseContent(std::string body, std::unordered_map<std::string, std::string> headers, int statusCode) : body(body), headers(headers), statusCode(statusCode) {};
+
+        /**
+         * @brief Creates a token using the payload provided
+         *
+         * @param payload std::unordered_map<std::string, std::string>
+         * @return std::string
+         */
+        std::string createToken(const std::unordered_map<std::string, std::string> &payload);
 
         /**
          * @brief Gets the response body
@@ -67,6 +78,7 @@ namespace Server
     private:
         std::string body;
         std::unordered_map<std::string, std::string> headers;
+        Logger logger;
         int statusCode;
         std::unique_ptr<IAuthorization> authorizationHandler = nullptr;
 

@@ -8,6 +8,7 @@ namespace Server
 
     std::string ResponseContent::getServerResponse()
     {
+        logger.info("ResponseContent::getServerResponse - entering");
         std::ostringstream response;
         response << "HTTP/1.1 " << statusCode << " " << getStatusText() << "\n";
         for (auto header : headers)
@@ -16,47 +17,86 @@ namespace Server
         }
         response << "Content-Length: " << body.size() << "\n\n";
         response << body;
+        logger.info("ResponseContent::getServerResponse - exiting");
         return response.str();
     }
     std::string ResponseContent::getStatusText()
     {
+        logger.info("ResponseContent::getStatusText - entering");
+        std::string statusText;
         switch (statusCode)
         {
         case 200:
-            return "OK";
+            statusText = "OK";
+            break;
         case 201:
-            return "Created";
+            statusText = "Created";
+            break;
         case 202:
-            return "Accepted";
+            statusText = "Accepted";
+            break;
         case 204:
-            return "No Content";
+            statusText = "No Content";
+            break;
         case 206:
-            return "Partial Content";
+            statusText = "Partial Content";
+            break;
         case 400:
-            return "Bad Request";
+            statusText = "Bad Request";
+            break;
         case 401:
-            return "Unauthorized";
+            statusText = "Unauthorized";
+            break;
         case 404:
-            return "Not Found";
+            statusText = "Not Found";
+            break;
         case 403:
-            return "Forbidden";
+            statusText = "Forbidden";
+            break;
         case 405:
-            return "Method Not Allowed";
+            statusText = "Method Not Allowed";
+            break;
         case 500:
-            return "Internal Server Error";
+            statusText = "Internal Server Error";
+            break;
         case 503:
-            return "Service Unavailable";
+            statusText = "Service Unavailable";
+            break;
         case 504:
-            return "Gateway Timeout";
+            statusText = "Gateway Timeout";
+            break;
         case 502:
-            return "Bad Gateway";
+            statusText = "Bad Gateway";
+            break;
         default:
-            return "Internal Server Error";
+            statusText = "Internal Server Error";
         }
+        logger.info("ResponseContent::getStatusText - exiting");
+        return statusText;
     }
     void ResponseContent::setAuthorizationHandler(std::unique_ptr<IAuthorization> authHandler)
     {
-        this->authorizationHandler = std::move(authHandler);
+        logger.info("ResponseContent::setAuthorizationHandler - entering");
+        if (!authHandler)
+        {
+            logger.error("Authorization handler is null");
+        }
+        else
+        {
+            this->authorizationHandler = std::move(authHandler);
+        }
+        logger.info("ResponseContent::setAuthorizationHandler - exiting");
     }
 
+    std::string ResponseContent::createToken(const std::unordered_map<std::string, std::string> &payload)
+    {
+        logger.info("ResponseContent::createToken - entering");
+        std::string token;
+        if (authorizationHandler)
+        {
+            token = authorizationHandler->createToken(payload);
+        }
+        logger.error("Authorization handler not set");
+        return token;
+    }
 } // namespace Server

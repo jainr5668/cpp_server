@@ -1,15 +1,17 @@
 #pragma once
 
 #include "IRequestContent.h"
+#include "logger.h"
 
+#include <nlohmann/json.hpp>
 #include <string>
+#include <sstream>
+#include <stdexcept>
 #include <unordered_map>
 #include <vector>
-#include <nlohmann/json.hpp>
-#include <stdexcept>
-#include <sstream>
 
 using IRequestContent = Server::IRequestContent;
+using Logger = Server::Logger;
 
 namespace Server
 {
@@ -18,21 +20,6 @@ namespace Server
     public:
         RequestContent() = default;
         RequestContent(std::string rawRequest);
-
-        // template <typename T>
-        // T getBody()
-        // {
-        //     T body;
-        //     try
-        //     {
-        //         body = nlohmann::json::parse(this->body);
-        //     }
-        //     catch (const std::exception &e)
-        //     {
-        //         throw std::runtime_error("Failed to parse request body: " + std::string(e.what()));
-        //     }
-        //     return body;
-        // }
 
         /**
          * @brief Gets the raw request body
@@ -107,6 +94,7 @@ namespace Server
     private:
         std::string body;
         std::unordered_map<std::string, std::string> headers;
+        Logger logger;
         std::string method;
         std::unordered_map<std::string, std::string> queryParameters;
         std::string route;
