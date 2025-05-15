@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IServer.h"
+#include "logger.h"
 #include "ServerTypes.h"
 
 namespace Server
@@ -21,5 +22,6 @@ namespace Server
         std::shared_ptr<IRouter> router;
         void handlerThread(int socket);
         std::string readRequest(int socket);
+        Logger logger;
     };
 } // namespace Server

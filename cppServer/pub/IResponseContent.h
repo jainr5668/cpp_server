@@ -10,6 +10,7 @@ namespace Server{
     class IResponseContent
     {
     public:
+    virtual std::string createToken(const std::unordered_map<std::string, std::string> &payload) = 0;
         virtual std::string getBody() = 0;
         virtual std::unordered_map<std::string, std::string> getHeaders() = 0;
         virtual int getStatusCode() = 0;

@@ -1,10 +1,11 @@
 add_library(cppServer_lib
     src/Authentication.cpp
     src/Authorization.cpp
+    src/logger.cpp
     src/RequestContent.cpp
     src/ResponseContent.cpp
-    src/Server.cpp
     src/Router.cpp
+    src/Server.cpp
 )
 include(FetchContent)
 FetchContent_Declare(

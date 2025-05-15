@@ -3,8 +3,10 @@
 #include "IAuthentication.h"
 
 #include <string>
+#include "logger.h"
 
 using IAuthentication = Server::IAuthentication;
+using Logger = Server::Logger;
 
 namespace Server
 {
@@ -42,9 +44,10 @@ namespace Server
          */
         void setAuthorizationToken(const std::string authorization_token);
     private:
-        std::string token_;
+        Logger logger;
         std::unordered_map<std::string, std::string> payload_;
         std::string secret;
+        std::string token_;
 
         /**
          * @brief Generates a random secret

@@ -1,7 +1,11 @@
 #pragma once
 
 #include "IAuthorization.h"
+#include "logger.h"
+
 #include <unordered_map>
+
+using Logger = Server::Logger;
 
 namespace Server
 {
@@ -37,8 +41,9 @@ namespace Server
          */
         bool isAuthenticated() override;
         private:
-        std::string secret;
+        Logger logger;
         std::unordered_map<std::string, std::string> payload_;
+        std::string secret;
         std::string token_;
     };
 } // namespace Server
