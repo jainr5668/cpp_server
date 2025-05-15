@@ -17,10 +17,6 @@ FetchContent_MakeAvailable(jwt-cpp)
 target_include_directories(cppServer_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/inc
     ${CMAKE_CURRENT_SOURCE_DIR}/pub
-<<<<<<< HEAD
-)
-=======
 )
 
 target_link_libraries(cppServer_lib jwt-cpp::jwt-cpp)
->>>>>>> pr_ronak.jain@gmail.com_server_implementation
