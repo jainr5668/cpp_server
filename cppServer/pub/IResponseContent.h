@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <IAuthorization.h>
+#include <memory>
 
 using IAuthorization = Server::IAuthorization;
 

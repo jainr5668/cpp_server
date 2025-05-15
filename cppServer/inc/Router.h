@@ -10,6 +10,7 @@
 #include <vector>
 
 using IAuthentication = Server::IAuthentication;
+using IAuthorization = Server::IAuthorization;
 using IRouter = Server::IRouter;
 using Logger = Server::Logger;
 
@@ -35,7 +36,7 @@ namespace Server
         std::vector<std::string> splitString(std::string str, char delimiter);
         bool validateScopeAndAccessLevel(const ServerTypes::Route& route, ServerTypes::RouteContext& context);
         bool validateAuthorization(std::vector<std::string> accessList, std::unordered_map<std::string, std::string> payload, std::string propertyName);
-        std::unique_ptr<Server::IAuthorization> authHandler_;
+        std::unique_ptr<IAuthorization> authHandler_;
         Logger logger;
     };
 }// namespace Server
