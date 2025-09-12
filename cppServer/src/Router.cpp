@@ -29,50 +29,56 @@ namespace Server
 
         if (requestContent.responseContext->getBody().empty() && routeIt == routes.end())
         {
-            logger.error("Route not found");
+            logger.error("Router::routeHandler - Route not found");
             setResponse(requestContent, 404, "Route not found");
         }
+        if (requestContent.responseContext->getBody().empty())
+        {
+            logger.info("Route found: " + routeIt->route);
+            const auto &route = *routeIt;
 
-        const auto &route = *routeIt;
-        
-        if (requestContent.responseContext->getBody().empty() && routeTypeToString(route.type) != requestContent.requestContext->getMethod())
-        {
-            logger.error("Method not allowed");
-            setResponse(requestContent, 405, "Method Not Allowed");
-        }
+            if (requestContent.responseContext->getBody().empty() && routeTypeToString(route.type) != requestContent.requestContext->getMethod())
+            {
+                logger.error("Method not allowed");
+                setResponse(requestContent, 405, "Method Not Allowed");
+            }
 
-        authHandler_ = authenticator_->getAuthorization("");
-        if (route.authorization.enabled)
-        {
-            if (requestContent.responseContext->getBody().empty() && !isAuthorized(requestContent))
+            authHandler_ = authenticator_->getAuthorization("");
+            if (route.authorization.enabled)
             {
-                logger.error("Unauthorized");
-                setResponse(requestContent, 401, "Unauthorized");
-            }
-    
-            if (requestContent.responseContext->getBody().empty() && !validateScopeAndAccessLevel(route, requestContent))
-            {
-                logger.error("Forbidden");
-                setResponse(requestContent, 403, "Forbidden");
-            }
-        }
-        try
-        {
-            if (requestContent.responseContext->getBody().empty())
-            {
-                if (route.handler == nullptr)
+                if (requestContent.responseContext->getBody().empty() && !isAuthorized(requestContent))
                 {
-                    logger.error("Handler not defined");
-                    throw std::runtime_error("Handler not defined");
+                    logger.error("Unauthorized");
+                    setResponse(requestContent, 401, "Unauthorized");
                 }
-                requestContent.responseContext->setAuthorizationHandler(std::move(authHandler_));
-                route.handler(requestContent);
+
+                if (requestContent.responseContext->getBody().empty() && !validateScopeAndAccessLevel(route, requestContent))
+                {
+                    logger.error("Forbidden");
+                    setResponse(requestContent, 403, "Forbidden");
+                }
+            }
+            try
+            {
+                if (requestContent.responseContext->getBody().empty())
+                {
+                    if (route.handler == nullptr)
+                    {
+                        logger.error("Handler not defined");
+                        throw std::runtime_error("Handler not defined");
+                    }
+                    requestContent.responseContext->setAuthorizationHandler(std::move(authHandler_));
+                    route.handler(requestContent);
+                }
+            }
+            catch (const std::exception &e)
+            {
+                logger.error("Internal Server Error: " + std::string(e.what()));
+                setResponse(requestContent, 500, "Internal Server Error: " + std::string(e.what()));
             }
         }
-        catch (const std::exception &e)
-        {
-            logger.error("Internal Server Error: " + std::string(e.what()));
-            setResponse(requestContent, 500, "Internal Server Error: " + std::string(e.what()));
+        else {
+            logger.info("Response already set, skipping route handling");
         }
         authHandler_ = nullptr;
         logger.info("Router::routeHandler - exiting");
