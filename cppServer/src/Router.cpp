@@ -24,60 +24,161 @@ namespace Server
     void Router::routeHandler(ServerTypes::RouteContext requestContent)
     {
         logger.info("Router::routeHandler - entering");
-        auto routeIt = std::find_if(routes.begin(), routes.end(), [&](const ServerTypes::Route &route)
-                                    { return route.route == requestContent.requestContext->getRoute(); });
+        auto routeParts = getRouteParts(requestContent.requestContext->getRoute());
+        size_t depth = requestContent.requestContext->getRouteDepth();
+        std::string currentPart = (depth < routeParts.size()) ? routeParts[depth] : "";
 
-        if (requestContent.responseContext->getBody().empty() && routeIt == routes.end())
+        auto subRouter = std::find_if(subRouters.begin(), subRouters.end(), [&](const auto &pair)
+                                      {
+            logger.info("Checking sub-router for path: " + pair.first);
+            return pair.first == currentPart; });
+
+        if (subRouter != subRouters.end())
+        {
+            auto router = subRouter->second;
+            if (router)
+            {
+                requestContent.requestContext->setRouteDepth(requestContent.requestContext->getRouteDepth() + 1);
+                router->routeHandler(requestContent);
+                return;
+            }
+        }
+        else
+        {
+            logger.info("No sub-router found for path: " + getRouteParts(requestContent.requestContext->getRoute())[requestContent.requestContext->getRouteDepth()]);
+        }
+        std::vector<ServerTypes::Route> matchedRoutes;
+        auto requestParts = getRouteParts(requestContent.requestContext->getRoute(), requestContent.requestContext->getRouteDepth());
+        matchedRoutes = std::find_if(routes.begin(), routes.end(), [&](const auto &route)
+                                     { return getRouteParts(route.route) == requestParts; }) != routes.end()
+                            ? std::vector<ServerTypes::Route>{*std::find_if(routes.begin(), routes.end(), [&](const auto &route)
+                                                                            { return getRouteParts(route.route) == requestParts; })}
+                            : std::vector<ServerTypes::Route>{};
+        if (matchedRoutes.empty())
+        {
+            for (const auto &route : routes)
+            {
+                // if (route.route == currentPart || (!route.route.empty() && route.route[0] == ':'))
+                // {
+                //     matchedRoutes.push_back(route);
+                auto routeParts = getRouteParts(route.route); // ["abcds", ":id"]
+                // }
+                if (routeParts.size() == requestParts.size())
+                {
+                    bool isMatch = true;
+                    std::unordered_map<std::string, std::string> pathParams;
+                    for (size_t i = 0; i < routeParts.size(); ++i)
+                    {
+                        if (routeParts[i] != requestParts[i])
+                        {
+                            if (!routeParts[i].empty() && routeParts[i][0] == ':')
+                            {
+                                if (!requestParts[i].empty())
+                                {
+                                    std::string paramName = routeParts[i].substr(1);
+                                    pathParams[paramName] = requestParts[i];
+                                }
+                                else
+                                {
+                                    // Do not match if the request part is empty (e.g., "/")
+                                    isMatch = false;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                isMatch = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (isMatch)
+                    {
+                        matchedRoutes.push_back(route);
+                        requestContent.requestContext->setPathParams(pathParams);
+                    }
+                }
+            }
+        }
+        logger.info("Matched routes count: " + std::to_string(matchedRoutes.size()));
+        logger.info("no of path params: " + std::to_string(requestContent.requestContext->getPathParams().size()));
+        for (const auto &param : requestContent.requestContext->getPathParams())
+        {
+            logger.info("Path param: " + param.first + " = " + param.second);
+        }
+
+        if (requestContent.responseContext->getBody().empty() && matchedRoutes.empty())
         {
             logger.error("Route not found");
             setResponse(requestContent, 404, "Route not found");
         }
 
-        if (routeIt != routes.end())
+        if (!matchedRoutes.empty())
         {
-            const auto &route = *routeIt;
-
-            if (requestContent.responseContext->getBody().empty() && routeTypeToString(route.type) != requestContent.requestContext->getMethod())
+            auto &route = matchedRoutes.front();
+            ServerTypes::Route *routePtr{nullptr};
+            for (auto &r : matchedRoutes)
+            {
+                if (routeTypeToString(r.type) == requestContent.requestContext->getMethod())
+                {
+                    routePtr = &r;
+                    break;
+                }
+            }
+            if (routePtr)
+            {
+                route = *routePtr;
+            }
+            else
             {
                 logger.error("Method not allowed");
                 setResponse(requestContent, 405, "Method Not Allowed");
             }
 
-            authHandler_ = authenticator_->getAuthorization("");
-            if (route.authorization.enabled)
+            if (requestContent.responseContext->getBody().empty())
             {
-                if (requestContent.responseContext->getBody().empty() && !isAuthorized(requestContent))
+                logger.info("Processing route: " + route.route + " with method: " + routeTypeToString(route.type));
+                if (authenticator_ == nullptr)
                 {
-                    logger.error("Unauthorized");
-                    setResponse(requestContent, 401, "Unauthorized");
+                    logger.error("Authenticator not defined");
+                    throw std::runtime_error("Authenticator not defined");
                 }
-
-                if (requestContent.responseContext->getBody().empty() && !validateScopeAndAccessLevel(route, requestContent))
+                authHandler_ = authenticator_->getAuthorization("");
+                if (route.authorization.enabled)
                 {
-                    logger.error("Forbidden");
-                    setResponse(requestContent, 403, "Forbidden");
-                }
-            }
-            try
-            {
-                if (requestContent.responseContext->getBody().empty())
-                {
-                    if (route.handler == nullptr)
+                    if (requestContent.responseContext->getBody().empty() && !isAuthorized(requestContent))
                     {
-                        logger.error("Handler not defined");
-                        throw std::runtime_error("Handler not defined");
+                        logger.error("Unauthorized");
+                        setResponse(requestContent, 401, "Unauthorized");
                     }
-                    requestContent.responseContext->setAuthorizationHandler(std::move(authHandler_));
-                    route.handler(requestContent);
+
+                    if (requestContent.responseContext->getBody().empty() && !validateScopeAndAccessLevel(route, requestContent))
+                    {
+                        logger.error("Forbidden");
+                        setResponse(requestContent, 403, "Forbidden");
+                    }
                 }
-            }
-            catch (const std::exception &e)
-            {
-                logger.error("Internal Server Error: " + std::string(e.what()));
-                setResponse(requestContent, 500, "Internal Server Error: " + std::string(e.what()));
+                try
+                {
+                    if (requestContent.responseContext->getBody().empty())
+                    {
+                        if (route.handler == nullptr)
+                        {
+                            logger.error("Handler not defined");
+                            throw std::runtime_error("Handler not defined");
+                        }
+                        requestContent.responseContext->setAuthorizationHandler(std::move(authHandler_));
+                        route.handler(requestContent);
+                    }
+                }
+                catch (const std::exception &e)
+                {
+                    logger.error("Internal Server Error: " + std::string(e.what()));
+                    setResponse(requestContent, 500, "Internal Server Error: " + std::string(e.what()));
+                }
             }
         }
-        authHandler_ = nullptr;
+        // authHandler_ = nullptr;
         logger.info("Router::routeHandler - exiting");
     }
 
@@ -90,22 +191,28 @@ namespace Server
 
     std::string Router::routeTypeToString(ServerTypes::RouteType type)
     {
-        logger.info("Router::routeTypeToString - entering");
+        std::string result;
         switch (type)
         {
         case ServerTypes::RouteType::GET:
-            return "GET";
+            result = "GET";
+            break;
         case ServerTypes::RouteType::POST:
-            return "POST";
+            result = "POST";
+            break;
         case ServerTypes::RouteType::PUT:
-            return "PUT";
+            result = "PUT";
+            break;
         case ServerTypes::RouteType::DELETE:
-            return "DELETE";
+            result = "DELETE";
+            break;
         default:
-            return "UNKNOWN";
+            result = "UNKNOWN";
+            break;
         }
-        logger.info("Router::routeTypeToString - exiting");
+        return result;
     }
+
     void Router::setResponse(ServerTypes::RouteContext &context, int statusCode, const std::string &body)
     {
         logger.info("Router::setResponse - entering");
@@ -175,6 +282,7 @@ namespace Server
         logger.info("Router::validateScopeAndAccessLevel - exiting");
         return result;
     }
+
     bool Router::validateAuthorization(std::vector<std::string> accessList, std::unordered_map<std::string, std::string> payload, std::string propertyName)
     {
         logger.info("Router::validateAuthorization - entering");
@@ -224,4 +332,35 @@ namespace Server
         return parts;
     }
 
+    std::vector<std::string> Router::getRouteParts(const std::string &routePath, int depth)
+    {
+        std::vector<std::string> parts;
+        std::string part;
+        std::istringstream stream(routePath);
+        bool isFirst = true;
+        if (routePath == "/")
+        {
+            parts = {"/"};
+        }
+        else
+        {
+            while (std::getline(stream, part, '/'))
+            {
+                if (part.empty() && !isFirst)
+                {
+                    parts.push_back("/");
+                }
+                else if (!part.empty())
+                {
+                    parts.push_back(part);
+                }
+                isFirst = false;
+            }
+        }
+        if (depth > 0 && depth <= parts.size())
+        {
+            parts = std::vector<std::string>(parts.begin() + depth, parts.end());
+        }
+        return parts;
+    }
 } // namespace Server
