@@ -29,12 +29,12 @@ namespace Server
 
         if (requestContent.responseContext->getBody().empty() && routeIt == routes.end())
         {
-            logger.error("Router::routeHandler - Route not found");
+            logger.error("Route not found");
             setResponse(requestContent, 404, "Route not found");
         }
-        if (requestContent.responseContext->getBody().empty())
+
+        if (routeIt != routes.end())
         {
-            logger.info("Route found: " + routeIt->route);
             const auto &route = *routeIt;
 
             if (requestContent.responseContext->getBody().empty() && routeTypeToString(route.type) != requestContent.requestContext->getMethod())
@@ -76,9 +76,6 @@ namespace Server
                 logger.error("Internal Server Error: " + std::string(e.what()));
                 setResponse(requestContent, 500, "Internal Server Error: " + std::string(e.what()));
             }
-        }
-        else {
-            logger.info("Response already set, skipping route handling");
         }
         authHandler_ = nullptr;
         logger.info("Router::routeHandler - exiting");
