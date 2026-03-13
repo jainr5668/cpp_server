@@ -15,11 +15,19 @@ namespace Server
         {
             response << header.first << ": " << header.second << "\n";
         }
+        response << "Content-Type: " << contentType << "\n";
         response << "Content-Length: " << body.size() << "\n\n";
         response << body;
         logger.info("ResponseContent::getServerResponse - exiting");
         return response.str();
     }
+
+    void ResponseContent::updateHeader(){
+         if (headers.find("Content-Type") == headers.end()){
+            headers.insert({"Content-Type", getContentType(responseType)});
+        }
+    }
+    
     std::string ResponseContent::getStatusText()
     {
         logger.info("ResponseContent::getStatusText - entering");
@@ -68,12 +76,16 @@ namespace Server
         case 502:
             statusText = "Bad Gateway";
             break;
+        case 501:
+            statusText = "Not Implemented";
+            break;
         default:
             statusText = "Internal Server Error";
         }
         logger.info("ResponseContent::getStatusText - exiting");
         return statusText;
     }
+    
     void ResponseContent::setAuthorizationHandler(std::unique_ptr<IAuthorization> authHandler)
     {
         logger.info("ResponseContent::setAuthorizationHandler - entering");
@@ -98,5 +110,21 @@ namespace Server
         }
         logger.error("Authorization handler not set");
         return token;
+    }
+
+    std::unordered_map<std::string, std::string> ResponseContent::getTokenPayload(std::string token)
+    {
+        logger.info("ResponseContent::getTokenPayload - entering");
+        std::unordered_map<std::string, std::string> payload;
+        if (authorizationHandler)
+        {
+            payload = authorizationHandler->getPayload(token);
+        }
+        else
+        {
+            logger.error("Authorization handler not set");
+        }
+        logger.info("ResponseContent::getTokenPayload - exiting");
+        return payload;
     }
 } // namespace Server

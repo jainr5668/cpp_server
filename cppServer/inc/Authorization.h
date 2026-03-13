@@ -35,6 +35,14 @@ namespace Server
         std::unordered_map<std::string, std::string> getPayload() override;
 
         /**
+         * @brief Returns the payload of the token provided
+         *
+         * @param token std::string
+         * @returns std::unordered_map<std::string, std::string> of the data in payload
+         */
+        std::unordered_map<std::string, std::string> getPayload(std::string token);
+
+        /**
          * @brief Validates the token provided
          *
          * @return bool: true if valid else false
@@ -45,5 +53,6 @@ namespace Server
         std::unordered_map<std::string, std::string> payload_;
         std::string secret;
         std::string token_;
+        static int counter_;
     };
 } // namespace Server
