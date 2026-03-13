@@ -131,7 +131,7 @@ namespace Server
 
         if (requestContent.responseContext->getBody().empty() && matchedRoutes.empty())
         {
-            logger.error("Route not found");
+            logger.error("Router::routeHandler - Route not found");
             setResponse(requestContent, 404, "Route not found");
         }
 

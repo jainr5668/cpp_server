@@ -11,6 +11,7 @@
 #include "IAuthorization.h"
 
 using IAuthentication = Server::IAuthentication;
+using IAuthorization = Server::IAuthorization;
 using IRouter = Server::IRouter;
 using Logger = Server::Logger;
 using IAuthorization = Server::IAuthorization;
