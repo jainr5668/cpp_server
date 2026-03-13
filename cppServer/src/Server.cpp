@@ -54,7 +54,7 @@ namespace Server
         RequestContent *request = new RequestContent(requestData);
         ResponseContent *response = new ResponseContent();
         logger.info("Request Route: " + request->getRoute() + " Method: " + request->getMethod());
-        if (router)
+        if (router && request->getRoute() != "" && request->getMethod() != "")
         {
             RouteContext routeContext;
             routeContext.requestContext = request;
@@ -64,7 +64,7 @@ namespace Server
         else
         {
             response->setStatusCode(500);
-            response->setBody("Initial Router is not set.");
+            response->setBody(std::string("Initial Router is not set."));
         }
         logger.info("Response Status: " + std::to_string(response->getStatusCode()));
         auto serverResponse = response->getServerResponse();

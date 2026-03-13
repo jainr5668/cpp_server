@@ -16,5 +16,6 @@ namespace Server
         virtual void addRoute(ServerTypes::Route route) = 0;
         virtual void addSubRouter(std::string path, std::shared_ptr<IRouter> router) = 0;
         virtual void routeHandler(ServerTypes::RouteContext requestContent) = 0;
+        virtual void notImplementedHandler(Server::ServerTypes::RouteContext requestContent) = 0;
     };  // namespace IRouter
 } // namespace Server

@@ -28,8 +28,9 @@ namespace Server
     std::unique_ptr<IAuthorization> Authentication::getAuthorization(std::string token)
     {
         logger.info("Authentication::getAuthorization - entering");
+        auto authorization = std::make_unique<Authorization>(secret, token);
         logger.info("Authentication::getAuthorization - exiting");
-        return std::make_unique<Authorization>(secret, token);
+        return authorization;
     }
 
     std::unordered_map<std::string, std::string> Authentication::getPayload()
